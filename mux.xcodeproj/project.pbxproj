@@ -1,0 +1,335 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3F4AE8611D5D7E2400951EA3 /* OnePlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */; };
+		3F4AE8641D5D991E00951EA3 /* PlayingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4AE8631D5D991E00951EA3 /* PlayingController.m */; };
+		3F6A84961D5EEF76003268C5 /* ZJViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F6A84951D5EEF76003268C5 /* ZJViewController.m */; };
+		3F6A84981D5F3572003268C5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F6A84971D5F3572003268C5 /* AVFoundation.framework */; };
+		3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB471D5D5BD400A07CB5 /* main.m */; };
+		3FE4DB4B1D5D5BD400A07CB5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB4A1D5D5BD400A07CB5 /* AppDelegate.m */; };
+		3FE4DB531D5D5BD400A07CB5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FE4DB521D5D5BD400A07CB5 /* Assets.xcassets */; };
+		3FE4DB561D5D5BD400A07CB5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FE4DB541D5D5BD400A07CB5 /* LaunchScreen.storyboard */; };
+		3FE4DB5F1D5D5C8900A07CB5 /* TabbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB5E1D5D5C8900A07CB5 /* TabbarController.m */; };
+		3FE4DB621D5D64AC00A07CB5 /* AllPlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */; };
+		3FE4DB641D5D662B00A07CB5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePlayListController.h; sourceTree = "<group>"; };
+		3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnePlayListController.m; sourceTree = "<group>"; };
+		3F4AE8621D5D991E00951EA3 /* PlayingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingController.h; sourceTree = "<group>"; };
+		3F4AE8631D5D991E00951EA3 /* PlayingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingController.m; sourceTree = "<group>"; };
+		3F6A84941D5EEF76003268C5 /* ZJViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJViewController.h; sourceTree = "<group>"; };
+		3F6A84951D5EEF76003268C5 /* ZJViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJViewController.m; sourceTree = "<group>"; };
+		3F6A84971D5F3572003268C5 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		3FE4DB431D5D5BD400A07CB5 /* mux.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mux.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FE4DB471D5D5BD400A07CB5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3FE4DB491D5D5BD400A07CB5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3FE4DB4A1D5D5BD400A07CB5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		3FE4DB521D5D5BD400A07CB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3FE4DB551D5D5BD400A07CB5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		3FE4DB571D5D5BD400A07CB5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FE4DB5D1D5D5C8900A07CB5 /* TabbarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabbarController.h; sourceTree = "<group>"; };
+		3FE4DB5E1D5D5C8900A07CB5 /* TabbarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabbarController.m; sourceTree = "<group>"; };
+		3FE4DB601D5D64AC00A07CB5 /* AllPlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllPlayListController.h; sourceTree = "<group>"; };
+		3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllPlayListController.m; sourceTree = "<group>"; };
+		3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3FE4DB401D5D5BD400A07CB5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F6A84981D5F3572003268C5 /* AVFoundation.framework in Frameworks */,
+				3FE4DB641D5D662B00A07CB5 /* MediaPlayer.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3FE4DB3A1D5D5BD400A07CB5 = {
+			isa = PBXGroup;
+			children = (
+				3F6A84971D5F3572003268C5 /* AVFoundation.framework */,
+				3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */,
+				3FE4DB451D5D5BD400A07CB5 /* mux */,
+				3FE4DB441D5D5BD400A07CB5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3FE4DB441D5D5BD400A07CB5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3FE4DB431D5D5BD400A07CB5 /* mux.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3FE4DB451D5D5BD400A07CB5 /* mux */ = {
+			isa = PBXGroup;
+			children = (
+				3FE4DB491D5D5BD400A07CB5 /* AppDelegate.h */,
+				3FE4DB4A1D5D5BD400A07CB5 /* AppDelegate.m */,
+				3FE4DB521D5D5BD400A07CB5 /* Assets.xcassets */,
+				3FE4DB541D5D5BD400A07CB5 /* LaunchScreen.storyboard */,
+				3FE4DB571D5D5BD400A07CB5 /* Info.plist */,
+				3FE4DB461D5D5BD400A07CB5 /* Supporting Files */,
+				3FE4DB5D1D5D5C8900A07CB5 /* TabbarController.h */,
+				3FE4DB5E1D5D5C8900A07CB5 /* TabbarController.m */,
+				3FE4DB601D5D64AC00A07CB5 /* AllPlayListController.h */,
+				3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */,
+				3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */,
+				3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */,
+				3F4AE8621D5D991E00951EA3 /* PlayingController.h */,
+				3F4AE8631D5D991E00951EA3 /* PlayingController.m */,
+				3F6A84941D5EEF76003268C5 /* ZJViewController.h */,
+				3F6A84951D5EEF76003268C5 /* ZJViewController.m */,
+			);
+			path = mux;
+			sourceTree = "<group>";
+		};
+		3FE4DB461D5D5BD400A07CB5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3FE4DB471D5D5BD400A07CB5 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3FE4DB421D5D5BD400A07CB5 /* mux */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3FE4DB5A1D5D5BD400A07CB5 /* Build configuration list for PBXNativeTarget "mux" */;
+			buildPhases = (
+				3FE4DB3F1D5D5BD400A07CB5 /* Sources */,
+				3FE4DB401D5D5BD400A07CB5 /* Frameworks */,
+				3FE4DB411D5D5BD400A07CB5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mux;
+			productName = mux;
+			productReference = 3FE4DB431D5D5BD400A07CB5 /* mux.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3FE4DB3B1D5D5BD400A07CB5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = Jam;
+				TargetAttributes = {
+					3FE4DB421D5D5BD400A07CB5 = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 4NU738LHQ7;
+					};
+				};
+			};
+			buildConfigurationList = 3FE4DB3E1D5D5BD400A07CB5 /* Build configuration list for PBXProject "mux" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3FE4DB3A1D5D5BD400A07CB5;
+			productRefGroup = 3FE4DB441D5D5BD400A07CB5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3FE4DB421D5D5BD400A07CB5 /* mux */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3FE4DB411D5D5BD400A07CB5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FE4DB561D5D5BD400A07CB5 /* LaunchScreen.storyboard in Resources */,
+				3FE4DB531D5D5BD400A07CB5 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3FE4DB3F1D5D5BD400A07CB5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F4AE8641D5D991E00951EA3 /* PlayingController.m in Sources */,
+				3FE4DB4B1D5D5BD400A07CB5 /* AppDelegate.m in Sources */,
+				3FE4DB621D5D64AC00A07CB5 /* AllPlayListController.m in Sources */,
+				3F4AE8611D5D7E2400951EA3 /* OnePlayListController.m in Sources */,
+				3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */,
+				3FE4DB5F1D5D5C8900A07CB5 /* TabbarController.m in Sources */,
+				3F6A84961D5EEF76003268C5 /* ZJViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		3FE4DB541D5D5BD400A07CB5 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3FE4DB551D5D5BD400A07CB5 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3FE4DB581D5D5BD400A07CB5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		3FE4DB591D5D5BD400A07CB5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3FE4DB5B1D5D5BD400A07CB5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = mux/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = zjam.mux;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Debug;
+		};
+		3FE4DB5C1D5D5BD400A07CB5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = mux/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = zjam.mux;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3FE4DB3E1D5D5BD400A07CB5 /* Build configuration list for PBXProject "mux" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3FE4DB581D5D5BD400A07CB5 /* Debug */,
+				3FE4DB591D5D5BD400A07CB5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3FE4DB5A1D5D5BD400A07CB5 /* Build configuration list for PBXNativeTarget "mux" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3FE4DB5B1D5D5BD400A07CB5 /* Debug */,
+				3FE4DB5C1D5D5BD400A07CB5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3FE4DB3B1D5D5BD400A07CB5 /* Project object */;
+}
