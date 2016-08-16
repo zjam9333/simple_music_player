@@ -29,6 +29,7 @@
     artists.topViewController.title=@"artist";
     [self addChildViewController:artists];
     // Do any additional setup after loading the view.
+    NSLog(@"tabbar");
 }
 
 - (void)didReceiveMemoryWarning {
