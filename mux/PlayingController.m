@@ -362,6 +362,8 @@ static AVAudioPlayer* player;
             duration.text=[self durationCountDownString:countDownTime];
             timeSlider.value=currentTime/durationTime;
         }
+        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+        [self becomeFirstResponder];
     }
 }
 
