@@ -32,10 +32,12 @@
         }
         CGFloat w=size.width;
         self.view.frame=CGRectMake(x,y,w,h);
+        
     }
     else
     {
     }
+    self.view.backgroundColor=[UIColor whiteColor];
     // Do any additional setup after loading the view.
 }
 

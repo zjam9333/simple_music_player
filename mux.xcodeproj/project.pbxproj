@@ -18,6 +18,8 @@
 		3FE4DB5F1D5D5C8900A07CB5 /* TabbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB5E1D5D5C8900A07CB5 /* TabbarController.m */; };
 		3FE4DB621D5D64AC00A07CB5 /* AllPlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */; };
 		3FE4DB641D5D662B00A07CB5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */; };
+		BB4268461D61C1C300B575ED /* OneAlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4268451D61C1C300B575ED /* OneAlbumController.m */; };
+		BBF6353B1D61B64D007D1440 /* AllArtistController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF6353A1D61B64D007D1440 /* AllArtistController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,10 @@
 		3FE4DB601D5D64AC00A07CB5 /* AllPlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllPlayListController.h; sourceTree = "<group>"; };
 		3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllPlayListController.m; sourceTree = "<group>"; };
 		3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		BB4268441D61C1C300B575ED /* OneAlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneAlbumController.h; sourceTree = "<group>"; };
+		BB4268451D61C1C300B575ED /* OneAlbumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneAlbumController.m; sourceTree = "<group>"; };
+		BBF635391D61B64D007D1440 /* AllArtistController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllArtistController.h; sourceTree = "<group>"; };
+		BBF6353A1D61B64D007D1440 /* AllArtistController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllArtistController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +98,10 @@
 				3F4AE8631D5D991E00951EA3 /* PlayingController.m */,
 				3F6A84941D5EEF76003268C5 /* ZJViewController.h */,
 				3F6A84951D5EEF76003268C5 /* ZJViewController.m */,
+				BBF635391D61B64D007D1440 /* AllArtistController.h */,
+				BBF6353A1D61B64D007D1440 /* AllArtistController.m */,
+				BB4268441D61C1C300B575ED /* OneAlbumController.h */,
+				BB4268451D61C1C300B575ED /* OneAlbumController.m */,
 			);
 			path = mux;
 			sourceTree = "<group>";
@@ -178,6 +188,8 @@
 				3FE4DB4B1D5D5BD400A07CB5 /* AppDelegate.m in Sources */,
 				3FE4DB621D5D64AC00A07CB5 /* AllPlayListController.m in Sources */,
 				3F4AE8611D5D7E2400951EA3 /* OnePlayListController.m in Sources */,
+				BBF6353B1D61B64D007D1440 /* AllArtistController.m in Sources */,
+				BB4268461D61C1C300B575ED /* OneAlbumController.m in Sources */,
 				3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */,
 				3FE4DB5F1D5D5C8900A07CB5 /* TabbarController.m in Sources */,
 				3F6A84961D5EEF76003268C5 /* ZJViewController.m in Sources */,

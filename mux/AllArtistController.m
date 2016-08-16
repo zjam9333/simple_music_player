@@ -1,33 +1,46 @@
 //
-//  AllPlayListController.m
+//  AllArtistController.m
 //  mux
 //
-//  Created by Jamm on 16/8/12.
+//  Created by iMac206 on 16/8/15.
 //  Copyright © 2016年 Jam. All rights reserved.
 //
 
-#import "AllPlayListController.h"
+#import "AllArtistController.h"
+
 #import <MediaPlayer/MediaPlayer.h>
 #import "OnePlayListController.h"
 #import "PlayingController.h"
+#import "OneAlbumController.h"
 
 #define cellHeight 64
 
-@interface AllPlayListController ()<UITableViewDelegate,UITableViewDataSource>
+@interface AllArtistController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,strong)NSArray* playListArray;
 @end
 
-@implementation AllPlayListController
+@implementation AllArtistController
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-//    [self presentViewController:[PlayingController sharedInstantype] animated:YES completion:nil];
+    //    [self presentViewController:[PlayingController sharedInstantype] animated:YES completion:nil];
 }
+
+//-(instancetype)init
+//{
+//    self=[super init];
+//    if (self) {
+//        self.title=@"artist";
+//        self.tabBarController.title=@"artist";
+//    }
+//    return self;
+//}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor=[UIColor whiteColor];
     
-    self.playListArray=[self getPlayLists];
+    self.playListArray=[self getArtists];
     UITableView* table=[[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStylePlain];
     table.tableFooterView=[[UIView alloc]init];
     table.dataSource=self;
@@ -42,31 +55,25 @@
     // Dispose of any resources that can be recreated.
 }
 
--(NSArray*)getPlayLists
+-(NSArray*)getArtists
 {
-    NSArray* array=[[MPMediaQuery playlistsQuery]collections];
-    for (MPMediaPlaylist *list in array)
+    NSArray* array=[[MPMediaQuery artistsQuery]collections];
+    for (MPMediaItemCollection *list in array)
     {
-        NSString *listName = [list valueForProperty: MPMediaPlaylistPropertyName];
-        NSLog (@"playlist:%@",listName);
+        MPMediaItem* item=list.representativeItem;
+        NSLog (@"Artists:%@",[item valueForProperty:MPMediaItemPropertyArtist]);
     }
-    return array;
-}
-
--(NSArray*)getAllSongs
-{
-    NSArray* array=[[MPMediaQuery songsQuery]items];
     return array;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1+self.playListArray.count;
+    return self.playListArray.count;
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* iden=@"allplaylistcell";
+    static NSString* iden=@"allartistcell";
     UITableViewCell* cell=[tableView dequeueReusableCellWithIdentifier:iden];
     if(cell==nil)
     {
@@ -92,49 +99,27 @@
     UIImageView* imgv=[cell.contentView viewWithTag:101];
     UILabel* lab1=[cell.contentView viewWithTag:102];
     UILabel* lab2=[cell.contentView viewWithTag:103];
-    if(indexPath.row==0)
-    {
-        imgv.image=nil;
-        lab1.text=@"all songs";
-        lab2.text=[NSString stringWithFormat:@"%d",(int)[self getAllSongs].count];
-    }
-    else
-    {
-        NSInteger index=indexPath.row-1;
-        MPMediaPlaylist* list=[self.playListArray objectAtIndex:index];
-        NSString* name=[list valueForProperty:MPMediaPlaylistPropertyName];
-        lab1.text=name;
-        lab2.text=[NSString stringWithFormat:@"%d",(int)list.items.count];
-        NSArray* seeds=[list items];
-        if (seeds.count>0) {
-            MPMediaItem* item=[seeds objectAtIndex:0];
-            MPMediaItemArtwork* artwork=item.artwork;
-            UIImage* img=[artwork imageWithSize:imgv.bounds.size];
-            imgv.image=img;
-        }
-    }
-    
+    NSInteger index=indexPath.row;
+    MPMediaPlaylist* list=[self.playListArray objectAtIndex:index];
+    MPMediaItem* item=list.representativeItem;
+    NSString* name=[item valueForProperty:MPMediaItemPropertyArtist];
+    lab1.text=name;
+    lab2.text=[NSString stringWithFormat:@"%d",(int)list.items.count];
+    imgv.image=[item.artwork imageWithSize:imgv.frame.size];
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    OnePlayListController* one=[[OnePlayListController alloc]init];
-    NSArray* items=nil;
-    if (indexPath.row==0) {
-        items=[self getAllSongs];
-        one.title=@"all songs";
-        one.items=items;
-    }
-    else
-    {
-        NSInteger row=indexPath.row-1;
-        MPMediaPlaylist* list=[self.playListArray objectAtIndex:row];
-        items=list.items;
-        one.title=[list valueForProperty:MPMediaPlaylistPropertyName];
-        one.items=items;
-    }
+    OneAlbumController* one=[[OneAlbumController alloc]init];
+    NSInteger row=indexPath.row;
+    MPMediaItemCollection* list=[self.playListArray objectAtIndex:row];
+    MPMediaItem* item=list.representativeItem;
+//    items=list.items;
+    one.title=[item valueForProperty:MPMediaItemPropertyArtist];
+    one.representiveItem=item;
+    
     [self.navigationController pushViewController:one animated:YES];
 }
 

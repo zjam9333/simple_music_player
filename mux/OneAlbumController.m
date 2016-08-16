@@ -1,24 +1,27 @@
 //
-//  OnePlayListController.m
+//  OneAlbumController.m
 //  mux
 //
-//  Created by Jamm on 16/8/12.
+//  Created by iMac206 on 16/8/15.
 //  Copyright © 2016年 Jam. All rights reserved.
 //
 
-#import "OnePlayListController.h"
+#import "OneAlbumController.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import "PlayingController.h"
+#import "OnePlayListController.h"
 #define cellHeight 54
 
-@interface OnePlayListController ()<UITableViewDataSource,UITableViewDelegate>
-
+@interface OneAlbumController ()<UITableViewDataSource,UITableViewDelegate>
+{
+    NSArray* items;
+}
 @end
 
-@implementation OnePlayListController
+@implementation OneAlbumController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    items=[self getAlbums];
     
     UITableView* table=[[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStylePlain];
     table.tableFooterView=[[UIView alloc]init];
@@ -35,7 +38,22 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.items.count;
+    return items.count;
+}
+
+-(NSArray*)getAlbums
+{
+    NSArray* array=[[MPMediaQuery albumsQuery]collections];
+    NSMutableArray* result=[NSMutableArray array];
+    for(MPMediaItemCollection* col in array)
+    {
+        MPMediaItem* it=col.representativeItem;
+        if([[[it valueForProperty:MPMediaItemPropertyArtist]uppercaseString]isEqualToString:[[self.representiveItem valueForProperty:MPMediaItemPropertyArtist]uppercaseString]])
+        {
+            [result addObject:col];
+        }
+    }
+    return [NSArray arrayWithArray:result];
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -69,15 +87,13 @@
     UILabel* labv=[cell.contentView viewWithTag:102];
     UILabel* lab2=[cell.contentView viewWithTag:103];
     
-    MPMediaItem* item=[self.items objectAtIndex:indexPath.row];
+    MPMediaItemCollection* ablum=[items objectAtIndex:indexPath.row];
+    MPMediaItem* item=ablum.representativeItem;
     
     NSString* title=item.title;
     labv.text=title;
     
-    int min=item.playbackDuration/60;
-    int sec=item.playbackDuration-min*60;
-    NSString* duration=[NSString stringWithFormat:@"%d:%02d",min,sec];
-    lab2.text=duration;
+    lab2.text=[NSString stringWithFormat:@"%ld",(long)ablum.items.count];
     
     MPMediaItemArtwork* artwork=item.artwork;
     UIImage* img=[artwork imageWithSize:imgv.bounds.size];
@@ -89,10 +105,11 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [PlayingController sharedInstantype].playingList=self.items;
-    MPMediaItem* selectItem=[self.items objectAtIndex:indexPath.row];
-    [PlayingController sharedInstantype].currentItem=selectItem;
-    [self presentViewController:[PlayingController sharedInstantype] animated:YES completion:nil];
+    MPMediaPlaylist* list=[items objectAtIndex:indexPath.row];
+    OnePlayListController* one=[[OnePlayListController alloc]init];
+    one.title=[list valueForProperty:MPMediaPlaylistPropertyName];
+    one.items=list.items;
+    [self.navigationController pushViewController:one animated:YES];
 }
 
 @end

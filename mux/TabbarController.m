@@ -8,6 +8,7 @@
 
 #import "TabbarController.h"
 #import "AllPlayListController.h"
+#import "AllArtistController.h"
 
 @interface TabbarController ()
 
@@ -17,8 +18,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UINavigationController* all=[[UINavigationController alloc]initWithRootViewController:[[AllPlayListController alloc]init]];
-    [self addChildViewController:all];
+    
+    UINavigationController* playlists=[[UINavigationController alloc]initWithRootViewController:[[AllPlayListController alloc]init]];
+    playlists.title=@"playlist";
+    playlists.topViewController.title=@"playlist";
+    [self addChildViewController:playlists];
+    
+    UINavigationController* artists=[[UINavigationController alloc]initWithRootViewController:[[AllArtistController alloc]init]];
+    artists.title=@"artist";
+    artists.topViewController.title=@"artist";
+    [self addChildViewController:artists];
     // Do any additional setup after loading the view.
 }
 

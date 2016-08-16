@@ -12,7 +12,7 @@
 
 @interface PlayingController : UIViewController
 
-@property (nonatomic,strong)NSMutableArray* playingList;
+@property (nonatomic,strong)NSArray* playingList;
 @property (nonatomic,strong)MPMediaItem* currentItem;
 
 +(PlayingController*)sharedInstantype;

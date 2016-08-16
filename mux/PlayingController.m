@@ -204,9 +204,9 @@ static AVAudioPlayer* player;
 
 -(void)setPlayingList:(NSMutableArray *)playingList
 {
-    [_playingList removeAllObjects];
-    [_playingList addObjectsFromArray:playingList];
+    _playingList=[NSArray arrayWithArray:playingList];
     [playedList removeAllObjects];
+    [willPlayList removeAllObjects];
     [willPlayList addObjectsFromArray:_playingList];
 }
 
@@ -371,11 +371,13 @@ static AVAudioPlayer* player;
     {
         UISlider* sli=(UISlider*)sender;
         [[MPMusicPlayerController applicationMusicPlayer]setVolume:sli.value];
+        MPVolumeSettingsAlertHide();
     }
 }
 
 -(void)volumeDidChanged:(NSNotification *)notification
 {
+    MPVolumeSettingsAlertHide();
     if(volumeSlider.isTracking)
         volumeSlider.value=[[[notification userInfo]objectForKey:@"AVSystemController_AudioVolumeNotificationParameter"]floatValue];
 }
@@ -390,11 +392,17 @@ static AVAudioPlayer* player;
     }
     else if(interruptionType==AVAudioSessionInterruptionTypeEnded)
     {
-        if(wasPlaying)
+        if([[dict allKeys]containsObject:AVAudioSessionInterruptionOptionKey])
         {
-            [player play];
-            [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-            [self becomeFirstResponder];
+            if([[dict valueForKey:AVAudioSessionInterruptionOptionKey]integerValue]==AVAudioSessionInterruptionOptionShouldResume)
+            {
+                if(wasPlaying)
+                {
+                    [player play];
+                    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+                    [self becomeFirstResponder];
+                }
+            }
         }
     }
 }
