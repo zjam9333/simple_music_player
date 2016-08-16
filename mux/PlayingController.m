@@ -339,7 +339,6 @@ static AVAudioPlayer* player;
 
 -(void)timerRunning
 {
-    
     if (player) {
         NSMutableDictionary* dict=[NSMutableDictionary dictionary];
         [dict setValue:@(player.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
@@ -365,6 +364,7 @@ static AVAudioPlayer* player;
         [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
         [self becomeFirstResponder];
     }
+    [play setTitle:player.isPlaying?@"◼︎":@"▶︎" forState:UIControlStateNormal];
 }
 
 -(void)volumeValueChanged:(id)sender
