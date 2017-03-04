@@ -14,7 +14,6 @@
 		3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB471D5D5BD400A07CB5 /* main.m */; };
 		3FE4DB4B1D5D5BD400A07CB5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB4A1D5D5BD400A07CB5 /* AppDelegate.m */; };
 		3FE4DB531D5D5BD400A07CB5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FE4DB521D5D5BD400A07CB5 /* Assets.xcassets */; };
-		3FE4DB561D5D5BD400A07CB5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FE4DB541D5D5BD400A07CB5 /* LaunchScreen.storyboard */; };
 		3FE4DB5F1D5D5C8900A07CB5 /* TabbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB5E1D5D5C8900A07CB5 /* TabbarController.m */; };
 		3FE4DB621D5D64AC00A07CB5 /* AllPlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */; };
 		3FE4DB641D5D662B00A07CB5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */; };
@@ -35,7 +34,6 @@
 		3FE4DB491D5D5BD400A07CB5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3FE4DB4A1D5D5BD400A07CB5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3FE4DB521D5D5BD400A07CB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3FE4DB551D5D5BD400A07CB5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3FE4DB571D5D5BD400A07CB5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FE4DB5D1D5D5C8900A07CB5 /* TabbarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabbarController.h; sourceTree = "<group>"; };
 		3FE4DB5E1D5D5C8900A07CB5 /* TabbarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabbarController.m; sourceTree = "<group>"; };
@@ -85,7 +83,6 @@
 				3FE4DB491D5D5BD400A07CB5 /* AppDelegate.h */,
 				3FE4DB4A1D5D5BD400A07CB5 /* AppDelegate.m */,
 				3FE4DB521D5D5BD400A07CB5 /* Assets.xcassets */,
-				3FE4DB541D5D5BD400A07CB5 /* LaunchScreen.storyboard */,
 				3FE4DB571D5D5BD400A07CB5 /* Info.plist */,
 				3FE4DB461D5D5BD400A07CB5 /* Supporting Files */,
 				3FE4DB5D1D5D5C8900A07CB5 /* TabbarController.h */,
@@ -145,7 +142,7 @@
 				TargetAttributes = {
 					3FE4DB421D5D5BD400A07CB5 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 4NU738LHQ7;
+						DevelopmentTeam = KPC52YPZEQ;
 					};
 				};
 			};
@@ -172,7 +169,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3FE4DB561D5D5BD400A07CB5 /* LaunchScreen.storyboard in Resources */,
 				3FE4DB531D5D5BD400A07CB5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -197,17 +193,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		3FE4DB541D5D5BD400A07CB5 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3FE4DB551D5D5BD400A07CB5 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		3FE4DB581D5D5BD400A07CB5 /* Debug */ = {
@@ -294,6 +279,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = mux/Info.plist;
@@ -309,6 +295,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = mux/Info.plist;

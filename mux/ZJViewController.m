@@ -7,6 +7,7 @@
 //
 
 #import "ZJViewController.h"
+#import "PlayingController.h"
 
 @interface ZJViewController ()
 
@@ -39,6 +40,9 @@
     }
     self.view.backgroundColor=[UIColor whiteColor];
     // Do any additional setup after loading the view.
+    
+    UIBarButtonItem* pl=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(goToPlaying)];
+    self.navigationItem.rightBarButtonItem=pl;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,14 +50,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)goToPlaying
+{
+    [self.navigationController pushViewController:[PlayingController sharedInstantype] animated:YES];
 }
-*/
 
 @end

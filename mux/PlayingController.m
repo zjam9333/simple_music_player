@@ -364,7 +364,7 @@ static AVAudioPlayer* player;
         [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
         [self becomeFirstResponder];
     }
-    [play setTitle:player.isPlaying?@"◼︎":@"▶︎" forState:UIControlStateNormal];
+    [play setTitle:player.isPlaying?@"||":@"▶︎" forState:UIControlStateNormal];
 }
 
 -(void)volumeValueChanged:(id)sender
