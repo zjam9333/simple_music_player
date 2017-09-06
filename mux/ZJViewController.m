@@ -52,7 +52,7 @@
 
 -(void)goToPlaying
 {
-    [self.navigationController pushViewController:[PlayingController sharedInstantype] animated:YES];
+    [self presentViewController:[PlayingController sharedInstantype] animated:YES completion:nil];
 }
 
 @end
