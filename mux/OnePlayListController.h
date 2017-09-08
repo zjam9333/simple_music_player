@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZJViewController.h"
+#import "BaseTableViewController.h"
+#import "MediaQuery.h"
 
-@interface OnePlayListController : ZJViewController
+@interface OnePlayListController : BaseTableViewController
 
-@property (nonatomic,strong) NSArray* items;
+@property (nonatomic,strong) MPMediaPlaylist* playList;
 
 @end

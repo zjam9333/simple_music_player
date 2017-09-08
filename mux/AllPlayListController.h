@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZJViewController.h"
+#import "BaseTableViewController.h"
 
-@interface AllPlayListController : ZJViewController
+@interface AllPlayListController : BaseTableViewController
 
 @end
