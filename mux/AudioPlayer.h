@@ -10,22 +10,27 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 #define AudioPlayerPlayingMediaInfoNotification @"AudioPlayerPlayingMediaInfoNotification"
+#define AudioPlayerStartMediaPlayNotification @"AudioPlayerStartMediaPlayNotification"
 
-@interface AudioPlayer : UIResponder
+@interface AudioPlayer : NSObject
 
 +(instancetype)sharedAudioPlayer;
 
 @property (nonatomic,strong) MPMediaItem* playingMediaItem;
 @property (nonatomic,strong) MPMediaPlaylist* playingList;
 
-@property (readonly) BOOL hasSongPlay;
+@property (readonly,nonatomic) BOOL hasSongPlay;
 
 -(void)setPlayingMediaItem:(MPMediaItem*)item inPlayList:(MPMediaPlaylist*)list;
 
 -(void)play;
 -(void)pause;
+-(void)playOrPause;
 -(void)playPrevious;
 -(void)playNext;
+-(void)shuffle:(BOOL)shuffle;
+
+-(void)becomeActive;
 
 @property (nonatomic,assign) CGFloat progress;
 

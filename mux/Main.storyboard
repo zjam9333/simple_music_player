@@ -24,10 +24,10 @@
             </objects>
             <point key="canvasLocation" x="1369" y="381"/>
         </scene>
-        <!--One Play List Controller-->
+        <!--播放列表-->
         <scene sceneID="EXV-pm-meR">
             <objects>
-                <tableViewController storyboardIdentifier="OnePlayListController" id="6Ol-f0-uZY" customClass="OnePlayListController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="OnePlayListController" title="播放列表" id="6Ol-f0-uZY" customClass="OnePlayListController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="eUn-kf-6YX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -43,11 +43,11 @@
             </objects>
             <point key="canvasLocation" x="1756" y="381"/>
         </scene>
-        <!--Item-->
+        <!--播放列表-->
         <scene sceneID="XhA-yO-5X9">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="W7i-t0-XUw" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="W2M-lN-Jo3"/>
+                    <tabBarItem key="tabBarItem" title="播放列表" id="W2M-lN-Jo3"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4Iz-nu-tO4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

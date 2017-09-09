@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3F4AE8611D5D7E2400951EA3 /* OnePlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */; };
-		3F4AE8641D5D991E00951EA3 /* PlayingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4AE8631D5D991E00951EA3 /* PlayingController.m */; };
 		3F6A84981D5F3572003268C5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F6A84971D5F3572003268C5 /* AVFoundation.framework */; };
 		3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB471D5D5BD400A07CB5 /* main.m */; };
 		3FE4DB4B1D5D5BD400A07CB5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB4A1D5D5BD400A07CB5 /* AppDelegate.m */; };
@@ -33,8 +32,6 @@
 /* Begin PBXFileReference section */
 		3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePlayListController.h; sourceTree = "<group>"; };
 		3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnePlayListController.m; sourceTree = "<group>"; };
-		3F4AE8621D5D991E00951EA3 /* PlayingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingController.h; sourceTree = "<group>"; };
-		3F4AE8631D5D991E00951EA3 /* PlayingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingController.m; sourceTree = "<group>"; };
 		3F6A84971D5F3572003268C5 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3FE4DB431D5D5BD400A07CB5 /* mux.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mux.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FE4DB471D5D5BD400A07CB5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -160,8 +157,6 @@
 				3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */,
 				3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */,
 				3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */,
-				3F4AE8621D5D991E00951EA3 /* PlayingController.h */,
-				3F4AE8631D5D991E00951EA3 /* PlayingController.m */,
 				8E8E14FC1F62301B0093459D /* BaseTableViewController.h */,
 				8E8E14FD1F62301B0093459D /* BaseTableViewController.m */,
 				8E8E15021F6233310093459D /* CustomTabController.h */,
@@ -245,7 +240,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E8E151C1F629BDD0093459D /* PlayingInfoModel.m in Sources */,
-				3F4AE8641D5D991E00951EA3 /* PlayingController.m in Sources */,
 				8E8E15101F62412E0093459D /* PlayListCell.m in Sources */,
 				3FE4DB4B1D5D5BD400A07CB5 /* AppDelegate.m in Sources */,
 				3FE4DB621D5D64AC00A07CB5 /* AllPlayListController.m in Sources */,

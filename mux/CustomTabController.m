@@ -19,6 +19,10 @@
     [super viewDidLoad];
     
     PlayingView* pv=[PlayingView defaultPlayingView];
+    CGRect pvf=pv.frame;
+    pvf.origin.y=self.tabBar.frame.origin.y;
+    pv.frame=pvf;
+    
     [self.view insertSubview:pv belowSubview:self.tabBar];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(playingViewWillHideNotification:) name:PlayingViewHidingNotification object:nil];

@@ -18,9 +18,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tableView.contentInset=UIEdgeInsetsMake(0, 0, 44, 0);
+    self.automaticallyAdjustsScrollViewInsets=NO;
     self.tableView.tableFooterView=[[UIView alloc]init];
+    self.tableView.showsVerticalScrollIndicator=NO;
     
+    self.tableView.contentInset=UIEdgeInsetsMake(64, 0, 49, 0);
+    if ([[AudioPlayer sharedAudioPlayer]hasSongPlay]) {
+        [self mediaStartedPlayingNotification:nil];
+    }
+    
+    self.tableView.contentOffset=CGPointMake(0, -self.tableView.contentInset.top);
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(mediaStartedPlayingNotification:) name:AudioPlayerStartMediaPlayNotification object:nil];
+}
+
+-(void)mediaStartedPlayingNotification:(NSNotification*)noti
+{
+    self.tableView.contentInset=UIEdgeInsetsMake(64, 0, 44+49, 0);
 }
 
 @end
