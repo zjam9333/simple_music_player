@@ -196,6 +196,7 @@
 				TargetAttributes = {
 					3FE4DB421D5D5BD400A07CB5 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 4NU738LHQ7;
 						ProvisioningStyle = Manual;
 					};
 				};
