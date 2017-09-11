@@ -22,4 +22,7 @@
 @property (nonatomic,strong) NSNumber* playing;
 @property (nonatomic,strong) NSNumber* shuffle;
 
+@property (nonatomic,strong) MPMediaItem* playingItem;
+@property (nonatomic,strong) MPMediaPlaylist* playingList;
+
 @end

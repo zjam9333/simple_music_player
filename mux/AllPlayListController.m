@@ -72,13 +72,7 @@
         
         cell.name.text=name;
         
-        NSArray* seeds=[list items];
-        if (seeds.count>0) {
-            MPMediaItem* item=[seeds objectAtIndex:0];
-            MPMediaItemArtwork* artwork=item.artwork;
-            UIImage* img=[artwork imageWithSize:cell.image.bounds.size];
-            cell.image.image=img;
-        }
+        cell.image.image=[MediaQuery artworkImageForPlaylist:list];
     }
     
     
@@ -100,6 +94,11 @@
         [self.navigationController pushViewController:one animated:YES];
     }
     
+}
+
+-(void)handlePlayingInfo:(PlayingInfoModel *)info
+{
+//    NSArray* cells=[self.ta]
 }
 
 @end

@@ -14,6 +14,10 @@
 		3FE4DB531D5D5BD400A07CB5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FE4DB521D5D5BD400A07CB5 /* Assets.xcassets */; };
 		3FE4DB621D5D64AC00A07CB5 /* AllPlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */; };
 		3FE4DB641D5D662B00A07CB5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */; };
+		8E0A0FFF1F662FEE000A4DE6 /* PlayingListHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E0A0FFD1F662FEE000A4DE6 /* PlayingListHeaderCell.m */; };
+		8E0A10001F662FEE000A4DE6 /* PlayingListHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E0A0FFE1F662FEE000A4DE6 /* PlayingListHeaderCell.xib */; };
+		8E0A10091F66356F000A4DE6 /* ShufflePlayHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E0A10071F66356F000A4DE6 /* ShufflePlayHeaderCell.m */; };
+		8E0A100A1F66356F000A4DE6 /* ShufflePlayHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E0A10081F66356F000A4DE6 /* ShufflePlayHeaderCell.xib */; };
 		8E8E14F91F622FC10093459D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E8E14F81F622FC10093459D /* Main.storyboard */; };
 		8E8E14FB1F622FCD0093459D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E8E14FA1F622FCD0093459D /* LaunchScreen.storyboard */; };
 		8E8E14FE1F62301B0093459D /* BaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E8E14FD1F62301B0093459D /* BaseTableViewController.m */; };
@@ -42,6 +46,12 @@
 		3FE4DB601D5D64AC00A07CB5 /* AllPlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllPlayListController.h; sourceTree = "<group>"; };
 		3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllPlayListController.m; sourceTree = "<group>"; };
 		3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		8E0A0FFC1F662FEE000A4DE6 /* PlayingListHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingListHeaderCell.h; sourceTree = "<group>"; };
+		8E0A0FFD1F662FEE000A4DE6 /* PlayingListHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingListHeaderCell.m; sourceTree = "<group>"; };
+		8E0A0FFE1F662FEE000A4DE6 /* PlayingListHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayingListHeaderCell.xib; sourceTree = "<group>"; };
+		8E0A10061F66356F000A4DE6 /* ShufflePlayHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShufflePlayHeaderCell.h; sourceTree = "<group>"; };
+		8E0A10071F66356F000A4DE6 /* ShufflePlayHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShufflePlayHeaderCell.m; sourceTree = "<group>"; };
+		8E0A10081F66356F000A4DE6 /* ShufflePlayHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShufflePlayHeaderCell.xib; sourceTree = "<group>"; };
 		8E8E14F81F622FC10093459D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8E8E14FA1F622FCD0093459D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8E8E14FC1F62301B0093459D /* BaseTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewController.h; sourceTree = "<group>"; };
@@ -133,6 +143,12 @@
 				8E8E15151F624C2D0093459D /* SongCell.h */,
 				8E8E15161F624C2D0093459D /* SongCell.m */,
 				8E8E15171F624C2D0093459D /* SongCell.xib */,
+				8E0A0FFC1F662FEE000A4DE6 /* PlayingListHeaderCell.h */,
+				8E0A0FFD1F662FEE000A4DE6 /* PlayingListHeaderCell.m */,
+				8E0A0FFE1F662FEE000A4DE6 /* PlayingListHeaderCell.xib */,
+				8E0A10061F66356F000A4DE6 /* ShufflePlayHeaderCell.h */,
+				8E0A10071F66356F000A4DE6 /* ShufflePlayHeaderCell.m */,
+				8E0A10081F66356F000A4DE6 /* ShufflePlayHeaderCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -196,7 +212,7 @@
 				TargetAttributes = {
 					3FE4DB421D5D5BD400A07CB5 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 4NU738LHQ7;
+						DevelopmentTeam = 9J7GGU5G9G;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -227,8 +243,10 @@
 				8E8E15111F62412E0093459D /* PlayListCell.xib in Resources */,
 				8E8E14FB1F622FCD0093459D /* LaunchScreen.storyboard in Resources */,
 				8E8E15191F624C2D0093459D /* SongCell.xib in Resources */,
+				8E0A10001F662FEE000A4DE6 /* PlayingListHeaderCell.xib in Resources */,
 				3FE4DB531D5D5BD400A07CB5 /* Assets.xcassets in Resources */,
 				8E8E14F91F622FC10093459D /* Main.storyboard in Resources */,
+				8E0A100A1F66356F000A4DE6 /* ShufflePlayHeaderCell.xib in Resources */,
 				8E8E150C1F6236160093459D /* PlayingView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -240,6 +258,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E0A0FFF1F662FEE000A4DE6 /* PlayingListHeaderCell.m in Sources */,
 				8E8E151C1F629BDD0093459D /* PlayingInfoModel.m in Sources */,
 				8E8E15101F62412E0093459D /* PlayListCell.m in Sources */,
 				3FE4DB4B1D5D5BD400A07CB5 /* AppDelegate.m in Sources */,
@@ -247,6 +266,7 @@
 				8E8E150A1F6236020093459D /* PlayingView.m in Sources */,
 				3F4AE8611D5D7E2400951EA3 /* OnePlayListController.m in Sources */,
 				8E8E15011F6230A60093459D /* AudioPlayer.m in Sources */,
+				8E0A10091F66356F000A4DE6 /* ShufflePlayHeaderCell.m in Sources */,
 				8E8E14FE1F62301B0093459D /* BaseTableViewController.m in Sources */,
 				8E8E15181F624C2D0093459D /* SongCell.m in Sources */,
 				3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */,

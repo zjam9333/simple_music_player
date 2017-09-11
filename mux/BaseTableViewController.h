@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PlayingInfoModel.h"
 
 @interface BaseTableViewController : UITableViewController
+
+@property (nonatomic,weak) PlayingInfoModel* currentPlayingInfo;
+
+-(void)handlePlayingInfo:(PlayingInfoModel*)info;
 
 @end

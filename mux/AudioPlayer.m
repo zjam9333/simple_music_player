@@ -89,6 +89,9 @@ static AudioPlayer* shared;
         currenPlayingInfo.playing=@(YES);
         currenPlayingInfo.shuffle=[[NSUserDefaults standardUserDefaults]valueForKey:@"shuffle"];
         
+        currenPlayingInfo.playingItem=self.playingMediaItem;
+        currenPlayingInfo.playingList=self.playingList;
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
         
         player=[[AVAudioPlayer alloc]initWithContentsOfURL:[media valueForProperty:MPMediaItemPropertyAssetURL] error:nil];
@@ -103,13 +106,11 @@ static AudioPlayer* shared;
 -(void)play
 {
     [player play];
-    wasPlaying=YES;
 }
 
 -(void)pause
 {
     [player pause];
-    wasPlaying=NO;
 }
 
 -(void)playOrPause
@@ -171,7 +172,8 @@ static AudioPlayer* shared;
     NSDictionary* dict=notification.userInfo;
     AVAudioSessionInterruptionType interruptionType=[[dict valueForKey:AVAudioSessionInterruptionTypeKey]integerValue];
     if (interruptionType==AVAudioSessionInterruptionTypeBegan) {
-        
+        wasPlaying=[player isPlaying];
+        [player pause];
     }
     else if(interruptionType==AVAudioSessionInterruptionTypeEnded)
     {
@@ -182,7 +184,6 @@ static AudioPlayer* shared;
                 if(wasPlaying)
                 {
                     [player play];
-                    [self becomeActive];
                 }
             }
         }
@@ -202,6 +203,7 @@ static AudioPlayer* shared;
         currenPlayingInfo.playbackDuration=@(player.duration);
         currenPlayingInfo.playing=@(player.isPlaying);
         [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
+        
         if (player.isPlaying) {
             [self becomeActive];
             NSMutableDictionary* dict=[NSMutableDictionary dictionary];
@@ -226,8 +228,8 @@ static AudioPlayer* shared;
 {
     [[UIApplication sharedApplication] becomeFirstResponder];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+//    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
 }
 
 @end
