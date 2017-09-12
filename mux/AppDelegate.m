@@ -34,27 +34,7 @@
 
 -(void)remoteControlReceivedWithEvent:(UIEvent *)event
 {
-    if (event.type==UIEventTypeRemoteControl) {
-        switch (event.subtype) {
-            case UIEventSubtypeRemoteControlPause:
-                [[AudioPlayer sharedAudioPlayer] playOrPause];
-                break;
-            case UIEventSubtypeRemoteControlPlay:
-                [[AudioPlayer sharedAudioPlayer] playOrPause];
-                break;
-            case UIEventSubtypeRemoteControlTogglePlayPause:
-                [[AudioPlayer sharedAudioPlayer] playOrPause];
-                break;
-            case UIEventSubtypeRemoteControlPreviousTrack:
-                [[AudioPlayer sharedAudioPlayer] playPrevious];
-                break;
-            case UIEventSubtypeRemoteControlNextTrack:
-                [[AudioPlayer sharedAudioPlayer] playNext];
-                break;
-            default:
-                break;
-        }
-    }
+    [[AudioPlayer sharedAudioPlayer]handleRemoteControlEvent:event];
 }
 
 @end

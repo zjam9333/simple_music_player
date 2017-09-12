@@ -31,7 +31,7 @@
                                     <constraint firstAttribute="height" constant="21" id="r6k-QR-mzL"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="artist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="doY-T3-BW0">
@@ -40,7 +40,7 @@
                                     <constraint firstAttribute="height" constant="21" id="UPC-Hw-ULP"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZbB-6g-lho">
@@ -49,7 +49,7 @@
                                     <constraint firstAttribute="width" constant="40" id="BCf-4U-99p"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -72,12 +72,22 @@
                             </mask>
                         </variation>
                     </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jz2-ka-MLE" customClass="PlayingProgressButton">
+                        <rect key="frame" x="30" y="20" width="30" height="30"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="1zB-O3-eI4"/>
+                            <constraint firstAttribute="width" secondItem="Jz2-ka-MLE" secondAttribute="height" multiplier="1:1" id="n5b-IM-dbe"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="CQu-zE-tKh" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="0wD-xu-BX3"/>
                     <constraint firstItem="gzh-9a-niq" firstAttribute="leading" secondItem="CQu-zE-tKh" secondAttribute="trailing" constant="8" id="1R9-0Q-lIX"/>
+                    <constraint firstItem="Jz2-ka-MLE" firstAttribute="centerX" secondItem="CQu-zE-tKh" secondAttribute="centerX" id="6g3-jJ-KAh"/>
                     <constraint firstItem="CQu-zE-tKh" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="P0D-wR-dfn"/>
                     <constraint firstAttribute="trailing" secondItem="gzh-9a-niq" secondAttribute="trailing" constant="15" id="Sgu-mS-7sN"/>
+                    <constraint firstItem="Jz2-ka-MLE" firstAttribute="centerY" secondItem="CQu-zE-tKh" secondAttribute="centerY" id="ZSH-vQ-43h"/>
                     <constraint firstItem="gzh-9a-niq" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="oXM-j2-clW"/>
                     <constraint firstAttribute="bottom" secondItem="CQu-zE-tKh" secondAttribute="bottom" constant="5" id="tpW-i2-XI2"/>
                 </constraints>
@@ -87,6 +97,7 @@
                 <outlet property="duration" destination="ZbB-6g-lho" id="aXO-Tl-3KQ"/>
                 <outlet property="image" destination="CQu-zE-tKh" id="2Hr-QL-QZX"/>
                 <outlet property="name" destination="c4M-Bu-eMv" id="23O-Ju-Nqo"/>
+                <outlet property="progressButton" destination="Jz2-ka-MLE" id="aen-yo-Gkx"/>
             </connections>
             <point key="canvasLocation" x="406" y="435.5"/>
         </tableViewCell>

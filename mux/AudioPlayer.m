@@ -209,6 +209,31 @@ static AudioPlayer* shared;
     }
 }
 
+-(void)handleRemoteControlEvent:(UIEvent *)event
+{
+    if (event.type==UIEventTypeRemoteControl) {
+        switch (event.subtype) {
+            case UIEventSubtypeRemoteControlPause:
+                [self playOrPause];
+                break;
+            case UIEventSubtypeRemoteControlPlay:
+                [self playOrPause];
+                break;
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                [self playOrPause];
+                break;
+            case UIEventSubtypeRemoteControlPreviousTrack:
+                [self playPrevious];
+                break;
+            case UIEventSubtypeRemoteControlNextTrack:
+                [self playNext];
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 -(void)setProgress:(CGFloat)progress
 {
     _progress=progress;

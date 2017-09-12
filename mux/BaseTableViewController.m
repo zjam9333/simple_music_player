@@ -41,9 +41,12 @@
 
 -(void)refreshMediaInfoNotification:(NSNotification*)noti
 {
-    PlayingInfoModel* info=[noti.userInfo valueForKey:@"mediaInfo"];
-    self.currentPlayingInfo=info;
-    [self handlePlayingInfo:info];
+    if ([[UIApplication sharedApplication]applicationState]==UIApplicationStateActive) {
+        PlayingInfoModel* info=[noti.userInfo valueForKey:@"mediaInfo"];
+        self.currentPlayingInfo=info;
+        [self handlePlayingInfo:info];
+    }
+    
 }
 
 -(void)handlePlayingInfo:(PlayingInfoModel *)info

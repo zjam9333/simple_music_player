@@ -62,6 +62,7 @@
     if (indexPath.section==0) {
         cell.name.text=@"所有歌曲";
         cell.image.image=nil;
+        cell.progressButton.hidden=YES;
     }
     else
     {
@@ -73,6 +74,11 @@
         cell.name.text=name;
         
         cell.image.image=[MediaQuery artworkImageForPlaylist:list];
+        
+        BOOL isThis=list.persistentID==self.currentPlayingInfo.playingList.persistentID;
+        
+        PlayingProgressButton* ppb=cell.progressButton;
+        ppb.hidden=!isThis;
     }
     
     
@@ -99,6 +105,25 @@
 -(void)handlePlayingInfo:(PlayingInfoModel *)info
 {
 //    NSArray* cells=[self.ta]
+    MPMediaPlaylist* list=info.playingList;
+    NSInteger isplay=info.playing.integerValue;
+    CGFloat progress=info.currentTime.floatValue/info.playbackDuration.floatValue;
+    NSArray* cells=[self.tableView visibleCells];
+    for (UITableViewCell* ce in cells) {
+        
+        NSIndexPath* indexPath=[self.tableView indexPathForCell:ce];
+        
+        if ([ce isKindOfClass:[PlayListCell class]]&&indexPath.section==1) {
+            MPMediaPlaylist* thatlist=[self.playListArray objectAtIndex:indexPath.row];
+            BOOL isThis=list.persistentID==thatlist.persistentID;
+            
+            PlayingProgressButton* ppb=((PlayListCell*)ce).progressButton;
+            ppb.hidden=!isThis;
+            ppb.progress=progress;
+            ppb.currentState=isplay;
+        }
+    }
+
 }
 
 @end

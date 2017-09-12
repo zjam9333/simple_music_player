@@ -20,4 +20,6 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)progressButton:(UIControl *)sender {
+}
 @end

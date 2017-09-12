@@ -32,6 +32,8 @@
 
 -(void)becomeActive;
 
+-(void)handleRemoteControlEvent:(UIEvent *)event;
+
 @property (nonatomic,assign) CGFloat progress;
 
 @end

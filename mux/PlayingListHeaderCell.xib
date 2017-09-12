@@ -36,22 +36,32 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bQa-DL-tuR">
                                 <rect key="frame" x="148" y="0.0" width="146" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zS5-qP-Jqw">
                                 <rect key="frame" x="148" y="26" width="146" height="16"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hs1-hW-180" customClass="PlayingProgressButton">
+                                <rect key="frame" x="93" y="93" width="30" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="59s-xE-Lc1"/>
+                                    <constraint firstAttribute="height" constant="30" id="MYG-Uz-Mxk"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="zS5-qP-Jqw" secondAttribute="trailing" id="6gn-ea-C0u"/>
+                            <constraint firstItem="hs1-hW-180" firstAttribute="bottom" secondItem="rCF-8i-nFy" secondAttribute="bottom" constant="-10" id="7EN-fd-nl4"/>
                             <constraint firstItem="bQa-DL-tuR" firstAttribute="leading" secondItem="rCF-8i-nFy" secondAttribute="trailing" constant="15" id="9S8-GN-Hi2"/>
                             <constraint firstItem="bQa-DL-tuR" firstAttribute="top" secondItem="XaG-zm-sR5" secondAttribute="top" id="BKE-YO-N2E"/>
                             <constraint firstItem="zS5-qP-Jqw" firstAttribute="leading" secondItem="rCF-8i-nFy" secondAttribute="trailing" constant="15" id="FDu-Rr-MIc"/>
+                            <constraint firstItem="hs1-hW-180" firstAttribute="trailing" secondItem="rCF-8i-nFy" secondAttribute="trailing" constant="-10" id="RUP-qm-5x2"/>
                             <constraint firstAttribute="bottom" secondItem="rCF-8i-nFy" secondAttribute="bottom" id="UAp-1F-AzL"/>
                             <constraint firstItem="rCF-8i-nFy" firstAttribute="leading" secondItem="XaG-zm-sR5" secondAttribute="leading" id="iei-2i-ZW6"/>
                             <constraint firstItem="zS5-qP-Jqw" firstAttribute="top" secondItem="bQa-DL-tuR" secondAttribute="bottom" constant="5" id="jKv-Fq-kjT"/>
@@ -70,6 +80,7 @@
             <connections>
                 <outlet property="image" destination="rCF-8i-nFy" id="eE9-Wg-a48"/>
                 <outlet property="name" destination="bQa-DL-tuR" id="xV1-dX-tPd"/>
+                <outlet property="progressButton" destination="hs1-hW-180" id="Ro3-Zp-NCB"/>
                 <outlet property="total" destination="zS5-qP-Jqw" id="Oiy-fB-CCc"/>
             </connections>
             <point key="canvasLocation" x="142" y="215"/>

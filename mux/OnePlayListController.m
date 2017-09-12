@@ -65,6 +65,10 @@
         cell.image.image=[MediaQuery artworkImageForPlaylist:self.playList];
         cell.name.text=self.playList.name;
         cell.total.text=[NSString stringWithFormat:@"%d 首歌曲",(int)self.playList.count];
+        
+        BOOL isThis=(self.currentPlayingInfo.playingList.persistentID==self.playList.persistentID);
+        cell.progressButton.hidden=!isThis;
+        
         return cell;
     }
     else if (indexPath.section==1){
@@ -92,8 +96,8 @@
         cell.duration.text=duration;
         
         //
-        //    BOOL isThis=self.currentPlayingInfo.playingItem.persistentID==item.persistentID;
-        //    cell.backgroundColor=isThis?[UIColor redColor]:[UIColor whiteColor];
+        BOOL isThis=(self.currentPlayingInfo.playingItem.persistentID==item.persistentID)&&(self.currentPlayingInfo.playingList.persistentID==self.playList.persistentID);
+        cell.progressButton.hidden=!isThis;
         
         return cell;
     }
@@ -119,14 +123,32 @@
 
 -(void)handlePlayingInfo:(PlayingInfoModel *)info
 {
-//    MPMediaItem* playing=info.playingItem;
-//    NSArray* cells=[self.tableView visibleCells];
-//    for (UITableViewCell* ce in cells) {
-//        NSIndexPath* indexPath=[self.tableView indexPathForCell:ce];
-//        MPMediaItem* item=[[self.playList items]objectAtIndex:indexPath.row];
-//        BOOL isThis=playing.persistentID==item.persistentID;
-//        ce.backgroundColor=isThis?[UIColor redColor]:[UIColor whiteColor];
-//    }
+    MPMediaItem* playing=info.playingItem;
+    MPMediaPlaylist* playlist=info.playingList;
+    NSInteger isplay=info.playing.integerValue;
+    CGFloat progress=info.currentTime.floatValue/info.playbackDuration.floatValue;
+    NSArray* cells=[self.tableView visibleCells];
+    for (UITableViewCell* ce in cells) {
+        
+        NSIndexPath* indexPath=[self.tableView indexPathForCell:ce];
+        if ([ce isKindOfClass:[SongCell class]]&&indexPath.section==2) {
+            MPMediaItem* item=[[self.playList items]objectAtIndex:indexPath.row];
+            BOOL isThis=playing.persistentID==item.persistentID;
+            
+            PlayingProgressButton* ppb=((SongCell*)ce).progressButton;
+            ppb.hidden=!isThis;
+            ppb.progress=progress;
+            ppb.currentState=isplay;
+        }
+        else if ([ce isKindOfClass:[PlayingListHeaderCell class]]&&indexPath.section==0) {
+            BOOL isThis=playlist.persistentID==self.playList.persistentID;
+            
+            PlayingProgressButton* ppb=((SongCell*)ce).progressButton;
+            ppb.hidden=!isThis;
+            ppb.progress=progress;
+            ppb.currentState=isplay;
+        }
+    }
 }
 
 @end

@@ -25,22 +25,33 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eA4-yy-CHd">
                         <rect key="frame" x="125" y="45" width="188" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="94h-h4-4cJ" customClass="PlayingProgressButton">
+                        <rect key="frame" x="48" y="41" width="30" height="30"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="OuD-pu-L2L"/>
+                            <constraint firstAttribute="width" constant="30" id="zHz-Ay-aN8"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="eA4-yy-CHd" firstAttribute="leading" secondItem="WoR-aL-BDc" secondAttribute="trailing" constant="15" id="2xs-lH-fGp"/>
                     <constraint firstAttribute="trailing" secondItem="eA4-yy-CHd" secondAttribute="trailing" constant="15" id="3S9-gx-OrI"/>
+                    <constraint firstItem="94h-h4-4cJ" firstAttribute="centerY" secondItem="WoR-aL-BDc" secondAttribute="centerY" id="59U-Tc-qhW"/>
                     <constraint firstAttribute="bottom" secondItem="WoR-aL-BDc" secondAttribute="bottom" constant="8" id="6Nf-cE-shG"/>
                     <constraint firstItem="eA4-yy-CHd" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="MhC-bM-q6d"/>
                     <constraint firstItem="WoR-aL-BDc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="azd-Gh-wC6"/>
+                    <constraint firstItem="94h-h4-4cJ" firstAttribute="centerX" secondItem="WoR-aL-BDc" secondAttribute="centerX" id="dUh-Hd-OF8"/>
                     <constraint firstItem="WoR-aL-BDc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="gIK-OV-RGD"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="image" destination="WoR-aL-BDc" id="eoi-MS-d2u"/>
                 <outlet property="name" destination="eA4-yy-CHd" id="HxE-a4-k6i"/>
+                <outlet property="progressButton" destination="94h-h4-4cJ" id="0U3-Mt-fU5"/>
             </connections>
             <point key="canvasLocation" x="158.5" y="32"/>
         </tableViewCell>

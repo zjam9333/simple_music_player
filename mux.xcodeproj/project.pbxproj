@@ -31,6 +31,7 @@
 		8E8E15181F624C2D0093459D /* SongCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E8E15161F624C2D0093459D /* SongCell.m */; };
 		8E8E15191F624C2D0093459D /* SongCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E8E15171F624C2D0093459D /* SongCell.xib */; };
 		8E8E151C1F629BDD0093459D /* PlayingInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E8E151B1F629BDD0093459D /* PlayingInfoModel.m */; };
+		8EA31FD51F678C2F005600AD /* PlayingProgressButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EA31FD41F678C2F005600AD /* PlayingProgressButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +74,8 @@
 		8E8E15171F624C2D0093459D /* SongCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SongCell.xib; sourceTree = "<group>"; };
 		8E8E151A1F629BDD0093459D /* PlayingInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingInfoModel.h; sourceTree = "<group>"; };
 		8E8E151B1F629BDD0093459D /* PlayingInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingInfoModel.m; sourceTree = "<group>"; };
+		8EA31FD31F678C2F005600AD /* PlayingProgressButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingProgressButton.h; sourceTree = "<group>"; };
+		8EA31FD41F678C2F005600AD /* PlayingProgressButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingProgressButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +152,8 @@
 				8E0A10061F66356F000A4DE6 /* ShufflePlayHeaderCell.h */,
 				8E0A10071F66356F000A4DE6 /* ShufflePlayHeaderCell.m */,
 				8E0A10081F66356F000A4DE6 /* ShufflePlayHeaderCell.xib */,
+				8EA31FD31F678C2F005600AD /* PlayingProgressButton.h */,
+				8EA31FD41F678C2F005600AD /* PlayingProgressButton.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -270,6 +275,7 @@
 				8E8E14FE1F62301B0093459D /* BaseTableViewController.m in Sources */,
 				8E8E15181F624C2D0093459D /* SongCell.m in Sources */,
 				3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */,
+				8EA31FD51F678C2F005600AD /* PlayingProgressButton.m in Sources */,
 				8E8E15041F6233310093459D /* CustomTabController.m in Sources */,
 				8E8E15071F6233F40093459D /* MediaQuery.m in Sources */,
 			);
