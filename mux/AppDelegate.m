@@ -32,11 +32,6 @@
     [[AudioPlayer sharedAudioPlayer]becomeActive];
 }
 
--(BOOL)canBecomeFirstResponder
-{
-    return YES;
-}
-
 -(void)remoteControlReceivedWithEvent:(UIEvent *)event
 {
     if (event.type==UIEventTypeRemoteControl) {

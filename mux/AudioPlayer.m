@@ -22,7 +22,6 @@ static AudioPlayer* shared;
     AVAudioPlayer* player;
     PlayingInfoModel* currenPlayingInfo;
     NSMutableArray* playedMedias;
-    BOOL wasPlaying;
 }
 
 +(instancetype)sharedAudioPlayer
@@ -39,6 +38,8 @@ static AudioPlayer* shared;
     if (self) {
 
         [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(handleInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRouteChange:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
+        
         timer=[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerRunning) userInfo:nil repeats:YES];
         [timer setFireDate:[NSDate date]];
     }
@@ -168,11 +169,13 @@ static AudioPlayer* shared;
 
 -(void)handleInterruption:(NSNotification*)notification
 {
-    NSLog(@"interruption: \n%@",notification);
+    NSLog(@"\n\ninterruption: \n%@",notification);
+    
+    
     NSDictionary* dict=notification.userInfo;
     AVAudioSessionInterruptionType interruptionType=[[dict valueForKey:AVAudioSessionInterruptionTypeKey]integerValue];
     if (interruptionType==AVAudioSessionInterruptionTypeBegan) {
-        wasPlaying=[player isPlaying];
+        
         [player pause];
     }
     else if(interruptionType==AVAudioSessionInterruptionTypeEnded)
@@ -181,11 +184,27 @@ static AudioPlayer* shared;
         {
             if([[dict valueForKey:AVAudioSessionInterruptionOptionKey]integerValue]==AVAudioSessionInterruptionOptionShouldResume)
             {
-                if(wasPlaying)
-                {
-                    [player play];
-                }
+                [self becomeActive];
+                [player play];
             }
+        }
+    }
+}
+
+-(void)handleRouteChange:(NSNotification*)notification
+{
+//    NSLog(@"routechange: \n%@",notification);
+    
+    NSDictionary* userinfo=notification.userInfo;
+    
+    AVAudioSessionRouteChangeReason reason=[[userinfo valueForKey:AVAudioSessionRouteChangeReasonKey]unsignedIntegerValue];
+    
+    if (reason==AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
+        
+        AVAudioSessionRouteDescription* prevoiusRouteDescription=[userinfo valueForKey:AVAudioSessionRouteChangePreviousRouteKey];
+        AVAudioSessionPortDescription* portDescription=prevoiusRouteDescription.outputs.firstObject;
+        if ([portDescription.portType isEqualToString:AVAudioSessionPortHeadphones]) {
+            [self pause];
         }
     }
 }
@@ -202,6 +221,7 @@ static AudioPlayer* shared;
         currenPlayingInfo.currentTime=@(player.currentTime);
         currenPlayingInfo.playbackDuration=@(player.duration);
         currenPlayingInfo.playing=@(player.isPlaying);
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
         
         if (player.isPlaying) {
@@ -228,8 +248,12 @@ static AudioPlayer* shared;
 {
     [[UIApplication sharedApplication] becomeFirstResponder];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-//    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//    [[AVAudioSession sharedInstance]setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
 }
 
 @end
