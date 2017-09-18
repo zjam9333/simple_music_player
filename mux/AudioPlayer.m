@@ -12,6 +12,8 @@
 
 static AudioPlayer* shared;
 
+const CFTimeInterval scheduledTime=0.5;
+
 @interface AudioPlayer()<AVAudioPlayerDelegate>
 
 @end
@@ -22,6 +24,7 @@ static AudioPlayer* shared;
     AVAudioPlayer* player;
     PlayingInfoModel* currenPlayingInfo;
     NSMutableArray* playedMedias;
+    CFTimeInterval pausedTime;
 }
 
 +(instancetype)sharedAudioPlayer
@@ -40,7 +43,7 @@ static AudioPlayer* shared;
         [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(handleInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRouteChange:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
         
-        timer=[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerRunning) userInfo:nil repeats:YES];
+        timer=[NSTimer scheduledTimerWithTimeInterval:scheduledTime target:self selector:@selector(timerRunning) userInfo:nil repeats:YES];
         [timer setFireDate:[NSDate date]];
     }
     return self;
@@ -106,11 +109,13 @@ static AudioPlayer* shared;
 
 -(void)play
 {
+    [self becomeActive];
     [player play];
 }
 
 -(void)pause
 {
+    pausedTime=0;
     [player pause];
 }
 
@@ -175,8 +180,7 @@ static AudioPlayer* shared;
     NSDictionary* dict=notification.userInfo;
     AVAudioSessionInterruptionType interruptionType=[[dict valueForKey:AVAudioSessionInterruptionTypeKey]integerValue];
     if (interruptionType==AVAudioSessionInterruptionTypeBegan) {
-        
-        [player pause];
+        [self pause];
     }
     else if(interruptionType==AVAudioSessionInterruptionTypeEnded)
     {
@@ -184,8 +188,9 @@ static AudioPlayer* shared;
         {
             if([[dict valueForKey:AVAudioSessionInterruptionOptionKey]integerValue]==AVAudioSessionInterruptionOptionShouldResume)
             {
-                [self becomeActive];
-                [player play];
+                if (pausedTime<60) {
+                    [self play];
+                }
             }
         }
     }
@@ -250,7 +255,6 @@ static AudioPlayer* shared;
         [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
         
         if (player.isPlaying) {
-            [self becomeActive];
             NSMutableDictionary* dict=[NSMutableDictionary dictionary];
             [dict setValue:@(player.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
             [dict setValue:@(player.duration) forKey:MPMediaItemPropertyPlaybackDuration];
@@ -260,6 +264,10 @@ static AudioPlayer* shared;
             [dict setObject:currenPlayingInfo.mediaArtwork forKey:MPMediaItemPropertyArtwork];
             [[MPNowPlayingInfoCenter
               defaultCenter] setNowPlayingInfo:dict];
+        }
+        else
+        {
+            pausedTime=pausedTime+scheduledTime;
         }
     }
 }
