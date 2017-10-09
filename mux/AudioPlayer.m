@@ -24,7 +24,6 @@ const CFTimeInterval scheduledTime=0.5;
     AVAudioPlayer* player;
     PlayingInfoModel* currenPlayingInfo;
     NSMutableArray* playedMedias;
-    CFTimeInterval pausedTime;
 }
 
 +(instancetype)sharedAudioPlayer
@@ -115,7 +114,6 @@ const CFTimeInterval scheduledTime=0.5;
 
 -(void)pause
 {
-    pausedTime=0;
     [player pause];
 }
 
@@ -175,25 +173,25 @@ const CFTimeInterval scheduledTime=0.5;
 -(void)handleInterruption:(NSNotification*)notification
 {
     NSLog(@"\n\ninterruption: \n%@",notification);
-    
-    
-    NSDictionary* dict=notification.userInfo;
-    AVAudioSessionInterruptionType interruptionType=[[dict valueForKey:AVAudioSessionInterruptionTypeKey]integerValue];
-    if (interruptionType==AVAudioSessionInterruptionTypeBegan) {
-        [self pause];
-    }
-    else if(interruptionType==AVAudioSessionInterruptionTypeEnded)
-    {
-        if([[dict allKeys]containsObject:AVAudioSessionInterruptionOptionKey])
-        {
-            if([[dict valueForKey:AVAudioSessionInterruptionOptionKey]integerValue]==AVAudioSessionInterruptionOptionShouldResume)
-            {
-                if (pausedTime<60) {
-                    [self play];
-                }
-            }
-        }
-    }
+//    
+//    
+//    NSDictionary* dict=notification.userInfo;
+//    AVAudioSessionInterruptionType interruptionType=[[dict valueForKey:AVAudioSessionInterruptionTypeKey]integerValue];
+//    if (interruptionType==AVAudioSessionInterruptionTypeBegan) {
+//        [self pause];
+//    }
+//    else if(interruptionType==AVAudioSessionInterruptionTypeEnded)
+//    {
+//        if([[dict allKeys]containsObject:AVAudioSessionInterruptionOptionKey])
+//        {
+//            if([[dict valueForKey:AVAudioSessionInterruptionOptionKey]integerValue]==AVAudioSessionInterruptionOptionShouldResume)
+//            {
+//                if (pausedTime<60) {
+//                    [self play];
+//                }
+//            }
+//        }
+//    }
 }
 
 -(void)handleRouteChange:(NSNotification*)notification
@@ -219,10 +217,10 @@ const CFTimeInterval scheduledTime=0.5;
     if (event.type==UIEventTypeRemoteControl) {
         switch (event.subtype) {
             case UIEventSubtypeRemoteControlPause:
-                [self playOrPause];
+                [self pause];
                 break;
             case UIEventSubtypeRemoteControlPlay:
-                [self playOrPause];
+                [self play];
                 break;
             case UIEventSubtypeRemoteControlTogglePlayPause:
                 [self playOrPause];
@@ -264,10 +262,6 @@ const CFTimeInterval scheduledTime=0.5;
             [dict setObject:currenPlayingInfo.mediaArtwork forKey:MPMediaItemPropertyArtwork];
             [[MPNowPlayingInfoCenter
               defaultCenter] setNowPlayingInfo:dict];
-        }
-        else
-        {
-            pausedTime=pausedTime+scheduledTime;
         }
     }
 }

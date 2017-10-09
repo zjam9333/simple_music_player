@@ -27,11 +27,21 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"PlayListCell" bundle:nil] forCellReuseIdentifier:@"PlayListCell"];
     
     // Do any additional setup after loading the view.
+    self.refreshControl=[[UIRefreshControl alloc]init];
+    [self.refreshControl addTarget:self action:@selector(refreshAllPlayList) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)refreshAllPlayList
+{
+    self.playListArray=[MediaQuery allPlaylists];
+    [self.tableView reloadData];
+    [self.refreshControl performSelector:@selector(endRefreshing) withObject:nil afterDelay:1];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

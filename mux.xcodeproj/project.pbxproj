@@ -218,7 +218,7 @@
 					3FE4DB421D5D5BD400A07CB5 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = 9J7GGU5G9G;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
