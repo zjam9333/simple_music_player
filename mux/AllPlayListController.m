@@ -21,6 +21,8 @@
     [super viewDidLoad];
     self.view.backgroundColor=[UIColor whiteColor];
     
+    self.title=@"播放列表";
+    
     self.tableView.rowHeight=64;
     
     self.playListArray=[MediaQuery allPlaylists];
@@ -52,7 +54,7 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section==0) {
-        return 1;
+        return 0;
     }
     return self.playListArray.count;
 }

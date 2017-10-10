@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
@@ -375,6 +374,12 @@
                                 <constraint firstAttribute="width" secondItem="oLS-NY-qYv" secondAttribute="height" multiplier="1:1" id="VPh-zd-3L7"/>
                             </constraints>
                         </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="artworkShadow" translatesAutoresizingMaskIntoConstraints="NO" id="ks6-qu-SZA">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="64" id="RPs-Eg-BMV"/>
+                            </constraints>
+                        </imageView>
                         <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4AC-eq-PYH" userLabel="dismisbtnBlurBg">
                             <rect key="frame" x="11" y="27" width="26" height="26"/>
                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="x90-lR-6N7">
@@ -410,12 +415,6 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </visualEffectView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="artworkShadow" translatesAutoresizingMaskIntoConstraints="NO" id="ks6-qu-SZA">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="64" id="RPs-Eg-BMV"/>
-                            </constraints>
-                        </imageView>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="Is0-v1-swm" secondAttribute="bottom" id="2fD-oa-eec"/>
@@ -465,7 +464,7 @@
                 <outlet property="shuffleButton" destination="lQt-WZ-ACc" id="4WQ-Nm-kQY"/>
                 <outlet property="volumnView" destination="nGo-ix-aYW" id="O4g-qS-M1W"/>
             </connections>
-            <point key="canvasLocation" x="411" y="717"/>
+            <point key="canvasLocation" x="460" y="594"/>
         </view>
     </objects>
     <resources>

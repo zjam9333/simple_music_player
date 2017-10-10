@@ -18,6 +18,7 @@
 		8E0A10001F662FEE000A4DE6 /* PlayingListHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E0A0FFE1F662FEE000A4DE6 /* PlayingListHeaderCell.xib */; };
 		8E0A10091F66356F000A4DE6 /* ShufflePlayHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E0A10071F66356F000A4DE6 /* ShufflePlayHeaderCell.m */; };
 		8E0A100A1F66356F000A4DE6 /* ShufflePlayHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E0A10081F66356F000A4DE6 /* ShufflePlayHeaderCell.xib */; };
+		8E214BA41F8C6BB000C8AD3D /* AllSongController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E214BA31F8C6BB000C8AD3D /* AllSongController.m */; };
 		8E8E14F91F622FC10093459D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E8E14F81F622FC10093459D /* Main.storyboard */; };
 		8E8E14FB1F622FCD0093459D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E8E14FA1F622FCD0093459D /* LaunchScreen.storyboard */; };
 		8E8E14FE1F62301B0093459D /* BaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E8E14FD1F62301B0093459D /* BaseTableViewController.m */; };
@@ -53,6 +54,8 @@
 		8E0A10061F66356F000A4DE6 /* ShufflePlayHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShufflePlayHeaderCell.h; sourceTree = "<group>"; };
 		8E0A10071F66356F000A4DE6 /* ShufflePlayHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShufflePlayHeaderCell.m; sourceTree = "<group>"; };
 		8E0A10081F66356F000A4DE6 /* ShufflePlayHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShufflePlayHeaderCell.xib; sourceTree = "<group>"; };
+		8E214BA21F8C6BB000C8AD3D /* AllSongController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllSongController.h; sourceTree = "<group>"; };
+		8E214BA31F8C6BB000C8AD3D /* AllSongController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllSongController.m; sourceTree = "<group>"; };
 		8E8E14F81F622FC10093459D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8E8E14FA1F622FCD0093459D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8E8E14FC1F62301B0093459D /* BaseTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewController.h; sourceTree = "<group>"; };
@@ -176,6 +179,8 @@
 			children = (
 				3FE4DB601D5D64AC00A07CB5 /* AllPlayListController.h */,
 				3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */,
+				8E214BA21F8C6BB000C8AD3D /* AllSongController.h */,
+				8E214BA31F8C6BB000C8AD3D /* AllSongController.m */,
 				3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */,
 				3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */,
 				8E8E14FC1F62301B0093459D /* BaseTableViewController.h */,
@@ -265,6 +270,7 @@
 			files = (
 				8E0A0FFF1F662FEE000A4DE6 /* PlayingListHeaderCell.m in Sources */,
 				8E8E151C1F629BDD0093459D /* PlayingInfoModel.m in Sources */,
+				8E214BA41F8C6BB000C8AD3D /* AllSongController.m in Sources */,
 				8E8E15101F62412E0093459D /* PlayListCell.m in Sources */,
 				3FE4DB4B1D5D5BD400A07CB5 /* AppDelegate.m in Sources */,
 				3FE4DB621D5D64AC00A07CB5 /* AllPlayListController.m in Sources */,
