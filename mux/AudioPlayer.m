@@ -16,6 +16,10 @@ const CFTimeInterval scheduledTime=0.5;
 
 @interface AudioPlayer()<AVAudioPlayerDelegate>
 
+@property (nonatomic,strong) MPMediaItem* playingMediaItem;
+@property (nonatomic,strong) MPMediaPlaylist* playingList;
+@property (nonatomic,strong) NSArray* playingItems;
+
 @end
 
 @implementation AudioPlayer
@@ -24,6 +28,7 @@ const CFTimeInterval scheduledTime=0.5;
     AVAudioPlayer* player;
     PlayingInfoModel* currenPlayingInfo;
     NSMutableArray* playedMedias;
+    BOOL manualPaused;
 }
 
 +(instancetype)sharedAudioPlayer
@@ -67,6 +72,7 @@ const CFTimeInterval scheduledTime=0.5;
 -(void)setPlayingList:(MPMediaPlaylist *)playingList
 {
     _playingList=playingList;
+    _playingItems=playingList.items;
     playedMedias=[NSMutableArray array];
 }
 
@@ -108,12 +114,14 @@ const CFTimeInterval scheduledTime=0.5;
 
 -(void)play
 {
+    manualPaused=NO;
     [self becomeActive];
     [player play];
 }
 
 -(void)pause
 {
+    manualPaused=YES;
     [player pause];
 }
 
@@ -131,11 +139,21 @@ const CFTimeInterval scheduledTime=0.5;
 -(void)playNext
 {
     BOOL shuffle=[[[NSUserDefaults standardUserDefaults]valueForKey:@"shuffle"]boolValue];
-    NSArray* all=[self.playingList items];
+    NSArray* all=_playingItems; //[self.playingList items];
     if(shuffle)
     {
-        MPMediaItem* next=[all objectAtIndex:(arc4random()%all.count)];
-        [self playMedia:next];
+        NSMutableArray* itemsDidNotPlayed=[NSMutableArray arrayWithArray:all];
+        [itemsDidNotPlayed removeObjectsInArray:playedMedias];
+//        NSLog(@"%@",itemsDidNotPlayed);
+        if (itemsDidNotPlayed.count>0) {
+            MPMediaItem* next=[itemsDidNotPlayed objectAtIndex:(arc4random()%itemsDidNotPlayed.count)];
+            [self playMedia:next];
+        }
+        else
+        {
+            [playedMedias removeAllObjects];
+            [self playMedia:[all objectAtIndex:(arc4random()%all.count)]];
+        }
     }
     else
     {
@@ -173,25 +191,22 @@ const CFTimeInterval scheduledTime=0.5;
 -(void)handleInterruption:(NSNotification*)notification
 {
     NSLog(@"\n\ninterruption: \n%@",notification);
-//    
-//    
-//    NSDictionary* dict=notification.userInfo;
-//    AVAudioSessionInterruptionType interruptionType=[[dict valueForKey:AVAudioSessionInterruptionTypeKey]integerValue];
-//    if (interruptionType==AVAudioSessionInterruptionTypeBegan) {
+    
+    NSDictionary* dict=notification.userInfo;
+    AVAudioSessionInterruptionType interruptionType=[[dict valueForKey:AVAudioSessionInterruptionTypeKey]integerValue];
+    if (interruptionType==AVAudioSessionInterruptionTypeBegan) {
 //        [self pause];
-//    }
-//    else if(interruptionType==AVAudioSessionInterruptionTypeEnded)
-//    {
-//        if([[dict allKeys]containsObject:AVAudioSessionInterruptionOptionKey])
-//        {
-//            if([[dict valueForKey:AVAudioSessionInterruptionOptionKey]integerValue]==AVAudioSessionInterruptionOptionShouldResume)
-//            {
-//                if (pausedTime<60) {
-//                    [self play];
-//                }
-//            }
-//        }
-//    }
+    }
+    else if(interruptionType==AVAudioSessionInterruptionTypeEnded)
+    {
+        if([[dict valueForKey:AVAudioSessionInterruptionOptionKey]integerValue]==AVAudioSessionInterruptionOptionShouldResume)
+        {
+            if (!manualPaused) {
+                [self play];
+            }
+        }
+        
+    }
 }
 
 -(void)handleRouteChange:(NSNotification*)notification

@@ -16,9 +16,6 @@
 
 +(instancetype)sharedAudioPlayer;
 
-@property (nonatomic,strong) MPMediaItem* playingMediaItem;
-@property (nonatomic,strong) MPMediaPlaylist* playingList;
-
 @property (readonly,nonatomic) BOOL hasSongPlay;
 
 -(void)setPlayingMediaItem:(MPMediaItem*)item inPlayList:(MPMediaPlaylist*)list;

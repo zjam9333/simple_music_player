@@ -21,7 +21,7 @@
 -(void)awakeFromNib
 {
     [super awakeFromNib];
-    NSLog(@"%@ awakeFromNib",NSStringFromClass(self.class));
+//    NSLog(@"%@ awakeFromNib",NSStringFromClass(self.class));
     [self config];
 }
 
