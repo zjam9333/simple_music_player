@@ -13,6 +13,11 @@
 
 +(NSArray*)allPlaylists;
 
++(NSArray*)allAlbums;
+
++(NSArray*)allSongs;
+
+//+(UIImage*)artworkImageForSongs:(NSArray*)songs;
 +(UIImage*)artworkImageForPlaylist:(MPMediaPlaylist*)playlist;
 
 @end

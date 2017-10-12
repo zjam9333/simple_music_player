@@ -18,7 +18,7 @@ const CFTimeInterval scheduledTime=0.5;
 
 @property (nonatomic,strong) MPMediaItem* playingMediaItem;
 @property (nonatomic,strong) MPMediaPlaylist* playingList;
-@property (nonatomic,strong) NSArray* playingItems;
+@property (nonatomic,strong) NSArray* songs;
 
 @end
 
@@ -60,20 +60,25 @@ const CFTimeInterval scheduledTime=0.5;
 
 -(void)setPlayingMediaItem:(MPMediaItem *)item inPlayList:(MPMediaPlaylist *)list
 {
+    self.playingList=list;
+    [self setPlayMediaItem:item inSongs:list.items];
+}
+
+-(void)setSongs:(NSArray *)songs
+{
+    _songs=songs;
+    playedMedias=[NSMutableArray array];
+}
+
+-(void)setPlayMediaItem:(MPMediaItem*)item inSongs:(NSArray*)songs
+{
     id old=self.playingMediaItem;
     self.playingMediaItem=item;
-    self.playingList=list;
+    self.songs=songs;
     [self playMedia:self.playingMediaItem];
     if (old==nil&&item!=nil) {
         [[NSNotificationCenter defaultCenter]postNotificationName:AudioPlayerStartMediaPlayNotification object:nil userInfo:nil];
     }
-}
-
--(void)setPlayingList:(MPMediaPlaylist *)playingList
-{
-    _playingList=playingList;
-    _playingItems=playingList.items;
-    playedMedias=[NSMutableArray array];
 }
 
 -(void)shuffle:(BOOL)shuffle
@@ -139,7 +144,7 @@ const CFTimeInterval scheduledTime=0.5;
 -(void)playNext
 {
     BOOL shuffle=[[[NSUserDefaults standardUserDefaults]valueForKey:@"shuffle"]boolValue];
-    NSArray* all=_playingItems; //[self.playingList items];
+    NSArray* all=_songs; //[self.playingList items];
     if(shuffle)
     {
         NSMutableArray* itemsDidNotPlayed=[NSMutableArray arrayWithArray:all];

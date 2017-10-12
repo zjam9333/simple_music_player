@@ -33,6 +33,7 @@
 		8E8E15191F624C2D0093459D /* SongCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E8E15171F624C2D0093459D /* SongCell.xib */; };
 		8E8E151C1F629BDD0093459D /* PlayingInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E8E151B1F629BDD0093459D /* PlayingInfoModel.m */; };
 		8EA31FD51F678C2F005600AD /* PlayingProgressButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EA31FD41F678C2F005600AD /* PlayingProgressButton.m */; };
+		8ED95F201F8F0F0E005E1696 /* AllAlbumController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ED95F1F1F8F0F0E005E1696 /* AllAlbumController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +80,8 @@
 		8E8E151B1F629BDD0093459D /* PlayingInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingInfoModel.m; sourceTree = "<group>"; };
 		8EA31FD31F678C2F005600AD /* PlayingProgressButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingProgressButton.h; sourceTree = "<group>"; };
 		8EA31FD41F678C2F005600AD /* PlayingProgressButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingProgressButton.m; sourceTree = "<group>"; };
+		8ED95F1E1F8F0F0E005E1696 /* AllAlbumController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllAlbumController.h; sourceTree = "<group>"; };
+		8ED95F1F1F8F0F0E005E1696 /* AllAlbumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllAlbumController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +182,8 @@
 			children = (
 				3FE4DB601D5D64AC00A07CB5 /* AllPlayListController.h */,
 				3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */,
+				8ED95F1E1F8F0F0E005E1696 /* AllAlbumController.h */,
+				8ED95F1F1F8F0F0E005E1696 /* AllAlbumController.m */,
 				8E214BA21F8C6BB000C8AD3D /* AllSongController.h */,
 				8E214BA31F8C6BB000C8AD3D /* AllSongController.m */,
 				3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */,
@@ -279,6 +284,7 @@
 				8E8E15011F6230A60093459D /* AudioPlayer.m in Sources */,
 				8E0A10091F66356F000A4DE6 /* ShufflePlayHeaderCell.m in Sources */,
 				8E8E14FE1F62301B0093459D /* BaseTableViewController.m in Sources */,
+				8ED95F201F8F0F0E005E1696 /* AllAlbumController.m in Sources */,
 				8E8E15181F624C2D0093459D /* SongCell.m in Sources */,
 				3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */,
 				8EA31FD51F678C2F005600AD /* PlayingProgressButton.m in Sources */,

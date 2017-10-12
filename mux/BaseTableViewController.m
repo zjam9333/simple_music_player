@@ -21,6 +21,7 @@
     self.automaticallyAdjustsScrollViewInsets=NO;
     self.tableView.tableFooterView=[[UIView alloc]init];
     self.tableView.showsVerticalScrollIndicator=NO;
+    self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     
     self.tableView.contentInset=UIEdgeInsetsMake(64, 0, 49, 0);
     if ([[AudioPlayer sharedAudioPlayer]hasSongPlay]) {

@@ -18,6 +18,18 @@ static NSMutableDictionary* artworkImageDictionary;
     return array;
 }
 
++(NSArray*)allAlbums
+{
+    NSArray* array=[[MPMediaQuery albumsQuery]items];
+    return array;
+}
+
++(NSArray*)allSongs
+{
+    NSArray* array=[[MPMediaQuery songsQuery]items];
+    return array;
+}
+
 +(UIImage*)artworkImageForPlaylist:(MPMediaPlaylist*)playlist
 {
     if (artworkImageDictionary==nil) {

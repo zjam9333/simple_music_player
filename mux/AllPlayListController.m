@@ -59,13 +59,13 @@
     return self.playListArray.count;
 }
 
--(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section==1) {
-        return @"所有播放列表";
-    }
-    return nil;
-}
+//-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    if (section==1) {
+//        return @"所有播放列表";
+//    }
+//    return nil;
+//}
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -84,7 +84,7 @@
         NSString* name=[list valueForProperty:MPMediaPlaylistPropertyName];
         
         cell.name.text=name;
-        
+        cell.count.text=[NSString stringWithFormat:@"%d首歌",(int)list.count];
         cell.image.image=[MediaQuery artworkImageForPlaylist:list];
         
         BOOL isThis=list.persistentID==self.currentPlayingInfo.playingList.persistentID;

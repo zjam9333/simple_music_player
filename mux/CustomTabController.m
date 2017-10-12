@@ -9,6 +9,9 @@
 #import "CustomTabController.h"
 #import "PlayingView.h"
 
+#import "AllSongController.h"
+#import "AllAlbumController.h"
+
 @interface CustomTabController ()
 
 @end
@@ -17,6 +20,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //add other controllers;
+    
+//    [self addChildViewController:[[UINavigationController alloc]initWithRootViewController:[[AllAlbumController alloc]initWithStyle:UITableViewStylePlain]]];
+//    self.childViewControllers.lastObject.title=@"专辑";
+//    
+//    [self addChildViewController:[[UINavigationController alloc]initWithRootViewController:[[AllSongController alloc]initWithStyle:UITableViewStylePlain]]];
+//    self.childViewControllers.lastObject.title=@"全部歌曲";
     
     PlayingView* pv=[PlayingView defaultPlayingView];
     CGRect pvf=pv.frame;
