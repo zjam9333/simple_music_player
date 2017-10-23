@@ -14,6 +14,9 @@ static AudioPlayer* shared;
 
 const CFTimeInterval scheduledTime=0.5;
 
+const NSString* lastPlayingItemKey=@"fjs09djf0w9ef09ef09ewfoijfsd";
+const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
+
 @interface AudioPlayer()<AVAudioPlayerDelegate>
 
 @property (nonatomic,strong) MPMediaItem* playingMediaItem;
@@ -72,13 +75,13 @@ const CFTimeInterval scheduledTime=0.5;
 
 -(void)setPlayMediaItem:(MPMediaItem*)item inSongs:(NSArray*)songs
 {
-    id old=self.playingMediaItem;
+//    id old=self.playingMediaItem;
     self.playingMediaItem=item;
     self.songs=songs;
     [self playMedia:self.playingMediaItem];
-    if (old==nil&&item!=nil) {
+//    if (old==nil&&item!=nil) { //what do you mean???
         [[NSNotificationCenter defaultCenter]postNotificationName:AudioPlayerStartMediaPlayNotification object:nil userInfo:nil];
-    }
+//    }
 }
 
 -(void)shuffle:(BOOL)shuffle
@@ -301,6 +304,47 @@ const CFTimeInterval scheduledTime=0.5;
     
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
 //    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
+}
+
+-(void)saveLastPlay
+{
+    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithUnsignedLongLong:self.playingMediaItem.persistentID] forKey:lastPlayingItemKey.description
+     ];
+    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithUnsignedLongLong:self.playingList.persistentID] forKey:lastPlayingListKey.description
+     ];
+}
+
+-(void)loadLastPlay
+{
+//    return;
+    MPMediaEntityPersistentID itemID=[[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingItemKey.description]unsignedLongLongValue];
+    MPMediaEntityPersistentID listID=[[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingListKey.description]unsignedLongLongValue];
+    
+    NSArray* allsongs=[MediaQuery allSongs];
+    NSArray* alllists=[MediaQuery allPlaylists];
+    
+    for (MPMediaItem* item in allsongs) {
+        if (item.persistentID==itemID) {
+            self.playingMediaItem=item;
+            NSLog(@"%@",item);
+            for (MPMediaPlaylist* list in alllists) {
+                if (list.persistentID==listID) {
+                    if ([list.items containsObject:item]) {
+                        self.playingList=list;
+                        NSLog(@"%@",list);
+                        break;
+                    }
+                }
+            }
+            
+            [self setPlayingMediaItem:self.playingMediaItem inPlayList:self.playingList];
+            [self pause];
+//            [self performSelector:@selector(pause) withObject:nil afterDelay:0.1];
+            
+            break;
+        }
+    }
+    
 }
 
 @end

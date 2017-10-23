@@ -18,6 +18,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [[AudioPlayer sharedAudioPlayer] performSelector:@selector(loadLastPlay) withObject:nil afterDelay:1];
     return YES;
 }
 
@@ -30,6 +31,11 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
     [[AudioPlayer sharedAudioPlayer]becomeActive];
+}
+
+-(void)applicationWillTerminate:(UIApplication *)application
+{
+    [[AudioPlayer sharedAudioPlayer]saveLastPlay];
 }
 
 -(void)remoteControlReceivedWithEvent:(UIEvent *)event

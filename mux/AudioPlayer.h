@@ -31,6 +31,9 @@
 
 -(void)handleRemoteControlEvent:(UIEvent *)event;
 
+-(void)loadLastPlay;
+-(void)saveLastPlay;
+
 @property (nonatomic,assign) CGFloat progress;
 
 @end
