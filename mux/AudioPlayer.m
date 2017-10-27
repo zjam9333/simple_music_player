@@ -235,29 +235,52 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     }
 }
 
--(void)handleRemoteControlEvent:(UIEvent *)event
+//-(void)handleRemoteControlEvent:(UIEvent *)event
+//{
+//    if (event.type==UIEventTypeRemoteControl) {
+//        switch (event.subtype) {
+//            case UIEventSubtypeRemoteControlPause:
+//                [self pause];
+//                break;
+//            case UIEventSubtypeRemoteControlPlay:
+//                [self play];
+//                break;
+//            case UIEventSubtypeRemoteControlTogglePlayPause:
+//                [self playOrPause];
+//                break;
+//            case UIEventSubtypeRemoteControlPreviousTrack:
+//                [self playPrevious];
+//                break;
+//            case UIEventSubtypeRemoteControlNextTrack:
+//                [self playNext];
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+//}
+
+-(void)otherWayToHandleRemoteControlEvent
 {
-    if (event.type==UIEventTypeRemoteControl) {
-        switch (event.subtype) {
-            case UIEventSubtypeRemoteControlPause:
-                [self pause];
-                break;
-            case UIEventSubtypeRemoteControlPlay:
-                [self play];
-                break;
-            case UIEventSubtypeRemoteControlTogglePlayPause:
-                [self playOrPause];
-                break;
-            case UIEventSubtypeRemoteControlPreviousTrack:
-                [self playPrevious];
-                break;
-            case UIEventSubtypeRemoteControlNextTrack:
-                [self playNext];
-                break;
-            default:
-                break;
-        }
-    }
+    MPRemoteCommandCenter* center=[MPRemoteCommandCenter sharedCommandCenter];
+    [center.playCommand addTarget:self action:@selector(play)];
+    [center.pauseCommand addTarget:self action:@selector(pause)];
+    [center.togglePlayPauseCommand addTarget:self action:@selector(playOrPause)];
+    [center.nextTrackCommand addTarget:self action:@selector(playNext)];
+    [center.previousTrackCommand addTarget:self action:@selector(playPrevious)];
+    
+    __weak typeof(player) weplayer=player;
+    
+    [center.changePlaybackPositionCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+//        NSLog(@"%@",event);
+        if ([event isKindOfClass:[MPChangePlaybackPositionCommandEvent class]]) {
+            MPChangePlaybackPositionCommandEvent* ev=(MPChangePlaybackPositionCommandEvent*)event;
+            NSTimeInterval newPositionTime=ev.positionTime;
+            [weplayer setCurrentTime:newPositionTime];
+            return MPRemoteCommandHandlerStatusSuccess;
+        }  
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
 }
 
 -(void)setProgress:(CGFloat)progress
@@ -298,6 +321,8 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 {
     [[UIApplication sharedApplication] becomeFirstResponder];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    
+    [self otherWayToHandleRemoteControlEvent];
     
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
 //    [[AVAudioSession sharedInstance]setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];

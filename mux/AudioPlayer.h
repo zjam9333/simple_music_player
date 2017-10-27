@@ -29,7 +29,7 @@
 
 -(void)becomeActive;
 
--(void)handleRemoteControlEvent:(UIEvent *)event;
+//-(void)handleRemoteControlEvent:(UIEvent *)event;
 
 -(void)loadLastPlay;
 -(void)saveLastPlay;
