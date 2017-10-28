@@ -38,9 +38,9 @@
     [[AudioPlayer sharedAudioPlayer]saveLastPlay];
 }
 
-//-(void)remoteControlReceivedWithEvent:(UIEvent *)event
-//{
-//    [[AudioPlayer sharedAudioPlayer]handleRemoteControlEvent:event];
-//}
+-(void)remoteControlReceivedWithEvent:(UIEvent *)event
+{
+    [[AudioPlayer sharedAudioPlayer]handleRemoteControlEvent:event];
+}
 
 @end

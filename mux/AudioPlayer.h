@@ -29,11 +29,13 @@
 
 -(void)becomeActive;
 
-//-(void)handleRemoteControlEvent:(UIEvent *)event;
+-(void)handleRemoteControlEvent:(UIEvent *)event;
 
 -(void)loadLastPlay;
 -(void)saveLastPlay;
 
 @property (nonatomic,assign) CGFloat progress;
+@property (nonatomic,assign) NSTimeInterval currentTime;
+@property (nonatomic,assign,readonly) BOOL playing;
 
 @end

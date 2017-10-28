@@ -52,6 +52,8 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
         
         timer=[NSTimer scheduledTimerWithTimeInterval:scheduledTime target:self selector:@selector(timerRunning) userInfo:nil repeats:YES];
         [timer setFireDate:[NSDate date]];
+        
+        [self setRemoteCommandCenter];
     }
     return self;
 }
@@ -113,10 +115,11 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
         
         player=[[AVAudioPlayer alloc]initWithContentsOfURL:[media valueForProperty:MPMediaItemPropertyAssetURL] error:nil];
         player.delegate=self;
-        player.currentTime=media.bookmarkTime;
+        player.currentTime=0;
         [self play];
         
         [playedMedias addObject:media];
+        [self saveLastPlay];
     }
 }
 
@@ -235,8 +238,8 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     }
 }
 
-//-(void)handleRemoteControlEvent:(UIEvent *)event
-//{
+-(void)handleRemoteControlEvent:(UIEvent *)event
+{
 //    if (event.type==UIEventTypeRemoteControl) {
 //        switch (event.subtype) {
 //            case UIEventSubtypeRemoteControlPause:
@@ -258,28 +261,55 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 //                break;
 //        }
 //    }
-//}
+}
 
--(void)otherWayToHandleRemoteControlEvent
+-(void)setRemoteCommandCenter
 {
+//    return;
     MPRemoteCommandCenter* center=[MPRemoteCommandCenter sharedCommandCenter];
-    [center.playCommand addTarget:self action:@selector(play)];
-    [center.pauseCommand addTarget:self action:@selector(pause)];
-    [center.togglePlayPauseCommand addTarget:self action:@selector(playOrPause)];
-    [center.nextTrackCommand addTarget:self action:@selector(playNext)];
-    [center.previousTrackCommand addTarget:self action:@selector(playPrevious)];
     
-    __weak typeof(player) weplayer=player;
+    __weak typeof(self) weself=self;
+    
+    [center.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        NSLog(@"%@",event);
+        [weself play];
+        return weself.playing?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
+    }];
+    
+    [center.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        NSLog(@"%@",event);
+        [weself pause];
+        return !weself.playing?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
+    }];
+    
+    [center.togglePlayPauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        // 耳机用
+        NSLog(@"%@",event);
+        BOOL oldIsPlaying=[weself playing];
+        [weself playOrPause];
+        return oldIsPlaying!=weself.playing?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
+    }];
+
+    [center.nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        NSLog(@"%@",event);
+        [weself playNext];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+    [center.previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        NSLog(@"%@",event);
+        [weself playPrevious];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
     
     [center.changePlaybackPositionCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-//        NSLog(@"%@",event);
+        NSLog(@"%@",event);
         if ([event isKindOfClass:[MPChangePlaybackPositionCommandEvent class]]) {
             MPChangePlaybackPositionCommandEvent* ev=(MPChangePlaybackPositionCommandEvent*)event;
             NSTimeInterval newPositionTime=ev.positionTime;
-            [weplayer setCurrentTime:newPositionTime];
-            return MPRemoteCommandHandlerStatusSuccess;
+            [weself setCurrentTime:newPositionTime];
+            return weself.currentTime==newPositionTime?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
         }  
-        return MPRemoteCommandHandlerStatusSuccess;
+        return MPRemoteCommandHandlerStatusCommandFailed;
     }];
 }
 
@@ -287,6 +317,21 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 {
     _progress=progress;
     [player setCurrentTime:(progress*player.duration)];
+}
+
+-(void)setCurrentTime:(NSTimeInterval)currentTime
+{
+    [player setCurrentTime:currentTime];
+}
+
+-(NSTimeInterval)currentTime
+{
+    return [player currentTime];
+}
+
+-(BOOL)playing
+{
+    return player.isPlaying;
 }
 
 -(void)timerRunning
@@ -321,8 +366,6 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 {
     [[UIApplication sharedApplication] becomeFirstResponder];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    
-    [self otherWayToHandleRemoteControlEvent];
     
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
 //    [[AVAudioSession sharedInstance]setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
