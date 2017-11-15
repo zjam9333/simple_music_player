@@ -22,6 +22,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 @property (nonatomic,strong) MPMediaItem* playingMediaItem;
 @property (nonatomic,strong) MPMediaPlaylist* playingList;
 @property (nonatomic,strong) NSArray* songs;
+@property (nonatomic,strong) NSMutableArray* playingOrder;
 
 @end
 
@@ -30,8 +31,8 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     NSTimer* timer;
     AVAudioPlayer* player;
     PlayingInfoModel* currenPlayingInfo;
-    NSMutableArray* playedMedias;
     BOOL manualPaused;
+    NSInteger currentPlayingIndex;
 }
 
 +(instancetype)sharedAudioPlayer
@@ -69,32 +70,63 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     [self setPlayMediaItem:item inSongs:list.items];
 }
 
--(void)setSongs:(NSArray *)songs
-{
-    _songs=songs;
-    playedMedias=[NSMutableArray array];
-}
-
 -(void)setPlayMediaItem:(MPMediaItem*)item inSongs:(NSArray*)songs
 {
-//    id old=self.playingMediaItem;
     self.playingMediaItem=item;
     self.songs=songs;
-    [self playMedia:self.playingMediaItem];
-//    if (old==nil&&item!=nil) { //what do you mean???
-        [[NSNotificationCenter defaultCenter]postNotificationName:AudioPlayerStartMediaPlayNotification object:nil userInfo:nil];
-//    }
+    [[NSNotificationCenter defaultCenter]postNotificationName:AudioPlayerStartMediaPlayNotification object:nil userInfo:nil];
+    
+    [self rebuildSongsListWithSongs:songs currentItem:item shuffle:[self isShuffle]];
 }
 
 -(void)shuffle:(BOOL)shuffle
 {
     [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithBool:shuffle] forKey:@"shuffle"];
     currenPlayingInfo.shuffle=[NSNumber numberWithBool:shuffle];
+    
+    [self rebuildSongsListWithSongs:self.songs currentItem:self.playingMediaItem shuffle:[self isShuffle]];
 }
 
--(void)playMedia:(MPMediaItem*)media
+-(BOOL)isShuffle
 {
-    self.playingMediaItem=media;
+    BOOL shuffle=[[[NSUserDefaults standardUserDefaults]valueForKey:@"shuffle"]boolValue];
+    return shuffle;
+}
+
+-(void)rebuildSongsListWithSongs:(NSArray*)songs currentItem:(MPMediaItem*)item shuffle:(BOOL)shuffle
+{
+    self.playingOrder=[NSMutableArray array];
+    
+    NSArray* orderNow=[self sortedArray:songs shuffle:shuffle];
+    
+    NSInteger inde=[orderNow indexOfObject:item];
+    inde=inde+songs.count;
+    
+    NSArray* orderOld=[self sortedArray:songs shuffle:shuffle];
+    
+    [self.playingOrder addObjectsFromArray:orderOld];
+    [self.playingOrder addObjectsFromArray:orderNow];
+    
+    currentPlayingIndex=inde;
+}
+
+-(NSArray*)sortedArray:(NSArray*)array shuffle:(BOOL)shuffle
+{
+    if (shuffle) {
+        return [array sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            return arc4random()%2==0?NSOrderedAscending:NSOrderedDescending;
+        }];
+    }
+    return array;
+}
+
+-(void)setPlayingMediaItem:(MPMediaItem *)playingMediaItem
+{
+    MPMediaItem* media=playingMediaItem;
+    if (media==_playingMediaItem&&self.playing) {
+        return;
+    }
+    _playingMediaItem=media;
     if (media) {
         currenPlayingInfo=[[PlayingInfoModel alloc]init];
         
@@ -117,8 +149,6 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
         player.delegate=self;
         player.currentTime=0;
         [self play];
-        
-        [playedMedias addObject:media];
         [self saveLastPlay];
     }
 }
@@ -149,54 +179,23 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
 -(void)playNext
 {
-    BOOL shuffle=[[[NSUserDefaults standardUserDefaults]valueForKey:@"shuffle"]boolValue];
-    NSArray* all=_songs; //[self.playingList items];
-    if(shuffle)
-    {
-        NSMutableArray* itemsDidNotPlayed=[NSMutableArray arrayWithArray:all];
-        [itemsDidNotPlayed removeObjectsInArray:playedMedias];
-//        NSLog(@"%@",itemsDidNotPlayed);
-        if (itemsDidNotPlayed.count>0) {
-            MPMediaItem* next=[itemsDidNotPlayed objectAtIndex:(arc4random()%itemsDidNotPlayed.count)];
-            [self playMedia:next];
-        }
-        else
-        {
-            [playedMedias removeAllObjects];
-            [self playMedia:[all objectAtIndex:(arc4random()%all.count)]];
-        }
+    NSInteger next=currentPlayingIndex+1;
+    if (next>=self.playingOrder.count) {
+        [self.playingOrder addObjectsFromArray:[self sortedArray:self.songs shuffle:[self isShuffle]]];
     }
-    else
-    {
-        NSInteger currenIndex=self.playingMediaItem?[all indexOfObject:self.playingMediaItem]:0;
-        NSInteger nextIndex=currenIndex+1;
-        if (nextIndex>=all.count) {
-            nextIndex=0;
-        }
-        MPMediaItem* next=[all objectAtIndex:nextIndex];
-        [self playMedia:next];
+    if (next<self.playingOrder.count) {
+        self.playingMediaItem=[self.playingOrder objectAtIndex:next];
+        currentPlayingIndex=next;
     }
 }
 
 -(void)playPrevious
 {
-    if (player.currentTime>10) {
-        player.currentTime=0;
+    NSInteger pre=currentPlayingIndex-1;
+    if (pre>=0&&pre<self.playingOrder.count) {
+        self.playingMediaItem=[self.playingOrder objectAtIndex:pre];
+        currentPlayingIndex=pre;
     }
-    else
-    {
-        [playedMedias removeLastObject];
-        if (playedMedias.count>0) {
-            MPMediaItem* last=playedMedias.lastObject;
-            [playedMedias removeLastObject];
-            [self playMedia:last];
-        }
-        else
-        {
-            [self playMedia:self.playingMediaItem];
-        }
-    }
-    
 }
 
 -(void)handleInterruption:(NSNotification*)notification
@@ -341,6 +340,9 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
         currenPlayingInfo.playbackDuration=@(player.duration);
         currenPlayingInfo.playing=@(player.isPlaying);
         
+        currenPlayingInfo.playingItem=self.playingMediaItem;
+        currenPlayingInfo.playingList=self.playingList;
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
         
         if (player.isPlaying) {
@@ -376,17 +378,17 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
 -(void)saveLastPlay
 {
-    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithUnsignedLongLong:self.playingMediaItem.persistentID] forKey:lastPlayingItemKey.description
+    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithLongLong:self.playingMediaItem.persistentID] forKey:lastPlayingItemKey.description
      ];
-    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithUnsignedLongLong:self.playingList.persistentID] forKey:lastPlayingListKey.description
+    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithLongLong:self.playingList.persistentID] forKey:lastPlayingListKey.description
      ];
 }
 
 -(void)loadLastPlay
 {
 //    return;
-    MPMediaEntityPersistentID itemID=[[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingItemKey.description]unsignedLongLongValue];
-    MPMediaEntityPersistentID listID=[[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingListKey.description]unsignedLongLongValue];
+    MPMediaEntityPersistentID itemID=[[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingItemKey.description]longLongValue];
+    MPMediaEntityPersistentID listID=[[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingListKey.description]longLongValue];
     
     NSArray* allsongs=[MediaQuery allSongs];
     NSArray* alllists=[MediaQuery allPlaylists];

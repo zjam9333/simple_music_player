@@ -94,7 +94,7 @@
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:startA endAngle:endA clockwise:YES];
     
     CGContextSetLineWidth(ctx, 2); //设置线条宽度
-    [[UIColor blackColor] setStroke]; //设置描边颜色
+    [[UIColor redColor] setStroke]; //设置描边颜色
     
     CGContextAddPath(ctx, path.CGPath); //把路径添加到上下文
     
