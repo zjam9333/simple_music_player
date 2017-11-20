@@ -49,8 +49,8 @@
 -(void)awakeFromNib
 {
     [super awakeFromNib];
-    [self.progressSlider setThumbImage:[UIImage imageNamed:@"progressThumb"] forState:UIControlStateNormal];
-    [self.volumnView setVolumeThumbImage:[UIImage imageNamed:@"volumnThumb"] forState:UIControlStateNormal];
+//    [self.progressSlider setThumbImage:[UIImage imageNamed:@"progressThumb"] forState:UIControlStateNormal];
+//    [self.volumnView setVolumeThumbImage:[UIImage imageNamed:@"volumnThumb"] forState:UIControlStateNormal];
 }
 
 -(void)refreshMediaInfoNotification:(NSNotification*)noti
