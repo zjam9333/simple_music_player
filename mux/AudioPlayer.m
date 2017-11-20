@@ -113,11 +113,24 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 -(NSArray*)sortedArray:(NSArray*)array shuffle:(BOOL)shuffle
 {
     if (shuffle) {
-        return [array sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-            return arc4random()%2==0?NSOrderedAscending:NSOrderedDescending;
-        }];
+        return [self shuffleArray:array];
     }
     return array;
+}
+
+-(NSArray*)shuffleArray:(NSArray*)array
+{
+    NSMutableArray* shus=[NSMutableArray arrayWithArray:array];
+    NSInteger count=shus.count;
+    for (NSInteger i=0; i<count*6; i++) { // how many rounds should be better ?
+        //        NSLog(@"random to random");
+        NSInteger randomIndex=arc4random()%(count);
+        id obj=[shus objectAtIndex:randomIndex];
+        [shus removeObjectAtIndex:randomIndex];
+        randomIndex=arc4random()%(count-1);
+        [shus insertObject:obj atIndex:randomIndex];
+    }
+    return shus;
 }
 
 -(void)setPlayingMediaItem:(MPMediaItem *)playingMediaItem
@@ -191,6 +204,10 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
 -(void)playPrevious
 {
+    if (self.currentTime<10) {
+        self.currentTime=0;
+        return;
+    }
     NSInteger pre=currentPlayingIndex-1;
     if (pre>=0&&pre<self.playingOrder.count) {
         self.playingMediaItem=[self.playingOrder objectAtIndex:pre];
