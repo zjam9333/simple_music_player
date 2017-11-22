@@ -122,13 +122,12 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 {
     NSMutableArray* shus=[NSMutableArray arrayWithArray:array];
     NSInteger count=shus.count;
-    for (NSInteger i=0; i<count*6; i++) { // how many rounds should be better ?
-        //        NSLog(@"random to random");
-        NSInteger randomIndex=arc4random()%(count);
-        id obj=[shus objectAtIndex:randomIndex];
-        [shus removeObjectAtIndex:randomIndex];
-        randomIndex=arc4random()%(count-1);
-        [shus insertObject:obj atIndex:randomIndex];
+    for (NSInteger i=0; i<count; i++) { // how many rounds should be better ?
+        if(i>0)
+        {
+            NSInteger randomIndex=arc4random()%i;
+            [shus exchangeObjectAtIndex:randomIndex withObjectAtIndex:i];
+        }
     }
     return shus;
 }
@@ -204,7 +203,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
 -(void)playPrevious
 {
-    if (self.currentTime<10) {
+    if (self.currentTime>10) {
         self.currentTime=0;
         return;
     }
