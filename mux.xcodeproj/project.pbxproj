@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06BE8A0721AE71470011258A /* MarginLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BE8A0521AE71470011258A /* MarginLabel.m */; };
 		3F4AE8611D5D7E2400951EA3 /* OnePlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */; };
 		3F6A84981D5F3572003268C5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F6A84971D5F3572003268C5 /* AVFoundation.framework */; };
 		3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB471D5D5BD400A07CB5 /* main.m */; };
@@ -37,6 +38,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		06BE8A0521AE71470011258A /* MarginLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginLabel.m; sourceTree = "<group>"; };
+		06BE8A0621AE71470011258A /* MarginLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginLabel.h; sourceTree = "<group>"; };
 		3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePlayListController.h; sourceTree = "<group>"; };
 		3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnePlayListController.m; sourceTree = "<group>"; };
 		3F6A84971D5F3572003268C5 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -160,6 +163,8 @@
 				8E0A10081F66356F000A4DE6 /* ShufflePlayHeaderCell.xib */,
 				8EA31FD31F678C2F005600AD /* PlayingProgressButton.h */,
 				8EA31FD41F678C2F005600AD /* PlayingProgressButton.m */,
+				06BE8A0621AE71470011258A /* MarginLabel.h */,
+				06BE8A0521AE71470011258A /* MarginLabel.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -227,7 +232,7 @@
 				TargetAttributes = {
 					3FE4DB421D5D5BD400A07CB5 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 9J7GGU5G9G;
+						DevelopmentTeam = 5Q82V2U2B5;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -287,6 +292,7 @@
 				8ED95F201F8F0F0E005E1696 /* AllAlbumController.m in Sources */,
 				8E8E15181F624C2D0093459D /* SongCell.m in Sources */,
 				3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */,
+				06BE8A0721AE71470011258A /* MarginLabel.m in Sources */,
 				8EA31FD51F678C2F005600AD /* PlayingProgressButton.m in Sources */,
 				8E8E15041F6233310093459D /* CustomTabController.m in Sources */,
 				8E8E15071F6233F40093459D /* MediaQuery.m in Sources */,
@@ -382,9 +388,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 5Q82V2U2B5;
 				INFOPLIST_FILE = mux/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = zjam.mux;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -399,9 +405,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 5Q82V2U2B5;
 				INFOPLIST_FILE = mux/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = zjam.mux;
 				PRODUCT_NAME = "$(TARGET_NAME)";

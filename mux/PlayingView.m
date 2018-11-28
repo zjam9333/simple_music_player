@@ -16,18 +16,22 @@
 @property (weak, nonatomic) IBOutlet UIButton *pauseLargeButton;
 @property (weak, nonatomic) IBOutlet UIButton *playSmallButton;
 @property (weak, nonatomic) IBOutlet UIButton *playLargeButton;
+
+@property (weak, nonatomic) IBOutlet UIView *playingMainPage;
 @property (weak, nonatomic) IBOutlet UIButton *shuffleButton;
 @property (weak, nonatomic) IBOutlet UIImageView *artworkImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *bgArtworkImageView;
+//@property (weak, nonatomic) IBOutlet UIImageView *bgArtworkImageView;
 @property (weak, nonatomic) IBOutlet UILabel *playedDurationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *leftDurationLabel;
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *artistAlbumLabel;
+@property (weak, nonatomic) IBOutlet UILabel *firstTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *secondTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nameSmallLabel;
 @property (weak, nonatomic) IBOutlet UILabel *artistAlbumSmallLabel;
 @property (weak, nonatomic) IBOutlet UISlider *progressSlider;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressSmallView;
 @property (weak, nonatomic) IBOutlet MPVolumeView *volumnView;
+
+@property (weak, nonatomic) PlayingInfoModel *currentInfoModel;
 
 @end
 
@@ -57,29 +61,58 @@
 {
     PlayingInfoModel* info=[noti.userInfo valueForKey:@"mediaInfo"];
     
+    // not same;
     BOOL playing=info.playing.boolValue;
     self.playSmallButton.hidden=playing;
     self.playLargeButton.hidden=playing;
     self.pauseSmallButton.hidden=!playing;
     self.pauseLargeButton.hidden=!playing;
-    
-    self.artworkImageView.image=info.artwork;
-    self.bgArtworkImageView.image=self.artworkImageView.image;
-    
-    self.nameLabel.text=info.name;
-    self.nameSmallLabel.text=self.nameLabel.text;
-    
-    self.artistAlbumLabel.text=[NSString stringWithFormat:@"%@ - %@",info.artist,info.album];
-    self.artistAlbumSmallLabel.text=self.artistAlbumLabel.text;
-    
+
     self.playedDurationLabel.text=[self stringWithNumber:info.currentTime];
     self.leftDurationLabel.text=[self stringWithNumber:[NSNumber numberWithInt:info.playbackDuration.intValue-info.currentTime.intValue]];
-    
+
     self.progressSlider.value=info.currentTime.floatValue/info.playbackDuration.floatValue;
     self.progressSmallView.progress=self.progressSlider.value;
-    
+
     self.shuffleButton.selected=info.shuffle.boolValue;
-//    self.volumnSlider.value=
+    //    self.volumnSlider.value=
+
+    // set artwork image frame
+    if (info.artwork) {
+        CGSize windowSize = UIApplication.sharedApplication.keyWindow.bounds.size;
+        int imgH = windowSize.height;
+        int imgW = imgH / info.artwork.size.height * info.artwork.size.width;
+        int imgY = 0; //self.frame.size.height - imgH;
+        int totalMove = windowSize.width - imgW;
+        int imgX = (int)(self.progressSlider.value * totalMove);
+        self.artworkImageView.frame = CGRectMake(imgX, imgY, imgW, imgH);
+    }
+
+    // always same
+    if (self.currentInfoModel != info) {
+        self.artworkImageView.image=info.artwork;
+        //    self.bgArtworkImageView.image=self.artworkImageView.image;
+
+        self.nameSmallLabel.text=info.name;
+        self.artistAlbumSmallLabel.text=[NSString stringWithFormat:@"%@ - %@",info.artist,info.album];
+
+        //    NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
+        //    paragraphStyle.maximumLineHeight = 20;
+        //    paragraphStyle.minimumLineHeight = 20;
+
+//        NSDictionary *attr = [NSDictionary dictionaryWithObjectsAndKeys:
+//                              [UIColor blackColor], NSBackgroundColorAttributeName,
+//                              [UIColor whiteColor], NSForegroundColorAttributeName,
+//                              //                          paragraphStyle, NSParagraphStyleAttributeName,
+//                              nil];
+//        NSAttributedString *firstTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", info.name] attributes:attr];
+//        self.firstTitleLabel.attributedText = firstTitle;
+//
+//        NSAttributedString *scondTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ - %@",info.artist,info.album] attributes:attr];
+//        self.secondTitleLabel.attributedText = scondTitle;
+    }
+    
+    self.currentInfoModel = info;
 }
 
 -(void)mediaStartedPlayingNotification:(NSNotification*)noti
@@ -155,7 +188,7 @@
     }
     else
     {
-        origin.y=screen.height-49-offset;
+        origin.y=screen.height-((UITabBarController *)(UIApplication.sharedApplication.keyWindow.rootViewController)).tabBar.frame.size.height-offset;
     }
     
     CGRect frame=CGRectZero;

@@ -68,7 +68,7 @@
 -(CGRect)frameForShowingBar:(BOOL)showing
 {
     CGSize screen=[[UIScreen mainScreen]bounds].size;
-    CGSize size=CGSizeMake(screen.width, 49);
+    CGSize size=CGSizeMake(screen.width, self.tabBar.frame.size.height);
     CGPoint origin=CGPointMake(0, 0);
     
     if (showing) {
