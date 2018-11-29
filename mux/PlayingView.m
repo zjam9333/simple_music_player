@@ -10,6 +10,7 @@
 #import "PlayingInfoModel.h"
 #import "AudioPlayer.h"
 #import "MySlider.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface PlayingView()
 
@@ -93,22 +94,15 @@
         self.firstTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:firstTitle attributes:attributes];
         self.secondTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:secondTitle attributes:attributes];
         
-//        AVURLAsset *urlAsset = [AVURLAsset assetWithURL:info.url];
-//        for (NSString *format in [urlAsset availableMetadataFormats]) {
-//            for (AVMetadataItem *metadataItem in [urlAsset metadataForFormat:format]) {
-//                NSLog(@"commonKey = %@",metadataItem);
-//            }
-//        }
-        
         self.myProgressSlider.numbers = ({
             NSMutableArray *arr = [NSMutableArray array];
             NSInteger count = info.playbackDuration.integerValue;
-            srand48(time(0));
             for (NSInteger i = 0; i < count; i ++) {
-                [arr addObject:[NSNumber numberWithFloat:0.6 + drand48()*0.4]];
+                [arr addObject:@(0.5)];
             }
             arr;
         });
+        [self analyseWaveUrl:info.url];
     }
     
     
@@ -147,6 +141,68 @@
         CGFloat imgX = (CGFloat)(progress * totalMove);
         self.artworkImageView.frame = CGRectMake(imgX, imgY, imgW, imgH);
     }
+}
+
+- (void)analyseWaveUrl:(NSURL *)url {
+    PlayingInfoModel *info = self.currentInfoModel;
+    NSInteger count = info.playbackDuration.integerValue;
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        if (!url) {
+            return;
+        }
+        AVAsset *asset = [AVAsset assetWithURL:url];
+        AVAssetReader *reader = [[AVAssetReader alloc] initWithAsset:asset error:nil];
+        if (!reader) {
+            return;
+        }
+        AVAssetTrack *track = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
+        NSDictionary *dic = @{AVFormatIDKey :@(kAudioFormatLinearPCM),
+                              AVLinearPCMIsBigEndianKey:@NO,
+                              AVLinearPCMIsFloatKey:@NO,
+                              AVLinearPCMBitDepthKey :@(16)
+                              };
+        AVAssetReaderTrackOutput *output = [[AVAssetReaderTrackOutput alloc]initWithTrack:track outputSettings:dic];
+        [reader addOutput:output];
+        [reader startReading];
+        NSMutableData *data = [NSMutableData data];
+        while (reader.status == AVAssetReaderStatusReading) {
+            CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer]; //读取到数据
+            if (sampleBuffer) {
+                CMBlockBufferRef blockBUfferRef = CMSampleBufferGetDataBuffer(sampleBuffer);//取出数据
+                size_t length = CMBlockBufferGetDataLength(blockBUfferRef); //返回一个大小,size_t针对不同的品台有不同的实现,扩展性更好
+                SInt16 sampleBytes[length];
+                CMBlockBufferCopyDataBytes(blockBUfferRef, 0, length, sampleBytes); //将数据放入数组
+                [data appendBytes:sampleBytes length:length]; //将数据附加到data中
+                CMSampleBufferInvalidate(sampleBuffer);//销毁
+                CFRelease(sampleBuffer); //释放
+            }
+        }
+        if (reader.status != AVAssetReaderStatusCompleted) {
+            return;
+        }
+        NSUInteger sampleCount = data.length / sizeof(SInt16);//计算所有数据个数
+        NSUInteger binSize = sampleCount / count; //将数据分割,也就是按照我们的需求width将数据分为一个个小包
+        SInt16 *bytes = (SInt16 *)data.bytes; //总的数据个数
+        
+        NSMutableArray *numbers = [NSMutableArray array];
+        for (NSUInteger i= 0; i < sampleCount; i += binSize) {//在sampleCount(所有数据)个数据中抽样,抽样方法为在binSize个数据为一个样本,在样本中选取一个数据
+            SInt16 maxForBin = 0;
+            for (NSUInteger j = 0; j < binSize; j++) {//先将每次抽样样本的binSize个数据遍历出来
+                
+                SInt16 value = CFSwapInt16LittleToHost(bytes[i + j]);
+                if (value > maxForBin) {
+                    maxForBin = value;
+                }
+            }
+            NSLog(@"%d", maxForBin);
+            [numbers addObject:@(((CGFloat)maxForBin)/32700)];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (info == self.currentInfoModel) {
+                self.myProgressSlider.numbers = numbers;
+            }
+        });
+    });
 }
 
 -(void)mediaStartedPlayingNotification:(NSNotification*)noti
