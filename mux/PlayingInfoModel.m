@@ -10,4 +10,8 @@
 
 @implementation PlayingInfoModel
 
+- (void)dealloc {
+    NSLog(@"dealloc: %@", self);
+}
+
 @end

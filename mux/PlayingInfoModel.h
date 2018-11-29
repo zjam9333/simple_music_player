@@ -12,6 +12,7 @@
 
 @interface PlayingInfoModel : NSObject
 
+@property (nonatomic, strong) NSURL *url;
 @property (nonatomic,strong) NSString* name;
 @property (nonatomic,strong) NSString* artist;
 @property (nonatomic,strong) NSString* album;

@@ -15,6 +15,10 @@
 
 @implementation BaseTableViewController
 
+- (void)dealloc {
+    NSLog(@"dealloc: %@", self);
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

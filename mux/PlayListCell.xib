@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -12,39 +15,39 @@
             <rect key="frame" x="0.0" y="0.0" width="361" height="112"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="328" height="111"/>
+                <rect key="frame" x="0.0" y="0.0" width="327" height="111.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WoR-aL-BDc">
-                        <rect key="frame" x="15" y="8" width="95" height="95"/>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <rect key="frame" x="15" y="8" width="95.5" height="95.5"/>
+                        <color key="backgroundColor" red="0.66666668653488159" green="0.66666668653488159" blue="0.66666668653488159" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="WoR-aL-BDc" secondAttribute="height" multiplier="1:1" id="rKh-Vu-SiE"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eA4-yy-CHd">
-                        <rect key="frame" x="125" y="45" width="188" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="eA4-yy-CHd">
+                        <rect key="frame" x="120.5" y="47" width="191.5" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="94h-h4-4cJ" customClass="PlayingProgressButton">
                         <rect key="frame" x="48" y="41" width="30" height="30"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="OuD-pu-L2L"/>
                             <constraint firstAttribute="width" constant="30" id="zHz-Ay-aN8"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHp-16-tIp">
-                        <rect key="frame" x="310" y="45" width="8" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHp-16-tIp">
+                        <rect key="frame" x="321" y="48.5" width="6" height="14.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="eA4-yy-CHd" firstAttribute="leading" secondItem="WoR-aL-BDc" secondAttribute="trailing" constant="15" id="2xs-lH-fGp"/>
+                    <constraint firstItem="eA4-yy-CHd" firstAttribute="leading" secondItem="WoR-aL-BDc" secondAttribute="trailing" constant="10" id="2xs-lH-fGp"/>
                     <constraint firstAttribute="trailing" secondItem="eA4-yy-CHd" secondAttribute="trailing" constant="15" id="3S9-gx-OrI"/>
                     <constraint firstItem="94h-h4-4cJ" firstAttribute="centerY" secondItem="WoR-aL-BDc" secondAttribute="centerY" id="59U-Tc-qhW"/>
                     <constraint firstAttribute="bottom" secondItem="WoR-aL-BDc" secondAttribute="bottom" constant="8" id="6Nf-cE-shG"/>
@@ -53,7 +56,7 @@
                     <constraint firstItem="WoR-aL-BDc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="azd-Gh-wC6"/>
                     <constraint firstItem="94h-h4-4cJ" firstAttribute="centerX" secondItem="WoR-aL-BDc" secondAttribute="centerX" id="dUh-Hd-OF8"/>
                     <constraint firstItem="WoR-aL-BDc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="gIK-OV-RGD"/>
-                    <constraint firstAttribute="trailing" secondItem="JHp-16-tIp" secondAttribute="trailing" constant="10" id="roS-p6-PfQ"/>
+                    <constraint firstAttribute="trailing" secondItem="JHp-16-tIp" secondAttribute="trailing" id="roS-p6-PfQ"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

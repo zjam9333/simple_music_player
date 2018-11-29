@@ -17,6 +17,19 @@ const CFTimeInterval scheduledTime=0.1;
 const NSString* lastPlayingItemKey=@"fjs09djf0w9ef09ef09ewfoijfsd";
 const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
+
+@interface MyAudioPlayer : AVAudioPlayer
+
+@end
+
+@implementation MyAudioPlayer
+
+- (void)dealloc {
+    NSLog(@"dealloc: %@", self);
+}
+
+@end
+
 @interface AudioPlayer()<AVAudioPlayerDelegate>
 
 @property (nonatomic,strong) MPMediaItem* playingMediaItem;
@@ -141,7 +154,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     _playingMediaItem=media;
     if (media) {
         currenPlayingInfo=[[PlayingInfoModel alloc]init];
-        
+        currenPlayingInfo.url = [media valueForProperty:MPMediaItemPropertyAssetURL];
         currenPlayingInfo.name=media.title;
         currenPlayingInfo.artist=media.artist;
         currenPlayingInfo.album=media.albumTitle;
@@ -156,8 +169,8 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
         currenPlayingInfo.playingList=self.playingList;
         
         [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
-        
-        player=[[AVAudioPlayer alloc]initWithContentsOfURL:[media valueForProperty:MPMediaItemPropertyAssetURL] error:nil];
+        [player stop];
+        player=[[MyAudioPlayer alloc]initWithContentsOfURL:currenPlayingInfo.url error:nil];
         player.delegate=self;
         player.currentTime=0;
         [self play];
@@ -332,6 +345,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 {
     _progress=progress;
     [player setCurrentTime:(progress*player.duration)];
+    [self timerRunning];
 }
 
 -(void)setCurrentTime:(NSTimeInterval)currentTime
@@ -388,8 +402,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
 //    [[AVAudioSession sharedInstance]setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
 }
 
 -(void)saveLastPlay

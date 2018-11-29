@@ -9,9 +9,11 @@
 #import "PlayingView.h"
 #import "PlayingInfoModel.h"
 #import "AudioPlayer.h"
+#import "MySlider.h"
 
 @interface PlayingView()
 
+@property (weak, nonatomic) IBOutlet UIView *playingSmallBar;
 @property (weak, nonatomic) IBOutlet UIButton *pauseSmallButton;
 @property (weak, nonatomic) IBOutlet UIButton *pauseLargeButton;
 @property (weak, nonatomic) IBOutlet UIButton *playSmallButton;
@@ -29,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *artistAlbumSmallLabel;
 @property (weak, nonatomic) IBOutlet UISlider *progressSlider;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressSmallView;
+@property (weak, nonatomic) IBOutlet MySlider *myProgressSlider;
 @property (weak, nonatomic) IBOutlet MPVolumeView *volumnView;
 
 @property (weak, nonatomic) PlayingInfoModel *currentInfoModel;
@@ -60,36 +63,15 @@
 -(void)refreshMediaInfoNotification:(NSNotification*)noti
 {
     PlayingInfoModel* info=[noti.userInfo valueForKey:@"mediaInfo"];
+    PlayingInfoModel* lastInfo = self.currentInfoModel;
+    self.currentInfoModel = info;
     
-    // not same;
-    BOOL playing=info.playing.boolValue;
-    self.playSmallButton.hidden=playing;
-    self.playLargeButton.hidden=playing;
-    self.pauseSmallButton.hidden=!playing;
-    self.pauseLargeButton.hidden=!playing;
-
-    self.playedDurationLabel.text=[self stringWithNumber:info.currentTime];
-    self.leftDurationLabel.text=[self stringWithNumber:[NSNumber numberWithInt:info.playbackDuration.intValue-info.currentTime.intValue]];
-
-    self.progressSlider.value=info.currentTime.floatValue/info.playbackDuration.floatValue;
-    self.progressSmallView.progress=self.progressSlider.value;
-
-    self.shuffleButton.selected=info.shuffle.boolValue;
-    //    self.volumnSlider.value=
-
-    // set artwork image frame
-    if (info.artwork) {
-        CGSize windowSize = UIApplication.sharedApplication.keyWindow.bounds.size;
-        int imgH = windowSize.height;
-        int imgW = imgH / info.artwork.size.height * info.artwork.size.width;
-        int imgY = 0; //self.frame.size.height - imgH;
-        int totalMove = windowSize.width - imgW;
-        int imgX = (int)(self.progressSlider.value * totalMove);
-        self.artworkImageView.frame = CGRectMake(imgX, imgY, imgW, imgH);
+    if ([[UIApplication sharedApplication]applicationState] != UIApplicationStateActive) {
+        return;
     }
-
+    
     // always same
-    if (self.currentInfoModel != info) {
+    if (lastInfo != info) {
         self.artworkImageView.image=info.artwork;
         //    self.bgArtworkImageView.image=self.artworkImageView.image;
 
@@ -99,20 +81,72 @@
         //    NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
         //    paragraphStyle.maximumLineHeight = 20;
         //    paragraphStyle.minimumLineHeight = 20;
+        
+        NSString *firstTitle = [NSString stringWithFormat:@"%@", info.name];
+        NSString *secondTitle = [NSString stringWithFormat:@"%@ - %@",info.artist,info.album];
 
-//        NSDictionary *attr = [NSDictionary dictionaryWithObjectsAndKeys:
-//                              [UIColor blackColor], NSBackgroundColorAttributeName,
-//                              [UIColor whiteColor], NSForegroundColorAttributeName,
-//                              //                          paragraphStyle, NSParagraphStyleAttributeName,
-//                              nil];
-//        NSAttributedString *firstTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", info.name] attributes:attr];
-//        self.firstTitleLabel.attributedText = firstTitle;
-//
-//        NSAttributedString *scondTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ - %@",info.artist,info.album] attributes:attr];
-//        self.secondTitleLabel.attributedText = scondTitle;
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [UIColor blackColor], NSBackgroundColorAttributeName,
+                                    [UIColor whiteColor], NSForegroundColorAttributeName,
+                                    nil];
+        
+        self.firstTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:firstTitle attributes:attributes];
+        self.secondTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:secondTitle attributes:attributes];
+        
+//        AVURLAsset *urlAsset = [AVURLAsset assetWithURL:info.url];
+//        for (NSString *format in [urlAsset availableMetadataFormats]) {
+//            for (AVMetadataItem *metadataItem in [urlAsset metadataForFormat:format]) {
+//                NSLog(@"commonKey = %@",metadataItem);
+//            }
+//        }
+        
+        self.myProgressSlider.numbers = ({
+            NSMutableArray *arr = [NSMutableArray array];
+            NSInteger count = info.playbackDuration.integerValue;
+            srand48(time(0));
+            for (NSInteger i = 0; i < count; i ++) {
+                [arr addObject:[NSNumber numberWithFloat:0.6 + drand48()*0.4]];
+            }
+            arr;
+        });
     }
     
-    self.currentInfoModel = info;
+    
+    // not same;
+    BOOL playing=info.playing.boolValue;
+    self.playSmallButton.hidden=playing;
+    self.playLargeButton.hidden=playing;
+    self.pauseSmallButton.hidden=!playing;
+    self.pauseLargeButton.hidden=!playing;
+    
+    self.shuffleButton.selected=info.shuffle.boolValue;
+    
+    if (self.myProgressSlider.isTouching) {
+        return;
+    }
+    //    self.volumnSlider.value=
+    CGFloat progressValue = info.currentTime.floatValue/info.playbackDuration.floatValue;
+    // set artwork image frame and progerss
+    [self setWithProgress:progressValue];
+}
+
+- (void)setWithProgress:(CGFloat)progress {
+    self.playedDurationLabel.text=[self stringWithNumber:[NSNumber numberWithInteger:progress * self.currentInfoModel.playbackDuration.integerValue]];
+    self.leftDurationLabel.text=[self stringWithNumber:[NSNumber numberWithInteger:(1 - progress) * self.currentInfoModel.playbackDuration.integerValue]];
+    
+    self.progressSlider.value=progress;
+    self.progressSmallView.progress=progress;
+    self.myProgressSlider.value = progress;
+
+    if (self.currentInfoModel.artwork) {
+        CGSize windowSize = UIApplication.sharedApplication.keyWindow.bounds.size;
+        CGFloat imgH = windowSize.height;
+        CGFloat imgW = imgH / self.currentInfoModel.artwork.size.height * self.currentInfoModel.artwork.size.width;
+        CGFloat imgY = 0; //self.frame.size.height - imgH;
+        CGFloat totalMove = windowSize.width - imgW;
+        CGFloat imgX = (CGFloat)(progress * totalMove);
+        self.artworkImageView.frame = CGRectMake(imgX, imgY, imgW, imgH);
+    }
 }
 
 -(void)mediaStartedPlayingNotification:(NSNotification*)noti
@@ -143,16 +177,19 @@
     [[AudioPlayer sharedAudioPlayer]shuffle:self.shuffleButton.selected];
 }
 
-- (IBAction)progressSliderValueChanged:(id)sender {
-    if ([sender isKindOfClass:[UISlider class]]) {
-        CGFloat progress=((UISlider*)sender).value;
-        CGFloat max=0.95;
-        if (progress>max)
-        {
-            progress=max;
-        }
-        [[AudioPlayer sharedAudioPlayer]setProgress:progress];
-    }
+- (IBAction)progressSliderValueChanged:(MySlider *)sender {
+    CGFloat progress=[sender value];
+//        CGFloat max=0.95;
+//        if (progress>max)
+//        {
+//            progress=max;
+//        }
+    [[AudioPlayer sharedAudioPlayer]setProgress:progress];
+    [self setWithProgress:progress];
+}
+- (IBAction)progressSliderDragInside:(MySlider *)sender {
+    CGFloat progress=[sender value];
+    [self setWithProgress:progress];
 }
 
 - (IBAction)showPlaying:(id)sender {
@@ -234,6 +271,9 @@
     CGRect fra=CGRectZero;
     fra.size=[self sizeForPlayingView];
     CGFloat toY=loc.y-touchBeganPointOffset.y;
+    if (toY < - self.playingSmallBar.frame.size.height) {
+        toY = - self.playingSmallBar.frame.size.height;
+    }
     fra.origin=CGPointMake(0, toY);
     self.frame=fra;
 }
