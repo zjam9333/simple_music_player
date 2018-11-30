@@ -98,7 +98,7 @@
             NSMutableArray *arr = [NSMutableArray array];
             NSInteger count = info.playbackDuration.integerValue;
             for (NSInteger i = 0; i < count; i ++) {
-                [arr addObject:@(0.1)];
+                [arr addObject:@(0.01)];
             }
             arr;
         });

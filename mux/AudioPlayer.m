@@ -12,7 +12,7 @@
 
 static AudioPlayer* shared;
 
-const CFTimeInterval scheduledTime=0.016;
+const CFTimeInterval scheduledTime=0.025;
 
 const NSString* lastPlayingItemKey=@"fjs09djf0w9ef09ef09ewfoijfsd";
 const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
