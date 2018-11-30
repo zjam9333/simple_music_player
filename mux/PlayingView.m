@@ -98,7 +98,7 @@
             NSMutableArray *arr = [NSMutableArray array];
             NSInteger count = info.playbackDuration.integerValue;
             for (NSInteger i = 0; i < count; i ++) {
-                [arr addObject:@(0.5)];
+                [arr addObject:@(0.1)];
             }
             arr;
         });
@@ -145,7 +145,7 @@
 
 - (void)analyseWaveUrl:(NSURL *)url {
     PlayingInfoModel *info = self.currentInfoModel;
-    NSInteger count = info.playbackDuration.integerValue;
+    NSInteger count = info.playbackDuration.integerValue * 5;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         if (!url) {
             return;
@@ -181,21 +181,26 @@
             return;
         }
         NSUInteger sampleCount = data.length / sizeof(SInt16);//计算所有数据个数
-        NSUInteger binSize = sampleCount / count; //将数据分割,也就是按照我们的需求width将数据分为一个个小包
-        SInt16 *bytes = (SInt16 *)data.bytes; //总的数据个数
+        NSUInteger blockSize = sampleCount / count; //将数据分割,也就是按照我们的需求width将数据分为一个个小包
+        SInt16 *sampleBytes = (SInt16 *)data.bytes; //总的数据个数
         
         NSMutableArray *numbers = [NSMutableArray array];
-        for (NSUInteger i= 0; i < sampleCount; i += binSize) {//在sampleCount(所有数据)个数据中抽样,抽样方法为在binSize个数据为一个样本,在样本中选取一个数据
-            SInt16 maxForBin = 0;
-            for (NSUInteger j = 0; j < binSize; j++) {//先将每次抽样样本的binSize个数据遍历出来
-                
-                SInt16 value = CFSwapInt16LittleToHost(bytes[i + j]);
-                if (value > maxForBin) {
-                    maxForBin = value;
+        for (NSUInteger i= 0; i < sampleCount; i += blockSize) {//在sampleCount(所有数据)个数据中抽样,抽样方法为在binSize个数据为一个样本,在样本中选取一个数据
+            SInt16 power = 0; //sampleBytes[i] - 32767;
+//            unsigned long long totalPower = 0;
+            for (NSUInteger j = 0; j < blockSize; j++) {//先将每次抽样样本的binSize个数据遍历出来
+                SInt16 value = CFSwapInt16LittleToHost(sampleBytes[i + j]);
+                if (value > power) {
+                    power = value;
                 }
             }
-            NSLog(@"%d", maxForBin);
-            [numbers addObject:@(((CGFloat)maxForBin)/32700)];
+////            SInt16 avg = 0xffff;
+////
+//            SInt16 avgForBin = totalPower / ;
+//            NSLog(@"%d", power);
+            CGFloat maxTop = 32767;
+            [numbers addObject:@(((CGFloat)power)/maxTop)];
+            
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             if (info == self.currentInfoModel) {

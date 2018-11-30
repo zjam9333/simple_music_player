@@ -12,7 +12,7 @@
 
 static AudioPlayer* shared;
 
-const CFTimeInterval scheduledTime=0.1;
+const CFTimeInterval scheduledTime=0.016;
 
 const NSString* lastPlayingItemKey=@"fjs09djf0w9ef09ef09ewfoijfsd";
 const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
@@ -402,7 +402,8 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
 //    [[AVAudioSession sharedInstance]setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
 }
 
 -(void)saveLastPlay

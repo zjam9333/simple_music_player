@@ -8,8 +8,8 @@
 
 #import "MySlider.h"
 
-const CGFloat kWidthPerColumn = 2;
-const CGFloat kMarginForColumn = 1;
+#define kWidthPerColumn 2 //(1/UIScreen.mainScreen.scale)
+#define kMarginForColumn 1 //(1/UIScreen.mainScreen.scale)
 
 @implementation MySlider {
     CGFloat _startX;
@@ -92,6 +92,14 @@ const CGFloat kMarginForColumn = 1;
     }
     _value = value;
     [self setNeedsDisplay];
+}
+
+- (void)setNeedsDisplay {
+    CGRect myFrameInWindow = [self convertRect:self.bounds toView:UIApplication.sharedApplication.keyWindow];
+    if (!CGRectIntersectsRect(UIApplication.sharedApplication.keyWindow.bounds, myFrameInWindow)) {
+        return;
+    }
+    [super setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect {

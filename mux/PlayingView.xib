@@ -172,7 +172,7 @@
                                                     </connections>
                                                 </slider>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="US1-d9-WpL" customClass="MarginLabel">
-                                                    <rect key="frame" x="160.5" y="57" width="26.5" height="16"/>
+                                                    <rect key="frame" x="160.5" y="65" width="26.5" height="16"/>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -184,7 +184,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t80-72-x7z" userLabel="line">
-                                                    <rect key="frame" x="160" y="57" width="0.5" height="16"/>
+                                                    <rect key="frame" x="160" y="65" width="0.5" height="16"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="0.5" id="3LA-Yd-PIF"/>
@@ -192,7 +192,7 @@
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IzM-ml-W5S" customClass="MarginLabel">
-                                                    <rect key="frame" x="133.5" y="57" width="26.5" height="16"/>
+                                                    <rect key="frame" x="133.5" y="65" width="26.5" height="16"/>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -215,7 +215,7 @@
                                                 <constraint firstItem="t80-72-x7z" firstAttribute="centerX" secondItem="AF2-Zs-vJZ" secondAttribute="centerX" id="fa2-SD-Equ"/>
                                                 <constraint firstItem="US1-d9-WpL" firstAttribute="top" secondItem="t80-72-x7z" secondAttribute="top" id="fgn-1a-pgD"/>
                                                 <constraint firstItem="B5h-FQ-xfV" firstAttribute="top" secondItem="AF2-Zs-vJZ" secondAttribute="top" constant="-15" id="hwL-P7-2pw"/>
-                                                <constraint firstItem="t80-72-x7z" firstAttribute="centerY" secondItem="AF2-Zs-vJZ" secondAttribute="centerY" constant="15" id="iRq-Rx-M46"/>
+                                                <constraint firstItem="t80-72-x7z" firstAttribute="centerY" secondItem="AF2-Zs-vJZ" secondAttribute="centerY" constant="23" id="iRq-Rx-M46"/>
                                                 <constraint firstAttribute="trailing" secondItem="B5h-FQ-xfV" secondAttribute="trailing" id="krk-Rc-moq"/>
                                                 <constraint firstAttribute="height" constant="100" id="mfd-R9-eZ8"/>
                                                 <constraint firstAttribute="bottom" secondItem="cVI-eM-0Xo" secondAttribute="bottom" id="qff-VT-Mse"/>
