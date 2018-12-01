@@ -67,7 +67,7 @@
     PlayingInfoModel* lastInfo = self.currentInfoModel;
     self.currentInfoModel = info;
     
-    if ([[UIApplication sharedApplication]applicationState] != UIApplicationStateActive) {
+    if (([[UIApplication sharedApplication]applicationState] != UIApplicationStateActive) && lastInfo == info) {
         return;
     }
     
