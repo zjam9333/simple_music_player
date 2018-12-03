@@ -130,7 +130,7 @@
     
     //获得处理的上下文
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, kWidthPerColumn);
+    CGContextSetLineWidth(context, 1);//kWidthPerColumn);
     
     NSInteger startIndex = (0 - startX) * columnCount / totalWidth;
     NSInteger endIndex = (size.width - startX) * columnCount / totalWidth;
