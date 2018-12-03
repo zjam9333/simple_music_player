@@ -9,8 +9,12 @@
 #import "PlayingView.h"
 #import "PlayingInfoModel.h"
 #import "AudioPlayer.h"
-#import "MySlider.h"
+#import "MyWaveSlider.h"
 #import <AVFoundation/AVFoundation.h>
+
+const CGFloat sampleRate = 44100;
+const NSInteger channelCount = 1;
+const NSInteger bitDepth = 8;
 
 @interface PlayingView()
 
@@ -32,7 +36,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *artistAlbumSmallLabel;
 @property (weak, nonatomic) IBOutlet UISlider *progressSlider;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressSmallView;
-@property (weak, nonatomic) IBOutlet MySlider *myProgressSlider;
+@property (weak, nonatomic) IBOutlet MyWaveSlider *myProgressSlider;
 @property (weak, nonatomic) IBOutlet MPVolumeView *volumnView;
 
 @property (weak, nonatomic) PlayingInfoModel *currentInfoModel;
@@ -94,14 +98,7 @@
         self.firstTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:firstTitle attributes:attributes];
         self.secondTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:secondTitle attributes:attributes];
         
-        self.myProgressSlider.numbers = ({
-            NSMutableArray *arr = [NSMutableArray array];
-            NSInteger count = info.playbackDuration.integerValue;
-            for (NSInteger i = 0; i < count; i ++) {
-                [arr addObject:@(0.01)];
-            }
-            arr;
-        });
+//        self.myProgressSlider.numbers = [NSMutableData dataWithLength:info.playbackDuration.floatValue * sampleRate * channelCount];
         [self analyseWaveUrl:info.url];
     }
     
@@ -144,9 +141,11 @@
 }
 
 - (void)analyseWaveUrl:(NSURL *)url {
-    PlayingInfoModel *info = self.currentInfoModel;
-    NSInteger count = info.playbackDuration.integerValue * 5;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        PlayingInfoModel *info = self.currentInfoModel;
+        
+        // 我现在知道通过（采样率、声道数、时长）可以计算出样品个数
+        NSInteger sampleCount = info.playbackDuration.floatValue * sampleRate * channelCount;
         if (!url) {
             return;
         }
@@ -156,57 +155,53 @@
             return;
         }
         AVAssetTrack *track = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
-        NSDictionary *dic = @{AVFormatIDKey :@(kAudioFormatLinearPCM),
+        NSDictionary *dic = @{AVFormatIDKey:@(kAudioFormatLinearPCM),
                               AVLinearPCMIsBigEndianKey:@NO,
                               AVLinearPCMIsFloatKey:@NO,
-                              AVLinearPCMBitDepthKey :@(16)
+                              AVLinearPCMBitDepthKey:@(bitDepth),
+                              AVSampleRateKey:@(sampleRate),
+                              AVNumberOfChannelsKey:@(channelCount),
                               };
         AVAssetReaderTrackOutput *output = [[AVAssetReaderTrackOutput alloc]initWithTrack:track outputSettings:dic];
         [reader addOutput:output];
         [reader startReading];
-        NSMutableData *data = [NSMutableData data];
+        
+        size_t readOffset = 0;
+        NSMutableData *sampleData = [NSMutableData dataWithLength:sampleCount];
+        
         while (reader.status == AVAssetReaderStatusReading) {
-            CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer]; //读取到数据
+            CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer];
             if (sampleBuffer) {
-                CMBlockBufferRef blockBUfferRef = CMSampleBufferGetDataBuffer(sampleBuffer);//取出数据
-                size_t length = CMBlockBufferGetDataLength(blockBUfferRef); //返回一个大小,size_t针对不同的品台有不同的实现,扩展性更好
-                SInt16 sampleBytes[length];
-                CMBlockBufferCopyDataBytes(blockBUfferRef, 0, length, sampleBytes); //将数据放入数组
-                [data appendBytes:sampleBytes length:length]; //将数据附加到data中
+                CMBlockBufferRef blockBUfferRef = CMSampleBufferGetDataBuffer(sampleBuffer);
+                size_t length = CMBlockBufferGetDataLength(blockBUfferRef);
+                if (readOffset + length > sampleCount) {
+                    length = sampleCount - readOffset;
+                }
+                Byte readSampleBytes[length];
+                CMBlockBufferCopyDataBytes(blockBUfferRef, 0, length, readSampleBytes);
+                [sampleData replaceBytesInRange:NSMakeRange(readOffset, length) withBytes:readSampleBytes length:length];
+                readOffset += length; // 修改当前已读数
+                
                 CMSampleBufferInvalidate(sampleBuffer);//销毁
                 CFRelease(sampleBuffer); //释放
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.myProgressSlider.numbers = sampleData;
+                });
+                
             }
         }
-        if (reader.status != AVAssetReaderStatusCompleted) {
-            return;
-        }
-        NSUInteger sampleCount = data.length / sizeof(SInt16);//计算所有数据个数
-        NSUInteger blockSize = sampleCount / count; //将数据分割,也就是按照我们的需求width将数据分为一个个小包
-        SInt16 *sampleBytes = (SInt16 *)data.bytes; //总的数据个数
-        
-        NSMutableArray *numbers = [NSMutableArray array];
-        for (NSUInteger i= 0; i < sampleCount; i += blockSize) {//在sampleCount(所有数据)个数据中抽样,抽样方法为在binSize个数据为一个样本,在样本中选取一个数据
-            SInt16 power = 0; //sampleBytes[i] - 32767;
-//            unsigned long long totalPower = 0;
-            for (NSUInteger j = 0; j < blockSize; j++) {//先将每次抽样样本的binSize个数据遍历出来
-                SInt16 value = CFSwapInt16LittleToHost(sampleBytes[i + j]);
-                if (value > power) {
-                    power = value;
-                }
-            }
-////            SInt16 avg = 0xffff;
-////
-//            SInt16 avgForBin = totalPower / ;
-//            NSLog(@"%d", power);
-            CGFloat maxTop = 32767;
-            [numbers addObject:@(((CGFloat)power)/maxTop)];
-            
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (info == self.currentInfoModel) {
-                self.myProgressSlider.numbers = numbers;
-            }
-        });
+//        Byte *bytes = (Byte *)sampleData.bytes;
+//        Byte max = 0;
+//        for (int i = 0; i < sampleCount; i += 10000) {
+//            Byte bi = bytes[i];
+////            CGFloat numberValue = 20 * log10((double)bi) / 48.0;
+//            if (max < bi) {
+//                max = bi;
+//            }
+//            printf("bi %d\n", bi);
+//        }
+//        printf("max %d\n",max);
     });
 }
 
@@ -238,7 +233,7 @@
     [[AudioPlayer sharedAudioPlayer]shuffle:self.shuffleButton.selected];
 }
 
-- (IBAction)progressSliderValueChanged:(MySlider *)sender {
+- (IBAction)progressSliderValueChanged:(MyWaveSlider *)sender {
     CGFloat progress=[sender value];
 //        CGFloat max=0.95;
 //        if (progress>max)
@@ -248,7 +243,7 @@
     [[AudioPlayer sharedAudioPlayer]setProgress:progress];
     [self setWithProgress:progress];
 }
-- (IBAction)progressSliderDragInside:(MySlider *)sender {
+- (IBAction)progressSliderDragInside:(MyWaveSlider *)sender {
     CGFloat progress=[sender value];
     [self setWithProgress:progress];
 }

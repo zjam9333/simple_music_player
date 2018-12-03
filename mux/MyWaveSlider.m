@@ -6,12 +6,13 @@
 //  Copyright © 2018 Jam. All rights reserved.
 //
 
-#import "MySlider.h"
+#import "MyWaveSlider.h"
 
-#define kWidthPerColumn 2 //(1/UIScreen.mainScreen.scale)
-#define kMarginForColumn 1 //(1/UIScreen.mainScreen.scale)
+#define kWidthPerColumn (1/UIScreen.mainScreen.scale)
+#define kMarginForColumn (0)//(1/UIScreen.mainScreen.scale)
+#define kSampleRate (1000)
 
-@implementation MySlider {
+@implementation MyWaveSlider {
     CGFloat _startX;
     CGFloat _deltaX;
     BOOL _isTouching;
@@ -62,17 +63,17 @@
 }
 
 - (void)calculateProgress {
-    NSInteger count = self.numbers.count;
+    NSInteger count = self.numbers.length;
     if (count == 0) {
         return;
     }
-    CGFloat totalWidth = count * (kWidthPerColumn + kMarginForColumn);
-    CGFloat deltaValue = (-_deltaX / totalWidth);
+    CGFloat totalWidth = count / kSampleRate * (kWidthPerColumn + kMarginForColumn);
+    CGFloat deltaValue = (-_deltaX / totalWidth) * 4;
     [self touchSetValue:self.value + deltaValue];
 //    NSLog(@"progress:%f", self.value);
 }
 
-- (void)setNumbers:(NSArray<NSNumber *> *)numbers {
+- (void)setNumbers:(NSData *)numbers {
     _numbers = numbers;
     [self setNeedsDisplay];
 }
@@ -108,30 +109,59 @@
     [[UIColor clearColor] setFill];
     UIRectFill(rect);
     
-    NSInteger count = self.numbers.count;
-    if (count == 0) {
+    NSInteger totalSampleCount = self.numbers.length;
+    if (totalSampleCount == 0) {
+        return;
+    }
+    NSInteger columnCount = totalSampleCount / kSampleRate;
+    if (columnCount == 0) {
         return;
     }
     
     CGFloat centerX = CGRectGetMidX(rect);
     
-    CGFloat totalWidth = count * (kWidthPerColumn + kMarginForColumn);
+    CGFloat totalWidth = columnCount * (kWidthPerColumn + kMarginForColumn);
     CGFloat startX = centerX - totalWidth * self.value;
     
     CGSize size = self.frame.size;
     CGFloat topMax = size.height * 0.65;
     CGFloat botMax = size.height - topMax;
+    
+    
     //获得处理的上下文
     CGContextRef context = UIGraphicsGetCurrentContext();
-    for (NSInteger i = 0; i < count; i ++) {
-        CGFloat lineCenterX = startX + totalWidth * i / count;
-        if (lineCenterX < 0 || lineCenterX > size.width) {
-            continue;
-        }
-        CGContextSetLineWidth(context, kWidthPerColumn);
+    CGContextSetLineWidth(context, kWidthPerColumn);
+    
+    NSInteger startIndex = (0 - startX) * columnCount / totalWidth;
+    NSInteger endIndex = (size.width - startX) * columnCount / totalWidth;
+    if (startIndex < 0) {
+        startIndex = 0;
+    }
+    if (endIndex > columnCount) {
+        endIndex = columnCount;
+    }
+    
+    SInt8 *values = (SInt8 *)self.numbers.bytes;
+    
+    for (NSInteger i = startIndex; i < endIndex; i ++) {
+        CGFloat lineCenterX = startX + totalWidth * i / columnCount;
         
+        SInt8 showSampleValue = 0;
+        NSInteger blockOffset = i * kSampleRate;
+        NSInteger blockLength = kSampleRate;
+        if (blockOffset + blockLength > totalSampleCount) {
+            blockLength = totalSampleCount - blockOffset;
+        }
+        NSInteger blockMax = blockLength + blockOffset;
+        for (NSInteger bla = blockOffset; bla < blockMax; bla ++) {
+            SInt8 thisSample = values[bla];
+            if (showSampleValue < thisSample) {
+                showSampleValue = thisSample;
+            }
+        }
+//        SInt8 blockAvgValue = blockTotalSampleValue / blockLength;
         CGPoint aPoints[2];
-        CGFloat numberValue = self.numbers[i].doubleValue;
+        CGFloat numberValue = (showSampleValue / 128.0);
         
         for (int k = 0; k < 2; k ++) {
             aPoints[0] = CGPointMake(lineCenterX, topMax);

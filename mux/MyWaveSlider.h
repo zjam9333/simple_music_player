@@ -8,14 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@interface MyWaveSlider : UIControl
 
-@interface MySlider : UIControl
-
-@property (nonatomic, strong) NSArray<NSNumber *> *numbers; // 0 ~ 1
+@property (nonatomic, strong) NSData *numbers; // read bytes
 @property (nonatomic, assign) CGFloat value; // 0 ~ 1
 @property (nonatomic, assign, readonly) BOOL isTouching;
 
 @end
-
-NS_ASSUME_NONNULL_END

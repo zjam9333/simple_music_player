@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		069975D921AF928600E8E663 /* MySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 069975D821AF928600E8E663 /* MySlider.m */; };
+		069975D921AF928600E8E663 /* MyWaveSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 069975D821AF928600E8E663 /* MyWaveSlider.m */; };
 		06BE8A0721AE71470011258A /* MarginLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BE8A0521AE71470011258A /* MarginLabel.m */; };
 		3F4AE8611D5D7E2400951EA3 /* OnePlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */; };
 		3F6A84981D5F3572003268C5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F6A84971D5F3572003268C5 /* AVFoundation.framework */; };
@@ -39,8 +39,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		069975D721AF928600E8E663 /* MySlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MySlider.h; sourceTree = "<group>"; };
-		069975D821AF928600E8E663 /* MySlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MySlider.m; sourceTree = "<group>"; };
+		069975D721AF928600E8E663 /* MyWaveSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyWaveSlider.h; sourceTree = "<group>"; };
+		069975D821AF928600E8E663 /* MyWaveSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyWaveSlider.m; sourceTree = "<group>"; };
 		06BE8A0521AE71470011258A /* MarginLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginLabel.m; sourceTree = "<group>"; };
 		06BE8A0621AE71470011258A /* MarginLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginLabel.h; sourceTree = "<group>"; };
 		3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePlayListController.h; sourceTree = "<group>"; };
@@ -168,8 +168,8 @@
 				8EA31FD41F678C2F005600AD /* PlayingProgressButton.m */,
 				06BE8A0621AE71470011258A /* MarginLabel.h */,
 				06BE8A0521AE71470011258A /* MarginLabel.m */,
-				069975D721AF928600E8E663 /* MySlider.h */,
-				069975D821AF928600E8E663 /* MySlider.m */,
+				069975D721AF928600E8E663 /* MyWaveSlider.h */,
+				069975D821AF928600E8E663 /* MyWaveSlider.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -287,7 +287,7 @@
 				8E8E151C1F629BDD0093459D /* PlayingInfoModel.m in Sources */,
 				8E214BA41F8C6BB000C8AD3D /* AllSongController.m in Sources */,
 				8E8E15101F62412E0093459D /* PlayListCell.m in Sources */,
-				069975D921AF928600E8E663 /* MySlider.m in Sources */,
+				069975D921AF928600E8E663 /* MyWaveSlider.m in Sources */,
 				3FE4DB4B1D5D5BD400A07CB5 /* AppDelegate.m in Sources */,
 				3FE4DB621D5D64AC00A07CB5 /* AllPlayListController.m in Sources */,
 				8E8E150A1F6236020093459D /* PlayingView.m in Sources */,
