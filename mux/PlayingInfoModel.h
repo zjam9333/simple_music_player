@@ -26,4 +26,6 @@
 @property (nonatomic,strong) MPMediaItem* playingItem;
 @property (nonatomic,strong) MPMediaPlaylist* playingList;
 
+@property (nonatomic,strong) NSMutableData *pcmData;
+
 @end

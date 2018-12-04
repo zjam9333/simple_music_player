@@ -10,11 +10,6 @@
 #import "PlayingInfoModel.h"
 #import "AudioPlayer.h"
 #import "MyWaveSlider.h"
-#import <AVFoundation/AVFoundation.h>
-
-const CGFloat sampleRate = 44100;
-const NSInteger channelCount = 1;
-const NSInteger bitDepth = 8;
 
 @interface PlayingView()
 
@@ -99,7 +94,6 @@ const NSInteger bitDepth = 8;
         self.secondTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:secondTitle attributes:attributes];
         
 //        self.myProgressSlider.numbers = [NSMutableData dataWithLength:info.playbackDuration.floatValue * sampleRate * channelCount];
-        [self analyseWaveUrl:info.url];
     }
     
     
@@ -111,6 +105,7 @@ const NSInteger bitDepth = 8;
     self.pauseLargeButton.hidden=!playing;
     
     self.shuffleButton.selected=info.shuffle.boolValue;
+    self.myProgressSlider.numbers = info.pcmData;
     
     if (self.myProgressSlider.isTouching) {
         return;
@@ -138,71 +133,6 @@ const NSInteger bitDepth = 8;
         CGFloat imgX = (CGFloat)(progress * totalMove);
         self.artworkImageView.frame = CGRectMake(imgX, imgY, imgW, imgH);
     }
-}
-
-- (void)analyseWaveUrl:(NSURL *)url {
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        PlayingInfoModel *info = self.currentInfoModel;
-        
-        // 我现在知道通过（采样率、声道数、时长）可以计算出样品个数
-        NSInteger sampleCount = info.playbackDuration.floatValue * sampleRate * channelCount;
-        if (!url) {
-            return;
-        }
-        AVAsset *asset = [AVAsset assetWithURL:url];
-        AVAssetReader *reader = [[AVAssetReader alloc] initWithAsset:asset error:nil];
-        if (!reader) {
-            return;
-        }
-        AVAssetTrack *track = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
-        NSDictionary *dic = @{AVFormatIDKey:@(kAudioFormatLinearPCM),
-                              AVLinearPCMIsBigEndianKey:@NO,
-                              AVLinearPCMIsFloatKey:@NO,
-                              AVLinearPCMBitDepthKey:@(bitDepth),
-                              AVSampleRateKey:@(sampleRate),
-                              AVNumberOfChannelsKey:@(channelCount),
-                              };
-        AVAssetReaderTrackOutput *output = [[AVAssetReaderTrackOutput alloc]initWithTrack:track outputSettings:dic];
-        [reader addOutput:output];
-        [reader startReading];
-        
-        size_t readOffset = 0;
-        NSMutableData *sampleData = [NSMutableData dataWithLength:sampleCount];
-        
-        while (reader.status == AVAssetReaderStatusReading) {
-            CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer];
-            if (sampleBuffer) {
-                CMBlockBufferRef blockBUfferRef = CMSampleBufferGetDataBuffer(sampleBuffer);
-                size_t length = CMBlockBufferGetDataLength(blockBUfferRef);
-                if (readOffset + length > sampleCount) {
-                    length = sampleCount - readOffset;
-                }
-                Byte readSampleBytes[length];
-                CMBlockBufferCopyDataBytes(blockBUfferRef, 0, length, readSampleBytes);
-                [sampleData replaceBytesInRange:NSMakeRange(readOffset, length) withBytes:readSampleBytes length:length];
-                readOffset += length; // 修改当前已读数
-                
-                CMSampleBufferInvalidate(sampleBuffer);//销毁
-                CFRelease(sampleBuffer); //释放
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.myProgressSlider.numbers = sampleData;
-                });
-                
-            }
-        }
-//        Byte *bytes = (Byte *)sampleData.bytes;
-//        Byte max = 0;
-//        for (int i = 0; i < sampleCount; i += 10000) {
-//            Byte bi = bytes[i];
-////            CGFloat numberValue = 20 * log10((double)bi) / 48.0;
-//            if (max < bi) {
-//                max = bi;
-//            }
-//            printf("bi %d\n", bi);
-//        }
-//        printf("max %d\n",max);
-    });
 }
 
 -(void)mediaStartedPlayingNotification:(NSNotification*)noti

@@ -12,6 +12,9 @@
 
 static AudioPlayer* shared;
 
+const CGFloat sampleRate = 44100;
+const NSInteger channelCount = 1;
+const NSInteger bitDepth = 8;
 const CFTimeInterval scheduledTime=0.05;
 
 const NSString* lastPlayingItemKey=@"fjs09djf0w9ef09ef09ewfoijfsd";
@@ -168,6 +171,59 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
         currenPlayingInfo.playingItem=self.playingMediaItem;
         currenPlayingInfo.playingList=self.playingList;
         
+        PlayingInfoModel *thisInfo = currenPlayingInfo;
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            
+            // 我现在知道通过（采样率、声道数、时长）可以计算出样品个数
+            NSInteger sampleCount = thisInfo.playbackDuration.doubleValue * sampleRate * channelCount;
+            if (!thisInfo.url) {
+                return;
+            }
+            AVAsset *asset = [AVAsset assetWithURL:thisInfo.url];
+            AVAssetReader *reader = [[AVAssetReader alloc] initWithAsset:asset error:nil];
+            if (!reader) {
+                return;
+            }
+            AVAssetTrack *track = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
+            NSDictionary *dic = @{AVFormatIDKey:@(kAudioFormatLinearPCM),
+                                  AVLinearPCMIsBigEndianKey:@NO,
+                                  AVLinearPCMIsFloatKey:@NO,
+                                  AVLinearPCMBitDepthKey:@(bitDepth),
+                                  AVSampleRateKey:@(sampleRate),
+                                  AVNumberOfChannelsKey:@(channelCount),
+                                  };
+            AVAssetReaderTrackOutput *output = [[AVAssetReaderTrackOutput alloc]initWithTrack:track outputSettings:dic];
+            [reader addOutput:output];
+            [reader startReading];
+            
+            size_t readOffset = 0;
+            NSMutableData *sampleData = [NSMutableData dataWithLength:sampleCount];
+            thisInfo.pcmData = sampleData;
+            
+            while (reader.status == AVAssetReaderStatusReading) {
+                CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer];
+                if (sampleBuffer) {
+                    CMBlockBufferRef blockBUfferRef = CMSampleBufferGetDataBuffer(sampleBuffer);
+                    size_t length = CMBlockBufferGetDataLength(blockBUfferRef);
+                    if (readOffset + length > sampleCount) {
+                        length = sampleCount - readOffset;
+                    }
+                    Byte readSampleBytes[length];
+                    CMBlockBufferCopyDataBytes(blockBUfferRef, 0, length, readSampleBytes);
+                    
+                    [sampleData replaceBytesInRange:NSMakeRange(readOffset, length) withBytes:readSampleBytes length:length];
+                    readOffset += length; // 修改当前已读数
+                    
+                    CMSampleBufferInvalidate(sampleBuffer);//销毁
+                    CFRelease(sampleBuffer); //释放
+                    
+                    if (thisInfo != currenPlayingInfo) {
+                        [reader cancelReading];
+                    }
+                }
+            }
+        });
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
         [player stop];
         player=[[MyAudioPlayer alloc]initWithContentsOfURL:currenPlayingInfo.url error:nil];
@@ -234,7 +290,8 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     NSDictionary* dict=notification.userInfo;
     AVAudioSessionInterruptionType interruptionType=[[dict valueForKey:AVAudioSessionInterruptionTypeKey]integerValue];
     if (interruptionType==AVAudioSessionInterruptionTypeBegan) {
-//        [self pause];
+        [self pause];
+        manualPaused = NO;
     }
     else if(interruptionType==AVAudioSessionInterruptionTypeEnded)
     {
