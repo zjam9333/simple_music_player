@@ -8,7 +8,7 @@
 
 #import "PlayingView.h"
 #import "PlayingInfoModel.h"
-#import "AudioPlayer.h"
+#import "AudioPlayController.h"
 #import "MyWaveSlider.h"
 
 @interface PlayingView()
@@ -147,20 +147,20 @@
 //        
 //        self.playSmallButton.selected=selected;
 //        self.playLargeButton.selected=selected;
-        [[AudioPlayer sharedAudioPlayer]playOrPause];
+        [[AudioPlayController sharedAudioPlayer]playOrPause];
     }
 }
 - (IBAction)playNext:(id)sender {
-    [[AudioPlayer sharedAudioPlayer]playNext];
+    [[AudioPlayController sharedAudioPlayer]playNext];
 }
 
 - (IBAction)playPrevious:(id)sender {
-    [[AudioPlayer sharedAudioPlayer]playPrevious];
+    [[AudioPlayController sharedAudioPlayer]playPrevious];
 }
 
 - (IBAction)shuffleOrNot:(id)sender {
     self.shuffleButton.selected=!self.shuffleButton.selected;
-    [[AudioPlayer sharedAudioPlayer]shuffle:self.shuffleButton.selected];
+    [[AudioPlayController sharedAudioPlayer]shuffle:self.shuffleButton.selected];
 }
 
 - (IBAction)progressSliderValueChanged:(MyWaveSlider *)sender {
@@ -170,7 +170,7 @@
 //        {
 //            progress=max;
 //        }
-    [[AudioPlayer sharedAudioPlayer]setProgress:progress];
+    [[AudioPlayController sharedAudioPlayer]setProgress:progress];
     [self setWithProgress:progress];
 }
 - (IBAction)progressSliderDragInside:(MyWaveSlider *)sender {

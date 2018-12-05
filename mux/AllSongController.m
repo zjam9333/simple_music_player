@@ -12,7 +12,7 @@
 #import "PlayingListHeaderCell.h"
 #import "ShufflePlayHeaderCell.h"
 
-#import "AudioPlayer.h"
+#import "AudioPlayController.h"
 
 @interface AllSongController ()
 {

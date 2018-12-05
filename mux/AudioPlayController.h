@@ -12,7 +12,7 @@
 #define AudioPlayerPlayingMediaInfoNotification @"AudioPlayerPlayingMediaInfoNotification"
 #define AudioPlayerStartMediaPlayNotification @"AudioPlayerStartMediaPlayNotification"
 
-@interface AudioPlayer : NSObject
+@interface AudioPlayController : NSObject
 
 +(instancetype)sharedAudioPlayer;
 

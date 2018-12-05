@@ -7,7 +7,7 @@
 //
 
 #import "PlayingProgressButton.h"
-#import "AudioPlayer.h"
+#import "AudioPlayController.h"
 
 @interface PlayingProgressButton()
 {
@@ -69,7 +69,7 @@
 //    if ([self.delegate respondsToSelector:@selector(playingProgressButtonDidSelected)]) {
 //        [self.delegate playingProgressButtonDidSelected];
 //    }
-    [[AudioPlayer sharedAudioPlayer]playOrPause];
+    [[AudioPlayController sharedAudioPlayer]playOrPause];
 }
 
 @end

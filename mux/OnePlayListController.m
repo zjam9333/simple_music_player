@@ -13,7 +13,7 @@
 #import "PlayingListHeaderCell.h"
 #import "ShufflePlayHeaderCell.h"
 
-#import "AudioPlayer.h"
+#import "AudioPlayController.h"
 
 @interface OnePlayListController ()
 
@@ -109,13 +109,13 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section==1) {
         MPMediaItem* medi=[[self.playList items]objectAtIndex:(arc4random()%self.playList.count)];
-        AudioPlayer* player=[AudioPlayer sharedAudioPlayer];
+        AudioPlayController* player=[AudioPlayController sharedAudioPlayer];
         [player shuffle:YES];
         [player setPlayingMediaItem:medi inPlayList:self.playList];
     }
     else if (indexPath.section==2) {
         MPMediaItem* medi=[[self.playList items]objectAtIndex:indexPath.row];
-        AudioPlayer* player=[AudioPlayer sharedAudioPlayer];
+        AudioPlayController* player=[AudioPlayController sharedAudioPlayer];
         [player setPlayingMediaItem:medi inPlayList:self.playList];
     }
     

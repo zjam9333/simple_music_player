@@ -9,8 +9,8 @@
 #import "MyWaveSlider.h"
 
 #define kWidthPerColumn (1/UIScreen.mainScreen.scale)
-#define kMarginForColumn (0)//(1/UIScreen.mainScreen.scale)
-#define kSampleRate (1000)
+#define kMarginForColumn (1/UIScreen.mainScreen.scale)
+#define kSampleRate (1)
 
 @implementation MyWaveSlider {
     CGFloat _startX;
@@ -63,12 +63,13 @@
 }
 
 - (void)calculateProgress {
-    NSInteger count = self.numbers.length;
-    if (count == 0) {
-        return;
-    }
-    CGFloat totalWidth = count / kSampleRate * (kWidthPerColumn + kMarginForColumn);
-    CGFloat deltaValue = (-_deltaX / totalWidth) * 4;
+//    NSInteger count = self.numbers.length;
+//    if (count == 0) {
+//        return;
+//    }
+    // 我想滑5 point就是0.01
+//    CGFloat totalWidth = count / kSampleRate * (kWidthPerColumn + kMarginForColumn);
+    CGFloat deltaValue = -_deltaX / 5 * 0.01;//(-_deltaX / totalWidth) * 10;
     [self touchSetValue:self.value + deltaValue];
 //    NSLog(@"progress:%f", self.value);
 }
@@ -130,7 +131,7 @@
     
     //获得处理的上下文
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, 1);//kWidthPerColumn);
+    CGContextSetLineWidth(context, kWidthPerColumn);
     
     NSInteger startIndex = (0 - startX) * columnCount / totalWidth;
     NSInteger endIndex = (size.width - startX) * columnCount / totalWidth;
@@ -142,7 +143,7 @@
     }
     
     SInt8 *values = (SInt8 *)self.numbers.bytes;
-    
+    CGPoint aPoints[2];
     for (NSInteger i = startIndex; i < endIndex; i ++) {
         CGFloat lineCenterX = startX + totalWidth * i / columnCount;
         
@@ -160,34 +161,43 @@
             }
         }
 //        SInt8 blockAvgValue = blockTotalSampleValue / blockLength;
-        CGPoint aPoints[2];
         CGFloat numberValue = (showSampleValue / 128.0);
         
         for (int k = 0; k < 2; k ++) {
             aPoints[0] = CGPointMake(lineCenterX, topMax);
             aPoints[1] = CGPointMake(lineCenterX, topMax * (1 - numberValue));
             
-            if (lineCenterX < centerX) {
+//            if (lineCenterX < centerX) {
                 if (k == 0) {
                     CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0); // top left
                 } else {
                     CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 0.3); // bot left
                     aPoints[1] = CGPointMake(lineCenterX, topMax + botMax *numberValue);
                 }
-            } else {
-                if (k == 0) {
-                    CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 1.0); // top right
-                } else {
-                    CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 0.3); // bot right
-                    aPoints[1] = CGPointMake(lineCenterX, topMax + botMax *numberValue);
-                }
-            }
+//            } else {
+//                if (k == 0) {
+//                    CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 1.0); // top right
+//                } else {
+//                    CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 0.3); // bot right
+//                    aPoints[1] = CGPointMake(lineCenterX, topMax + botMax *numberValue);
+//                }
+//            }
             //添加线 points[]坐标数组，和count大小
             CGContextAddLines(context, aPoints, 2);
             //根据坐标绘制路径
             CGContextDrawPath(context, kCGPathStroke);
         }
         
+        // 画条中线
+        aPoints[0] = CGPointMake(centerX, topMax / 2);
+        aPoints[1] = CGPointMake(centerX, topMax);
+        
+        CGContextSetLineWidth(context, 1);
+        CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 1.0);
+        //添加线 points[]坐标数组，和count大小
+        CGContextAddLines(context, aPoints, 2);
+        //根据坐标绘制路径
+        CGContextDrawPath(context, kCGPathStroke);
     }
 }
 

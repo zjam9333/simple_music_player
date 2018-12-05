@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "AudioPlayer.h"
+#import "AudioPlayController.h"
 
 @interface AppDelegate ()
 
@@ -18,7 +18,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [[AudioPlayer sharedAudioPlayer] performSelector:@selector(loadLastPlay) withObject:nil afterDelay:1];
+    [[AudioPlayController sharedAudioPlayer] performSelector:@selector(loadLastPlay) withObject:nil afterDelay:1];
     return YES;
 }
 
@@ -30,17 +30,17 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-    [[AudioPlayer sharedAudioPlayer]becomeActive];
+    [[AudioPlayController sharedAudioPlayer]becomeActive];
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application
 {
-    [[AudioPlayer sharedAudioPlayer]saveLastPlay];
+    [[AudioPlayController sharedAudioPlayer]saveLastPlay];
 }
 
 -(void)remoteControlReceivedWithEvent:(UIEvent *)event
 {
-    [[AudioPlayer sharedAudioPlayer]handleRemoteControlEvent:event];
+    [[AudioPlayController sharedAudioPlayer]handleRemoteControlEvent:event];
 }
 
 @end
