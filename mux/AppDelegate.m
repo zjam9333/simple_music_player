@@ -9,7 +9,11 @@
 #import "AppDelegate.h"
 #import "AudioPlayController.h"
 
+#import "MyAudioPlayer.h"
+
 @interface AppDelegate ()
+
+@property (nonatomic, strong) MyAudioPlayer *player;
 
 @end
 
@@ -19,7 +23,18 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [[AudioPlayController sharedAudioPlayer] performSelector:@selector(loadLastPlay) withObject:nil afterDelay:1];
+    
+    [self performSelector:@selector(testPlay) withObject:nil afterDelay:2];
     return YES;
+}
+
+- (void)testPlay {
+    NSMutableData *sampleData = [NSMutableData data];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"The Best Of You" ofType:@"mp3"];
+    NSURL *fileUrl = [NSURL fileURLWithPath:filePath];
+    
+    self.player = [[MyAudioPlayer alloc] initWithContentsOfURL:fileUrl error:nil];
+//    [self.player play];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

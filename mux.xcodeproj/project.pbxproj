@@ -10,6 +10,7 @@
 		069975D921AF928600E8E663 /* MyWaveSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 069975D821AF928600E8E663 /* MyWaveSlider.m */; };
 		06B55E3E21B77A140014EADE /* MyAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B55E3D21B77A140014EADE /* MyAudioPlayer.m */; };
 		06B55E4121B77BEF0014EADE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06B55E4021B77BEF0014EADE /* AudioToolbox.framework */; };
+		06B55E8921B8F82E0014EADE /* The Best Of You.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 06B55E8821B8F82E0014EADE /* The Best Of You.mp3 */; };
 		06BE8A0721AE71470011258A /* MarginLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BE8A0521AE71470011258A /* MarginLabel.m */; };
 		3F4AE8611D5D7E2400951EA3 /* OnePlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */; };
 		3F6A84981D5F3572003268C5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F6A84971D5F3572003268C5 /* AVFoundation.framework */; };
@@ -48,6 +49,7 @@
 		06B55E4021B77BEF0014EADE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		06B55E4221B77C000014EADE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		06B55E4321B77C000014EADE /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		06B55E8821B8F82E0014EADE /* The Best Of You.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "The Best Of You.mp3"; sourceTree = "<group>"; };
 		06BE8A0521AE71470011258A /* MarginLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginLabel.m; sourceTree = "<group>"; };
 		06BE8A0621AE71470011258A /* MarginLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginLabel.h; sourceTree = "<group>"; };
 		3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePlayListController.h; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 		3FE4DB451D5D5BD400A07CB5 /* mux */ = {
 			isa = PBXGroup;
 			children = (
+				06B55E8821B8F82E0014EADE /* The Best Of You.mp3 */,
 				8E8E15141F6242DE0093459D /* Controllers */,
 				8E8E15131F6242CC0093459D /* Tools */,
 				8E8E15121F6242B90093459D /* Views */,
@@ -291,6 +294,7 @@
 				8E8E15191F624C2D0093459D /* SongCell.xib in Resources */,
 				8E0A10001F662FEE000A4DE6 /* PlayingListHeaderCell.xib in Resources */,
 				3FE4DB531D5D5BD400A07CB5 /* Assets.xcassets in Resources */,
+				06B55E8921B8F82E0014EADE /* The Best Of You.mp3 in Resources */,
 				8E8E14F91F622FC10093459D /* Main.storyboard in Resources */,
 				8E0A100A1F66356F000A4DE6 /* ShufflePlayHeaderCell.xib in Resources */,
 				8E8E150C1F6236160093459D /* PlayingView.xib in Resources */,
