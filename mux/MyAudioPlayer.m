@@ -7,303 +7,227 @@
 //
 
 #import "MyAudioPlayer.h"
-//#import <AudioToolbox/AudioToolbox.h>
-
+#import <AVFoundation/AVFoundation.h>
+#import "NSTimer+HICategory.h"
 
 const double sampleRate = 44100;
 const NSInteger channelCount = 1;
 const NSInteger bitDepth = 8;
 
-static const int kNumberBuffers = 3;                              // 1
-struct AQPlayerState {
-    AudioStreamBasicDescription   mDataFormat;                    // 2
-    AudioQueueRef                 mQueue;                         // 3
-    AudioQueueBufferRef           mBuffers[kNumberBuffers];       // 4
-    AudioFileID                   mAudioFile;                     // 5
-    UInt32                        bufferByteSize;                 // 6
-    SInt64                        mCurrentPacket;                 // 7
-    UInt32                        mNumPacketsToRead;              // 8
-    AudioStreamPacketDescription  *mPacketDescs;                  // 9
-    bool                          mIsRunning;                     // 10
-};
+@interface MyAudioPlayer ()
 
-typedef struct AQPlayerState AQPlayerState;
+@property (nonatomic, strong) AVAudioEngine *engine;
+@property (nonatomic, strong) AVAudioPlayerNode *playerNode;
+
+@property (nonatomic, strong) AVAudioFile *audioFile;
+
+// effects
+@property (nonatomic, strong) AVAudioUnitReverb *audioReverb;
+@property (nonatomic, strong) AVAudioUnitDistortion *audioDistortion;
+@property (nonatomic, strong) AVAudioUnitEQ *audioEQ;
+
+@property (nonatomic, strong) NSTimer *timer;
+
+@end
 
 @implementation MyAudioPlayer {
-    AQPlayerState aqData;
+    AVAudioFramePosition lastStartFramePosition;
 }
 
 - (void)dealloc {
     NSLog(@"dealloc: %@", self);
+    self.delegate = nil;
+    [self.playerNode stop];
+    [self.engine stop];
+    [self.timer invalidate];
 }
 
 - (instancetype)initWithContentsOfURL:(NSURL *)url error:(NSError * _Nullable __autoreleasing *)outError {
-    self = [super initWithContentsOfURL:url error:outError];
+    self = [super init];
     if (self) {
+//        self.duration = 10000000;
+        self.url = url;
+        [self myInit];
         [self readPCMData];
     }
     return self;
 }
 
-- (BOOL)play {
+- (void)myInit {
+    // create engine and nodes
+    self.engine = [[AVAudioEngine alloc] init];
+    self.playerNode = [[AVAudioPlayerNode alloc] init];
     
     
-    return [super play];
+//    self.audioReverb = [[AVAudioUnitReverb alloc] init];
+//    [self.audioReverb loadFactoryPreset:AVAudioUnitReverbPresetLargeRoom2];
+//    self.audioReverb.wetDryMix = 50;
+//
+//    self.audioDistortion = [[AVAudioUnitDistortion alloc] init];
+//    [self.audioDistortion loadFactoryPreset:AVAudioUnitDistortionPresetSpeechWaves];
+//    self.audioDistortion.wetDryMix = 100;
+    
+    self.audioEQ = [[AVAudioUnitEQ alloc] initWithNumberOfBands:10];
+    NSArray *bands = self.audioEQ.bands;
+    for (AVAudioUnitEQFilterParameters *ban in bands) {
+        NSLog(@"%f", ban.frequency);
+        if (ban.frequency > 10000) {
+            ban.bypass = NO; // bypass 为 no才生效
+            ban.gain = -90;
+        }
+    }
+    
+    AVAudioUnitEffect *effect = self.audioEQ;
+    
+    // connect effects
+    AVAudioMixerNode *mixer = self.engine.mainMixerNode;
+    AVAudioFormat *format = [mixer outputFormatForBus:0];
+    [self.engine attachNode:self.playerNode];
+    [self.engine attachNode:effect];
+    [self.engine connect:self.playerNode to:effect format:format];
+    [self.engine connect:effect to:mixer format:format];
+    
+    // start engine
+    NSError *error = nil;
+    [self.engine startAndReturnError:&error];
+    
+    // create file or pcm buffer
+    self.audioFile = [[AVAudioFile alloc] initForReading:self.url error:nil];
+    
+    // calculate duration
+    AVAudioFrameCount frameCount = (AVAudioFrameCount)self.audioFile.length;
+    double sampleRate = self.audioFile.processingFormat.sampleRate;
+    if (sampleRate != 0) {
+        self.duration = frameCount / sampleRate;
+    } else {
+        self.duration = 1;
+    }
+    
+    // play file, or buffer
+    __weak typeof(self) weself = self;
+    self.currentTime = 0.01;
+    
+//    // init a timer to catch current time;
+    self.timer = [NSTimer db_scheduledTimerWithTimeInterval:0.01 repeats:YES block:^(NSTimer *timer) {
+        [weself catchCurrentTime];
+    }];
+}
+
+- (void)play {
+    [self.playerNode play];
+}
+
+- (void)pause {
+    [self.playerNode pause];
+}
+
+- (void)stop {
+    self.delegate = nil; // 手动停的必须设delegate nil，不然回调出去又播放下一首了，内存超大
+    if (self.isPlaying) {
+        [self.playerNode stop];
+    }
+    [self.engine stop];
+}
+
+- (void)didFinishPlay {
+    if ([self.delegate respondsToSelector:@selector(audioPlayerDidFinishPlaying:successfully:)]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate audioPlayerDidFinishPlaying:(id)self successfully:self.isPlaying];
+        });
+    }
+}
+
+- (BOOL)isPlaying {
+    return self.playerNode.isPlaying;
+}
+
+- (void)catchCurrentTime {
+    if (self.playing) {
+        AVAudioTime *playerTime = [self.playerNode playerTimeForNodeTime:self.playerNode.lastRenderTime];
+        if (playerTime.sampleRate != 0) {
+            _currentTime = (lastStartFramePosition + playerTime.sampleTime) / playerTime.sampleRate;
+        } else {
+            _currentTime = 0;
+        }
+    }
+    if (_currentTime > self.duration) {
+        [self.playerNode stop];
+    }
+}
+
+- (void)setCurrentTime:(NSTimeInterval)currentTime {
+    _currentTime = currentTime;
+    
+    BOOL isPlaying = self.isPlaying;
+    id lastdelegate = self.delegate;
+    self.delegate = nil;
+    [self.playerNode stop];
+    self.delegate = lastdelegate;
+    __weak typeof(self) weself = self;
+    
+    AVAudioFramePosition startingFrame = currentTime * self.audioFile.processingFormat.sampleRate;
+    
+    AVAudioFrameCount frameCount = (AVAudioFrameCount)(self.audioFile.length - startingFrame);
+    if (frameCount > 1000) {
+        lastStartFramePosition = startingFrame;
+        [self.playerNode scheduleSegment:self.audioFile startingFrame:startingFrame frameCount:frameCount atTime:nil completionHandler:^{
+            [weself didFinishPlay];
+        }];
+    }
+    if (isPlaying) {
+        [self.playerNode play];
+    }
 }
 
 - (void)readPCMData {
+//    return;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{// 我现在知道通过（采样率、声道数、时长）可以计算出样品个数
-//        NSInteger sampleCount = self.duration * sampleRate * channelCount;
-//
-//        NSMutableData *sampleData = [NSMutableData dataWithLength:sampleCount];
-//        self.pcmData = sampleData;
-//
-//        if (!self.url) {
-//            return;
-//        }
-//        AVAsset *asset = [AVAsset assetWithURL:self.url];
-//        AVAssetReader *reader = [[AVAssetReader alloc] initWithAsset:asset error:nil];
-//        if (!reader) {
-//            return;
-//        }
-//        AVAssetTrack *track = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
-//        NSDictionary *dic = @{AVFormatIDKey:@(kAudioFormatLinearPCM),
-//                              AVLinearPCMIsBigEndianKey:@NO,
-//                              AVLinearPCMIsFloatKey:@NO,
-//                              AVLinearPCMBitDepthKey:@(bitDepth),
-//                              AVSampleRateKey:@(sampleRate),
-//                              AVNumberOfChannelsKey:@(channelCount),
-//                              };
-//        AVAssetReaderTrackOutput *output = [[AVAssetReaderTrackOutput alloc]initWithTrack:track outputSettings:dic];
-//        [reader addOutput:output];
-//        [reader startReading];
-//
-//        size_t readOffset = 0;
-//        while (reader.status == AVAssetReaderStatusReading) {
-//            CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer];
-//            if (sampleBuffer) {
-//                CMBlockBufferRef blockBUfferRef = CMSampleBufferGetDataBuffer(sampleBuffer);
-//                size_t length = CMBlockBufferGetDataLength(blockBUfferRef);
-//                if (readOffset + length > sampleCount) {
-//                    length = sampleCount - readOffset;
-//                }
-//                Byte readSampleBytes[length];
-//                CMBlockBufferCopyDataBytes(blockBUfferRef, 0, length, readSampleBytes);
-//
-//                [sampleData replaceBytesInRange:NSMakeRange(readOffset, length) withBytes:readSampleBytes length:length];
-//                readOffset += length; // 修改当前已读数
-//
-//                CMSampleBufferInvalidate(sampleBuffer);//销毁
-//                CFRelease(sampleBuffer); //释放
-//            }
-//        }
-        
-        // from https://developer.apple.com/library/archive/documentation/MusicAudio/Conceptual/AudioQueueProgrammingGuide/AQPlayback/PlayingAudio.html#//apple_ref/doc/uid/TP40005343-CH3-SW2
-        
-        // Opening an Audio File
-        CFURLRef audioFileURL = ((__bridge CFURLRef)self.url);
-//        OSStatus result =
-        AudioFileOpenURL (audioFileURL, kAudioFileReadPermission, 0, &aqData.mAudioFile);
-        CFRelease (audioFileURL);
-        
-        // Obtaining a File’s Audio Data Format
-        UInt32 dataFormatSize = sizeof (aqData.mDataFormat);    // 1
-        AudioFileGetProperty (aqData.mAudioFile, kAudioFilePropertyDataFormat, &dataFormatSize, &aqData.mDataFormat);
-        
-        // Create a Playback Audio Queue
-        AudioQueueNewOutput (&aqData.mDataFormat, HandleOutputBuffer, &aqData, CFRunLoopGetCurrent(), kCFRunLoopCommonModes, 0, &aqData.mQueue);
-        
-        // Set Sizes for a Playback Audio Queue
-        UInt32 maxPacketSize;
-        UInt32 propertySize = sizeof (maxPacketSize);
-        AudioFileGetProperty (                               // 1
-                              aqData.mAudioFile,                               // 2
-                              kAudioFilePropertyPacketSizeUpperBound,          // 3
-                              &propertySize,                                   // 4
-                              &maxPacketSize                                   // 5
-                              );
-        
-        DeriveBufferSize (                                   // 6
-                          aqData.mDataFormat,                              // 7
-                          maxPacketSize,                                   // 8
-                          0.5,                                             // 9
-                          &aqData.bufferByteSize,                          // 10
-                          &aqData.mNumPacketsToRead                        // 11
-                          );
-        
-        // Allocating Memory for a Packet Descriptions Array
-        bool isFormatVBR = (                                       // 1
-                            aqData.mDataFormat.mBytesPerPacket == 0 ||
-                            aqData.mDataFormat.mFramesPerPacket == 0
-                            );
-        
-        if (isFormatVBR) {                                         // 2
-            aqData.mPacketDescs =
-            (AudioStreamPacketDescription*) malloc (
-                                                    aqData.mNumPacketsToRead * sizeof (AudioStreamPacketDescription)
-                                                    );
-        } else {                                                   // 3
-            aqData.mPacketDescs = NULL;
+        NSInteger sampleCount = self.duration * sampleRate * channelCount;
+
+        NSMutableData *sampleData = [NSMutableData dataWithLength:sampleCount];
+        self.pcmData = sampleData;
+
+        if (!self.url) {
+            return;
         }
-        
-        // Set a Magic Cookie for a Playback Audio Queue
-        UInt32 cookieSize = sizeof (UInt32);                   // 1
-        bool couldNotGetProperty =                             // 2
-        AudioFileGetPropertyInfo (                         // 3
-                                  aqData.mAudioFile,                             // 4
-                                  kAudioFilePropertyMagicCookieData,             // 5
-                                  &cookieSize,                                   // 6
-                                  NULL                                           // 7
-                                  );
-        
-        if (!couldNotGetProperty && cookieSize) {              // 8
-            char* magicCookie =
-            (char *) malloc (cookieSize);
-            
-            AudioFileGetProperty (                             // 9
-                                  aqData.mAudioFile,                             // 10
-                                  kAudioFilePropertyMagicCookieData,             // 11
-                                  &cookieSize,                                   // 12
-                                  magicCookie                                    // 13
-                                  );
-            
-            AudioQueueSetProperty (                            // 14
-                                   aqData.mQueue,                                 // 15
-                                   kAudioQueueProperty_MagicCookie,               // 16
-                                   magicCookie,                                   // 17
-                                   cookieSize                                     // 18
-                                   );
-            
-            free (magicCookie);                                // 19
+        AVAsset *asset = [AVAsset assetWithURL:self.url];
+        AVAssetReader *reader = [[AVAssetReader alloc] initWithAsset:asset error:nil];
+        if (!reader) {
+            return;
         }
-        
-        // Allocate and Prime Audio Queue Buffers
-        aqData.mCurrentPacket = 0;                                // 1
-        
-        for (int i = 0; i < kNumberBuffers; ++i) {                // 2
-            AudioQueueAllocateBuffer (                            // 3
-                                      aqData.mQueue,                                    // 4
-                                      aqData.bufferByteSize,                            // 5
-                                      &aqData.mBuffers[i]                               // 6
-                                      );
-            
-            HandleOutputBuffer (                                  // 7
-                                &aqData,                                          // 8
-                                aqData.mQueue,                                    // 9
-                                aqData.mBuffers[i]                                // 10
-                                );
+        AVAssetTrack *track = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
+        NSDictionary *dic = @{AVFormatIDKey:@(kAudioFormatLinearPCM),
+                              AVLinearPCMIsBigEndianKey:@NO,
+                              AVLinearPCMIsFloatKey:@NO,
+                              AVLinearPCMBitDepthKey:@(bitDepth),
+                              AVSampleRateKey:@(sampleRate),
+                              AVNumberOfChannelsKey:@(channelCount),
+                              };
+        AVAssetReaderTrackOutput *output = [[AVAssetReaderTrackOutput alloc]initWithTrack:track outputSettings:dic];
+        [reader addOutput:output];
+        [reader startReading];
+
+        size_t readOffset = 0;
+        while (reader.status == AVAssetReaderStatusReading) {
+            CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer];
+            if (sampleBuffer) {
+                CMBlockBufferRef blockBUfferRef = CMSampleBufferGetDataBuffer(sampleBuffer);
+                size_t length = CMBlockBufferGetDataLength(blockBUfferRef);
+                if (readOffset + length > sampleCount) {
+                    length = sampleCount - readOffset;
+                }
+                Byte readSampleBytes[length];
+                CMBlockBufferCopyDataBytes(blockBUfferRef, 0, length, readSampleBytes);
+
+                [sampleData replaceBytesInRange:NSMakeRange(readOffset, length) withBytes:readSampleBytes length:length];
+                readOffset += length; // 修改当前已读数
+
+                CMSampleBufferInvalidate(sampleBuffer);//销毁
+                CFRelease(sampleBuffer); //释放
+            }
         }
-        
-        // Set an Audio Queue’s Playback Gain
-//        Float32 gain = 1.0;                                       // 1
-//        // Optionally, allow user to override gain setting here
-//        AudioQueueSetParameter (                                  // 2
-//                                aqData.mQueue,                                        // 3
-//                                kAudioQueueParam_Volume,                              // 4
-//                                gain                                                  // 5
-//                                );
-        
-        // Start and Run an Audio Queue
-        aqData.mIsRunning = true;                          // 1
-        
-        AudioQueueStart (                                  // 2
-                         aqData.mQueue,                                 // 3
-                         NULL                                           // 4
-                         );
-        
-        do {                                               // 5
-            CFRunLoopRunInMode (                           // 6
-                                kCFRunLoopDefaultMode,                     // 7
-                                0.25,                                      // 8
-                                false                                      // 9
-                                );
-        } while (aqData.mIsRunning);
-        
-        CFRunLoopRunInMode (                               // 10
-                            kCFRunLoopDefaultMode,
-                            1,
-                            false
-                            );
-        
-        // Clean Up After Playing
-        AudioQueueDispose (                            // 1
-                           aqData.mQueue,                             // 2
-                           true                                       // 3
-                           );
-        
-        AudioFileClose (aqData.mAudioFile);            // 4
-        
-        free (aqData.mPacketDescs);                    // 5
     });
 }
 
-static void HandleOutputBuffer (
-                                void                *aqData,
-                                AudioQueueRef       inAQ,
-                                AudioQueueBufferRef inBuffer
-                                ) {
-    AQPlayerState *pAqData = (AQPlayerState *) aqData;        // 1
-    if (pAqData->mIsRunning == 0) return;                     // 2
-    UInt32 numBytesReadFromFile;                              // 3
-    UInt32 numPackets = pAqData->mNumPacketsToRead;           // 4
-    AudioFileReadPackets (
-                          pAqData->mAudioFile,
-                          false,
-                          &numBytesReadFromFile,
-                          pAqData->mPacketDescs,
-                          pAqData->mCurrentPacket,
-                          &numPackets,
-                          inBuffer->mAudioData
-                          );
-    if (numPackets > 0) {                                     // 5
-        inBuffer->mAudioDataByteSize = numBytesReadFromFile;  // 6
-        AudioQueueEnqueueBuffer (
-                                 pAqData->mQueue,
-                                 inBuffer,
-                                 (pAqData->mPacketDescs ? numPackets : 0),
-                                 pAqData->mPacketDescs
-                                 );
-        pAqData->mCurrentPacket += numPackets;                // 7
-    } else {
-        AudioQueueStop (
-                        pAqData->mQueue,
-                        false
-                        );
-        pAqData->mIsRunning = false;
-    }
-}
-
-static void DeriveBufferSize (
-                       AudioStreamBasicDescription ASBDesc,                            // 1
-                       UInt32                      maxPacketSize,                       // 2
-                       Float64                     seconds,                             // 3
-                       UInt32                      *outBufferSize,                      // 4
-                       UInt32                      *outNumPacketsToRead                 // 5
-) {
-    static const int maxBufferSize = 0x50000;                        // 6
-    static const int minBufferSize = 0x4000;                         // 7
-    
-    if (ASBDesc.mFramesPerPacket != 0) {                             // 8
-        Float64 numPacketsForTime =
-        ASBDesc.mSampleRate / ASBDesc.mFramesPerPacket * seconds;
-        *outBufferSize = numPacketsForTime * maxPacketSize;
-    } else {                                                         // 9
-        *outBufferSize =
-        maxBufferSize > maxPacketSize ?
-        maxBufferSize : maxPacketSize;
-    }
-    
-    if (                                                             // 10
-        *outBufferSize > maxBufferSize &&
-        *outBufferSize > maxPacketSize
-        )
-        *outBufferSize = maxBufferSize;
-    else {                                                           // 11
-        if (*outBufferSize < minBufferSize)
-            *outBufferSize = minBufferSize;
-    }
-    
-    *outNumPacketsToRead = *outBufferSize / maxPacketSize;           // 12
-}
 
 @end

@@ -372,9 +372,9 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
             [dict setValue:@(player.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
             [dict setValue:@(player.duration) forKey:MPMediaItemPropertyPlaybackDuration];
             [dict setValue:currenPlayingInfo.name forKey:MPMediaItemPropertyTitle];
-            [dict setObject:currenPlayingInfo.artist forKey:MPMediaItemPropertyArtist];
-            [dict setObject:currenPlayingInfo.album forKey:MPMediaItemPropertyAlbumTitle];
-            [dict setObject:currenPlayingInfo.mediaArtwork forKey:MPMediaItemPropertyArtwork];
+            [dict setValue:currenPlayingInfo.artist forKey:MPMediaItemPropertyArtist];
+            [dict setValue:currenPlayingInfo.album forKey:MPMediaItemPropertyAlbumTitle];
+            [dict setValue:currenPlayingInfo.mediaArtwork forKey:MPMediaItemPropertyArtwork];
             [[MPNowPlayingInfoCenter
               defaultCenter] setNowPlayingInfo:dict];
         }
@@ -383,6 +383,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
+    NSLog(@"did finish?");
     [self playNext];
 }
 
@@ -400,17 +401,17 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
 -(void)saveLastPlay
 {
-    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithLongLong:self.playingMediaItem.persistentID] forKey:lastPlayingItemKey.description
-     ];
-    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithLongLong:self.playingList.persistentID] forKey:lastPlayingListKey.description
-     ];
+    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithLongLong:self.playingMediaItem.persistentID] forKey:lastPlayingItemKey.description];
+    if (self.playingList) {
+        [[NSUserDefaults standardUserDefaults]setValue:self.playingList.name forKey:lastPlayingListKey.description];
+    }
 }
 
 -(void)loadLastPlay
 {
 //    return;
     MPMediaEntityPersistentID itemID=[[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingItemKey.description]longLongValue];
-    MPMediaEntityPersistentID listID=[[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingListKey.description]longLongValue];
+    NSString *listName=[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingListKey.description];
     
     NSArray* allsongs=[MediaQuery allSongs];
     NSArray* alllists=[MediaQuery allPlaylists];
@@ -420,7 +421,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
             self.playingMediaItem=item;
             NSLog(@"%@",item);
             for (MPMediaPlaylist* list in alllists) {
-                if (list.persistentID==listID) {
+                if ([list.name isEqualToString:listName]) {
                     if ([list.items containsObject:item]) {
                         self.playingList=list;
                         NSLog(@"%@",list);

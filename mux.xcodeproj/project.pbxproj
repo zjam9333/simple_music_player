@@ -9,16 +9,14 @@
 /* Begin PBXBuildFile section */
 		069975D921AF928600E8E663 /* MyWaveSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 069975D821AF928600E8E663 /* MyWaveSlider.m */; };
 		06B55E3E21B77A140014EADE /* MyAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B55E3D21B77A140014EADE /* MyAudioPlayer.m */; };
-		06B55E4121B77BEF0014EADE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06B55E4021B77BEF0014EADE /* AudioToolbox.framework */; };
-		06B55E8921B8F82E0014EADE /* The Best Of You.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 06B55E8821B8F82E0014EADE /* The Best Of You.mp3 */; };
+		06B55EF321BE4A050014EADE /* on9.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 06B55EF221BE4A050014EADE /* on9.m4a */; };
+		06B55EF621BE4D220014EADE /* NSTimer+HICategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B55EF421BE4D220014EADE /* NSTimer+HICategory.m */; };
 		06BE8A0721AE71470011258A /* MarginLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BE8A0521AE71470011258A /* MarginLabel.m */; };
 		3F4AE8611D5D7E2400951EA3 /* OnePlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */; };
-		3F6A84981D5F3572003268C5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F6A84971D5F3572003268C5 /* AVFoundation.framework */; };
 		3FE4DB481D5D5BD400A07CB5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB471D5D5BD400A07CB5 /* main.m */; };
 		3FE4DB4B1D5D5BD400A07CB5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB4A1D5D5BD400A07CB5 /* AppDelegate.m */; };
 		3FE4DB531D5D5BD400A07CB5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FE4DB521D5D5BD400A07CB5 /* Assets.xcassets */; };
 		3FE4DB621D5D64AC00A07CB5 /* AllPlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */; };
-		3FE4DB641D5D662B00A07CB5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */; };
 		8E0A0FFF1F662FEE000A4DE6 /* PlayingListHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E0A0FFD1F662FEE000A4DE6 /* PlayingListHeaderCell.m */; };
 		8E0A10001F662FEE000A4DE6 /* PlayingListHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E0A0FFE1F662FEE000A4DE6 /* PlayingListHeaderCell.xib */; };
 		8E0A10091F66356F000A4DE6 /* ShufflePlayHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E0A10071F66356F000A4DE6 /* ShufflePlayHeaderCell.m */; };
@@ -49,12 +47,14 @@
 		06B55E4021B77BEF0014EADE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		06B55E4221B77C000014EADE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		06B55E4321B77C000014EADE /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		06B55E8821B8F82E0014EADE /* The Best Of You.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "The Best Of You.mp3"; sourceTree = "<group>"; };
+		06B55EC821BDFEF90014EADE /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		06B55EF221BE4A050014EADE /* on9.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = on9.m4a; sourceTree = "<group>"; };
+		06B55EF421BE4D220014EADE /* NSTimer+HICategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+HICategory.m"; sourceTree = "<group>"; };
+		06B55EF521BE4D220014EADE /* NSTimer+HICategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+HICategory.h"; sourceTree = "<group>"; };
 		06BE8A0521AE71470011258A /* MarginLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginLabel.m; sourceTree = "<group>"; };
 		06BE8A0621AE71470011258A /* MarginLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginLabel.h; sourceTree = "<group>"; };
 		3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePlayListController.h; sourceTree = "<group>"; };
 		3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnePlayListController.m; sourceTree = "<group>"; };
-		3F6A84971D5F3572003268C5 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3FE4DB431D5D5BD400A07CB5 /* mux.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mux.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FE4DB471D5D5BD400A07CB5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3FE4DB491D5D5BD400A07CB5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -63,7 +63,6 @@
 		3FE4DB571D5D5BD400A07CB5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FE4DB601D5D64AC00A07CB5 /* AllPlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllPlayListController.h; sourceTree = "<group>"; };
 		3FE4DB611D5D64AC00A07CB5 /* AllPlayListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllPlayListController.m; sourceTree = "<group>"; };
-		3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		8E0A0FFC1F662FEE000A4DE6 /* PlayingListHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingListHeaderCell.h; sourceTree = "<group>"; };
 		8E0A0FFD1F662FEE000A4DE6 /* PlayingListHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingListHeaderCell.m; sourceTree = "<group>"; };
 		8E0A0FFE1F662FEE000A4DE6 /* PlayingListHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayingListHeaderCell.xib; sourceTree = "<group>"; };
@@ -104,9 +103,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06B55E4121B77BEF0014EADE /* AudioToolbox.framework in Frameworks */,
-				3F6A84981D5F3572003268C5 /* AVFoundation.framework in Frameworks */,
-				3FE4DB641D5D662B00A07CB5 /* MediaPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,6 +112,7 @@
 		06B55E3F21B77BEF0014EADE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				06B55EC821BDFEF90014EADE /* OpenAL.framework */,
 				06B55E4221B77C000014EADE /* AVFoundation.framework */,
 				06B55E4321B77C000014EADE /* MediaPlayer.framework */,
 				06B55E4021B77BEF0014EADE /* AudioToolbox.framework */,
@@ -126,8 +123,6 @@
 		3FE4DB3A1D5D5BD400A07CB5 = {
 			isa = PBXGroup;
 			children = (
-				3F6A84971D5F3572003268C5 /* AVFoundation.framework */,
-				3FE4DB631D5D662B00A07CB5 /* MediaPlayer.framework */,
 				3FE4DB451D5D5BD400A07CB5 /* mux */,
 				3FE4DB441D5D5BD400A07CB5 /* Products */,
 				06B55E3F21B77BEF0014EADE /* Frameworks */,
@@ -145,7 +140,7 @@
 		3FE4DB451D5D5BD400A07CB5 /* mux */ = {
 			isa = PBXGroup;
 			children = (
-				06B55E8821B8F82E0014EADE /* The Best Of You.mp3 */,
+				06B55EF221BE4A050014EADE /* on9.m4a */,
 				8E8E15141F6242DE0093459D /* Controllers */,
 				8E8E15131F6242CC0093459D /* Tools */,
 				8E8E15121F6242B90093459D /* Views */,
@@ -207,6 +202,8 @@
 				8E8E151B1F629BDD0093459D /* PlayingInfoModel.m */,
 				06B55E3C21B77A140014EADE /* MyAudioPlayer.h */,
 				06B55E3D21B77A140014EADE /* MyAudioPlayer.m */,
+				06B55EF521BE4D220014EADE /* NSTimer+HICategory.h */,
+				06B55EF421BE4D220014EADE /* NSTimer+HICategory.m */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -294,10 +291,10 @@
 				8E8E15191F624C2D0093459D /* SongCell.xib in Resources */,
 				8E0A10001F662FEE000A4DE6 /* PlayingListHeaderCell.xib in Resources */,
 				3FE4DB531D5D5BD400A07CB5 /* Assets.xcassets in Resources */,
-				06B55E8921B8F82E0014EADE /* The Best Of You.mp3 in Resources */,
 				8E8E14F91F622FC10093459D /* Main.storyboard in Resources */,
 				8E0A100A1F66356F000A4DE6 /* ShufflePlayHeaderCell.xib in Resources */,
 				8E8E150C1F6236160093459D /* PlayingView.xib in Resources */,
+				06B55EF321BE4A050014EADE /* on9.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +307,7 @@
 			files = (
 				8E0A0FFF1F662FEE000A4DE6 /* PlayingListHeaderCell.m in Sources */,
 				8E8E151C1F629BDD0093459D /* PlayingInfoModel.m in Sources */,
+				06B55EF621BE4D220014EADE /* NSTimer+HICategory.m in Sources */,
 				8E214BA41F8C6BB000C8AD3D /* AllSongController.m in Sources */,
 				8E8E15101F62412E0093459D /* PlayListCell.m in Sources */,
 				069975D921AF928600E8E663 /* MyWaveSlider.m in Sources */,

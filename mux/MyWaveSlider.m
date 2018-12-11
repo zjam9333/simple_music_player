@@ -133,6 +133,8 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, kWidthPerColumn);
     
+    CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0);
+    
     NSInteger startIndex = (0 - startX) * columnCount / totalWidth;
     NSInteger endIndex = (size.width - startX) * columnCount / totalWidth;
     if (startIndex < 0) {
@@ -169,9 +171,9 @@
             
 //            if (lineCenterX < centerX) {
                 if (k == 0) {
-                    CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0); // top left
+//                    CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0); // top left
                 } else {
-                    CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 0.3); // bot left
+//                    CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 0.3); // bot left
                     aPoints[1] = CGPointMake(lineCenterX, topMax + botMax *numberValue);
                 }
 //            } else {
@@ -189,15 +191,15 @@
         }
         
         // 画条中线
-        aPoints[0] = CGPointMake(centerX, topMax / 2);
-        aPoints[1] = CGPointMake(centerX, topMax);
-        
-        CGContextSetLineWidth(context, 1);
-        CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 1.0);
-        //添加线 points[]坐标数组，和count大小
-        CGContextAddLines(context, aPoints, 2);
-        //根据坐标绘制路径
-        CGContextDrawPath(context, kCGPathStroke);
+//        aPoints[0] = CGPointMake(centerX, topMax / 2);
+//        aPoints[1] = CGPointMake(centerX, topMax);
+//
+//        CGContextSetLineWidth(context, 1);
+//        CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 1.0);
+//        //添加线 points[]坐标数组，和count大小
+//        CGContextAddLines(context, aPoints, 2);
+//        //根据坐标绘制路径
+//        CGContextDrawPath(context, kCGPathStroke);
     }
 }
 

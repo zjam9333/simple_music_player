@@ -29,12 +29,13 @@
 }
 
 - (void)testPlay {
-    NSMutableData *sampleData = [NSMutableData data];
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"The Best Of You" ofType:@"mp3"];
+#if TARGET_IPHONE_SIMULATOR
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"on9" ofType:@"m4a"];
     NSURL *fileUrl = [NSURL fileURLWithPath:filePath];
-    
+
     self.player = [[MyAudioPlayer alloc] initWithContentsOfURL:fileUrl error:nil];
-//    [self.player play];
+    [self.player play];
+#endif
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
