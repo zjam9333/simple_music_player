@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="O4N-Fx-BMU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="O4N-Fx-BMU">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--All Play List Controller-->
@@ -10,9 +14,9 @@
             <objects>
                 <tableViewController id="YUa-86-dEu" customClass="AllPlayListController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="XkS-wY-BXn">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <connections>
                             <outlet property="dataSource" destination="YUa-86-dEu" id="IxI-ma-T85"/>
                             <outlet property="delegate" destination="YUa-86-dEu" id="MMZ-3z-whG"/>
@@ -22,35 +26,34 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iLW-M8-SCM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1369" y="381"/>
+            <point key="canvasLocation" x="1690" y="381"/>
         </scene>
         <!--播放列表-->
         <scene sceneID="EXV-pm-meR">
             <objects>
                 <tableViewController storyboardIdentifier="OnePlayListController" title="播放列表" id="6Ol-f0-uZY" customClass="OnePlayListController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="eUn-kf-6YX">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <connections>
                             <outlet property="dataSource" destination="6Ol-f0-uZY" id="8KQ-IB-O8U"/>
                             <outlet property="delegate" destination="6Ol-f0-uZY" id="K8B-EZ-mLP"/>
                         </connections>
                     </tableView>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3n7-ib-LMX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1756" y="381"/>
+            <point key="canvasLocation" x="2466" y="381"/>
         </scene>
         <!--播放列表-->
         <scene sceneID="XhA-yO-5X9">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="W7i-t0-XUw" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="播放列表" id="W2M-lN-Jo3"/>
+                    <tabBarItem key="tabBarItem" title="播放列表" image="volumnUp" id="W2M-lN-Jo3"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4Iz-nu-tO4">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -60,17 +63,18 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oTJ-On-do4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="917" y="381"/>
+            <point key="canvasLocation" x="900" y="381"/>
         </scene>
         <!--Custom Tab Controller-->
         <scene sceneID="fxl-sL-0d2">
             <objects>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="O4N-Fx-BMU" customClass="CustomTabController" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="kbc-YE-p4a">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="selectedImageTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="W7i-t0-XUw" kind="relationship" relationship="viewControllers" id="3EZ-DI-Cma"/>
@@ -78,7 +82,10 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ptY-r2-USm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="408" y="381"/>
+            <point key="canvasLocation" x="113" y="381"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="volumnUp" width="18" height="12"/>
+    </resources>
 </document>

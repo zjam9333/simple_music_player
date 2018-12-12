@@ -11,7 +11,10 @@
 #import "AudioPlayController.h"
 #import "MyWaveSlider.h"
 
+#import "EqualizerView.h"
+
 @interface PlayingView()
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewBottomConstraint;
 
 @property (weak, nonatomic) IBOutlet UIView *playingSmallBar;
 @property (weak, nonatomic) IBOutlet UIButton *pauseSmallButton;
@@ -50,6 +53,16 @@
     pl.frame=[pl frameForShowing:NO];
     [[NSNotificationCenter defaultCenter]addObserver:pl selector:@selector(refreshMediaInfoNotification:) name:AudioPlayerPlayingMediaInfoNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:pl selector:@selector(mediaStartedPlayingNotification:) name:AudioPlayerStartMediaPlayNotification object:nil];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (@available(iOS 11.0, *)) {
+            UIEdgeInsets inset = UIApplication.sharedApplication.keyWindow.safeAreaInsets;
+            pl.bottomViewBottomConstraint.constant =  inset.bottom;
+        } else {
+            // Fallback on earlier versions
+        }
+    });
+    
     return pl;
 }
 
@@ -197,6 +210,14 @@
         self.volumnView.hidden=YES;
         [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
     }];
+}
+- (IBAction)showMoreAction:(id)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Setting" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    [alert addAction:[UIAlertAction actionWithTitle:@"EQ" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [EqualizerView show];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"close" style:UIAlertActionStyleCancel handler:nil]];
+    [UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 -(CGRect)frameForShowing:(BOOL)showing

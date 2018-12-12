@@ -24,19 +24,19 @@
     // Override point for customization after application launch.
     [[AudioPlayController sharedAudioPlayer] performSelector:@selector(loadLastPlay) withObject:nil afterDelay:1];
     
-    [self performSelector:@selector(testPlay) withObject:nil afterDelay:2];
+//    [self performSelector:@selector(testPlay) withObject:nil afterDelay:2];
     return YES;
 }
 
-- (void)testPlay {
-#if TARGET_IPHONE_SIMULATOR
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"on9" ofType:@"m4a"];
-    NSURL *fileUrl = [NSURL fileURLWithPath:filePath];
-
-    self.player = [[MyAudioPlayer alloc] initWithContentsOfURL:fileUrl error:nil];
-    [self.player play];
-#endif
-}
+//- (void)testPlay {
+//#if TARGET_IPHONE_SIMULATOR
+//    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"on9" ofType:@"m4a"];
+//    NSURL *fileUrl = [NSURL fileURLWithPath:filePath];
+//
+//    self.player = [[MyAudioPlayer alloc] initWithContentsOfURL:fileUrl error:nil];
+//    [self.player play];
+//#endif
+//}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

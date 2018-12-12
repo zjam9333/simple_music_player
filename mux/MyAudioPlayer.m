@@ -68,14 +68,7 @@ const NSInteger bitDepth = 8;
 //    self.audioDistortion.wetDryMix = 100;
     
     self.audioEQ = [[AVAudioUnitEQ alloc] initWithNumberOfBands:10];
-    NSArray *bands = self.audioEQ.bands;
-    for (AVAudioUnitEQFilterParameters *ban in bands) {
-        NSLog(@"%f", ban.frequency);
-        if (ban.frequency > 10000) {
-            ban.bypass = NO; // bypass 为 no才生效
-            ban.gain = -90;
-        }
-    }
+    [self eqDidChangedNotification:nil];
     
     AVAudioUnitEffect *effect = self.audioEQ;
     
@@ -111,6 +104,25 @@ const NSInteger bitDepth = 8;
     self.timer = [NSTimer db_scheduledTimerWithTimeInterval:0.01 repeats:YES block:^(NSTimer *timer) {
         [weself catchCurrentTime];
     }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eqDidChangedNotification:) name:kEQChangedNotificationName object:nil];
+}
+
+- (void)eqDidChangedNotification:(NSNotification *)notification {
+    NSArray *bands = [self.audioEQ.bands sortedArrayUsingComparator:^NSComparisonResult(AVAudioUnitEQFilterParameters *obj1, AVAudioUnitEQFilterParameters *obj2) {
+        if (obj1.frequency > obj2.frequency) {
+            return NSOrderedDescending;
+        }
+        return NSOrderedAscending;
+    }];
+    NSInteger bandsCount = bands.count;
+    for (NSInteger i = 0; i < bandsCount; i ++) {
+        AVAudioUnitEQFilterParameters *ban = [bands objectAtIndex:i];
+//        NSLog(@"%f", ban.frequency);
+        CGFloat gainValue = [[[NSUserDefaults standardUserDefaults] valueForKey:[NSString stringWithFormat:@"%@%d", kEQBandKeyPrefix, (int)i]] floatValue];
+        ban.bypass = gainValue == 0;
+        ban.gain = gainValue;
+    }
 }
 
 - (void)play {

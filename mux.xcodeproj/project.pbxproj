@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0635BE2121C0A7FA000E5B87 /* EqualizerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0635BE2021C0A7FA000E5B87 /* EqualizerView.m */; };
+		0635BE2321C0A80E000E5B87 /* EqualizerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0635BE2221C0A80E000E5B87 /* EqualizerView.xib */; };
 		069975D921AF928600E8E663 /* MyWaveSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 069975D821AF928600E8E663 /* MyWaveSlider.m */; };
 		06B55E3E21B77A140014EADE /* MyAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B55E3D21B77A140014EADE /* MyAudioPlayer.m */; };
-		06B55EF321BE4A050014EADE /* on9.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 06B55EF221BE4A050014EADE /* on9.m4a */; };
 		06B55EF621BE4D220014EADE /* NSTimer+HICategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B55EF421BE4D220014EADE /* NSTimer+HICategory.m */; };
 		06BE8A0721AE71470011258A /* MarginLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BE8A0521AE71470011258A /* MarginLabel.m */; };
 		3F4AE8611D5D7E2400951EA3 /* OnePlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */; };
@@ -40,6 +41,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0635BE1F21C0A7FA000E5B87 /* EqualizerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EqualizerView.h; sourceTree = "<group>"; };
+		0635BE2021C0A7FA000E5B87 /* EqualizerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EqualizerView.m; sourceTree = "<group>"; };
+		0635BE2221C0A80E000E5B87 /* EqualizerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EqualizerView.xib; sourceTree = "<group>"; };
+		0635BE3A21C0DFCE000E5B87 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		069975D721AF928600E8E663 /* MyWaveSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyWaveSlider.h; sourceTree = "<group>"; };
 		069975D821AF928600E8E663 /* MyWaveSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyWaveSlider.m; sourceTree = "<group>"; };
 		06B55E3C21B77A140014EADE /* MyAudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAudioPlayer.h; sourceTree = "<group>"; };
@@ -48,7 +53,6 @@
 		06B55E4221B77C000014EADE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		06B55E4321B77C000014EADE /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		06B55EC821BDFEF90014EADE /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
-		06B55EF221BE4A050014EADE /* on9.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = on9.m4a; sourceTree = "<group>"; };
 		06B55EF421BE4D220014EADE /* NSTimer+HICategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+HICategory.m"; sourceTree = "<group>"; };
 		06B55EF521BE4D220014EADE /* NSTimer+HICategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+HICategory.h"; sourceTree = "<group>"; };
 		06BE8A0521AE71470011258A /* MarginLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginLabel.m; sourceTree = "<group>"; };
@@ -140,7 +144,6 @@
 		3FE4DB451D5D5BD400A07CB5 /* mux */ = {
 			isa = PBXGroup;
 			children = (
-				06B55EF221BE4A050014EADE /* on9.m4a */,
 				8E8E15141F6242DE0093459D /* Controllers */,
 				8E8E15131F6242CC0093459D /* Tools */,
 				8E8E15121F6242B90093459D /* Views */,
@@ -151,6 +154,7 @@
 				3FE4DB521D5D5BD400A07CB5 /* Assets.xcassets */,
 				3FE4DB571D5D5BD400A07CB5 /* Info.plist */,
 				3FE4DB461D5D5BD400A07CB5 /* Supporting Files */,
+				0635BE3A21C0DFCE000E5B87 /* PrefixHeader.pch */,
 			);
 			path = mux;
 			sourceTree = "<group>";
@@ -187,6 +191,9 @@
 				06BE8A0521AE71470011258A /* MarginLabel.m */,
 				069975D721AF928600E8E663 /* MyWaveSlider.h */,
 				069975D821AF928600E8E663 /* MyWaveSlider.m */,
+				0635BE1F21C0A7FA000E5B87 /* EqualizerView.h */,
+				0635BE2021C0A7FA000E5B87 /* EqualizerView.m */,
+				0635BE2221C0A80E000E5B87 /* EqualizerView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -291,10 +298,10 @@
 				8E8E15191F624C2D0093459D /* SongCell.xib in Resources */,
 				8E0A10001F662FEE000A4DE6 /* PlayingListHeaderCell.xib in Resources */,
 				3FE4DB531D5D5BD400A07CB5 /* Assets.xcassets in Resources */,
+				0635BE2321C0A80E000E5B87 /* EqualizerView.xib in Resources */,
 				8E8E14F91F622FC10093459D /* Main.storyboard in Resources */,
 				8E0A100A1F66356F000A4DE6 /* ShufflePlayHeaderCell.xib in Resources */,
 				8E8E150C1F6236160093459D /* PlayingView.xib in Resources */,
-				06B55EF321BE4A050014EADE /* on9.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +331,7 @@
 				06BE8A0721AE71470011258A /* MarginLabel.m in Sources */,
 				8EA31FD51F678C2F005600AD /* PlayingProgressButton.m in Sources */,
 				8E8E15041F6233310093459D /* CustomTabController.m in Sources */,
+				0635BE2121C0A7FA000E5B87 /* EqualizerView.m in Sources */,
 				8E8E15071F6233F40093459D /* MediaQuery.m in Sources */,
 				06B55E3E21B77A140014EADE /* MyAudioPlayer.m in Sources */,
 			);
@@ -419,6 +427,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 5Q82V2U2B5;
+				GCC_PREFIX_HEADER = mux/PrefixHeader.pch;
 				INFOPLIST_FILE = mux/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -436,6 +445,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 5Q82V2U2B5;
+				GCC_PREFIX_HEADER = mux/PrefixHeader.pch;
 				INFOPLIST_FILE = mux/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

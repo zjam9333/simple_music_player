@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -68,6 +69,7 @@
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="ADZ-h8-YVf"/>
                                     </constraints>
+                                    <color key="progressTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="trackTintColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 </progressView>
                             </subviews>
@@ -331,12 +333,24 @@
                                                         <action selector="shuffleOrNot:" destination="iN0-l3-epB" eventType="touchUpInside" id="3Su-yc-Mi1"/>
                                                     </connections>
                                                 </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PxN-uw-lQ4">
+                                                    <rect key="frame" x="217" y="10" width="30" height="30"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                    <state key="normal" title=" ∙∙∙ ">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="showMoreAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="3h4-dC-qTR"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="50" id="2p8-BV-gJF"/>
                                                 <constraint firstItem="lQt-WZ-ACc" firstAttribute="centerY" secondItem="p1m-p6-UAR" secondAttribute="centerY" id="9dB-gk-IRT"/>
                                                 <constraint firstItem="lQt-WZ-ACc" firstAttribute="centerX" secondItem="p1m-p6-UAR" secondAttribute="centerX" id="IzJ-7I-Fye"/>
+                                                <constraint firstItem="PxN-uw-lQ4" firstAttribute="centerY" secondItem="p1m-p6-UAR" secondAttribute="centerY" id="JRC-0l-hCw"/>
                                                 <constraint firstItem="lQt-WZ-ACc" firstAttribute="top" secondItem="p1m-p6-UAR" secondAttribute="top" constant="13" id="YcB-iT-yjY"/>
+                                                <constraint firstItem="PxN-uw-lQ4" firstAttribute="leading" secondItem="lQt-WZ-ACc" secondAttribute="trailing" constant="40" id="fVy-Mp-vwv"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -409,9 +423,11 @@
                 <constraint firstItem="vbS-0e-ooF" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ymg-gF-eSc"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="Htr-bm-laV"/>
             <connections>
                 <outlet property="artistAlbumSmallLabel" destination="6iG-uq-HTT" id="wYc-EO-Icv"/>
                 <outlet property="artworkImageView" destination="oLS-NY-qYv" id="6cJ-03-aJw"/>
+                <outlet property="bottomViewBottomConstraint" destination="Ppb-wP-ofF" id="qXa-xY-0ko"/>
                 <outlet property="firstTitleLabel" destination="sLY-bc-FRb" id="q14-Al-TtA"/>
                 <outlet property="leftDurationLabel" destination="US1-d9-WpL" id="O8a-eq-mSe"/>
                 <outlet property="myProgressSlider" destination="cVI-eM-0Xo" id="3jY-k7-SQa"/>

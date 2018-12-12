@@ -40,6 +40,8 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(playingViewWillShowNotification:) name:PlayingViewShowingNotification object:nil];
     
     // Do any additional setup after loading the view.
+    
+    self.tabBar.tintColor = [UIColor redColor];
 }
 
 - (void)didReceiveMemoryWarning {
