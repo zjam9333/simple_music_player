@@ -40,7 +40,7 @@
     
     CGRect containerRect = self.sliderContainer.bounds;
     
-    NSInteger count = 10;
+    NSInteger count = kEQBandCount;
     CGSize sliderSize = CGSizeMake(containerRect.size.height, containerRect.size.width / count);
     CGFloat halfWidth = sliderSize.height / 2;
     CGFloat centerY = containerRect.size.height / 2;

@@ -14,5 +14,6 @@
 
 #define kEQChangedNotificationName @"kEQChangedNotificationName"
 #define kEQBandKeyPrefix @"EQBand"
+#define kEQBandCount (10)
 
 #endif /* PrefixHeader_pch */

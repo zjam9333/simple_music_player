@@ -67,7 +67,13 @@ const NSInteger bitDepth = 8;
 //    [self.audioDistortion loadFactoryPreset:AVAudioUnitDistortionPresetSpeechWaves];
 //    self.audioDistortion.wetDryMix = 100;
     
-    self.audioEQ = [[AVAudioUnitEQ alloc] initWithNumberOfBands:10];
+    self.audioEQ = [[AVAudioUnitEQ alloc] initWithNumberOfBands:kEQBandCount];
+    NSArray *bands = self.audioEQ.bands;
+    NSInteger bandsCount = bands.count;
+    for (NSInteger i = 0; i < bandsCount; i ++) {
+        AVAudioUnitEQFilterParameters *ban = [bands objectAtIndex:i];
+        NSLog(@"%f", ban.frequency);
+    }
     [self eqDidChangedNotification:nil];
     
     AVAudioUnitEffect *effect = self.audioEQ;
