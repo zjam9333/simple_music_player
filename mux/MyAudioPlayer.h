@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+#import <AVFoundation/AVFoundation.h>
+@interface HisAudioPlayer : AVAudioPlayer
+
+@property (nonatomic, strong) NSMutableData *pcmData;
+
+@end
+
 @protocol AVAudioPlayerDelegate;
 
 @interface MyAudioPlayer : NSObject

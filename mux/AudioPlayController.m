@@ -285,21 +285,21 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 {
 //    return;
     MPRemoteCommandCenter* center=[MPRemoteCommandCenter sharedCommandCenter];
-    
+
     __weak typeof(self) weself=self;
-    
+
     [center.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         NSLog(@"%@",event);
         [weself play];
         return weself.playing?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
     }];
-    
+
     [center.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         NSLog(@"%@",event);
-        [weself pause];
-        return !weself.playing?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
+        [weself playOrPause];
+        return MPRemoteCommandHandlerStatusSuccess;//!weself.playing?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
     }];
-    
+
     [center.togglePlayPauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         // 耳机用
         NSLog(@"%@",event);
@@ -318,7 +318,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
         [weself playPrevious];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
-    
+
     [center.changePlaybackPositionCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         NSLog(@"%@",event);
         if ([event isKindOfClass:[MPChangePlaybackPositionCommandEvent class]]) {
@@ -326,7 +326,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
             NSTimeInterval newPositionTime=ev.positionTime;
             [weself setCurrentTime:newPositionTime];
             return weself.currentTime==newPositionTime?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
-        }  
+        }
         return MPRemoteCommandHandlerStatusCommandFailed;
     }];
 }

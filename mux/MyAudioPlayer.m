@@ -10,6 +10,12 @@
 #import <AVFoundation/AVFoundation.h>
 #import "NSTimer+HICategory.h"
 
+@implementation HisAudioPlayer
+
+
+
+@end
+
 const double sampleRate = 44100;
 const NSInteger channelCount = 1;
 const NSInteger bitDepth = 8;
@@ -141,10 +147,14 @@ const NSInteger bitDepth = 8;
 }
 
 - (void)play {
+    if (!self.engine.running) {
+        [self.engine startAndReturnError:nil];
+    }
     [self.playerNode play];
 }
 
 - (void)pause {
+    [self.engine stop];
     [self.playerNode pause];
 }
 
