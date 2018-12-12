@@ -8,8 +8,8 @@
 
 #import "EqualizerView.h"
 
-#define kMaxGain (24)
-#define kMinGain (-24)
+#define kMaxGain (12)
+#define kMinGain (-12)
 
 @interface EqualizerView ()
 

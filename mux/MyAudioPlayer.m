@@ -70,9 +70,18 @@ const NSInteger bitDepth = 8;
     self.audioEQ = [[AVAudioUnitEQ alloc] initWithNumberOfBands:kEQBandCount];
     NSArray *bands = self.audioEQ.bands;
     NSInteger bandsCount = bands.count;
-    for (NSInteger i = 0; i < bandsCount; i ++) {
-        AVAudioUnitEQFilterParameters *ban = [bands objectAtIndex:i];
-        NSLog(@"%f", ban.frequency);
+    if (bandsCount == 10) {
+        
+        NSInteger maxFre = 16000;
+        
+        // api默认的10分段是40、57、83、120、174、251、264、526、5414、10000，应该要改掉
+        // 假设是10段，那么市面上的频率分段为32、64、125、250、500、1k、2k、4k、8k、16k
+        for (NSInteger i = bandsCount - 1; i >= 0; i --) {
+            AVAudioUnitEQFilterParameters *ban = [bands objectAtIndex:i];
+            ban.frequency = maxFre;
+            NSLog(@"%f", ban.frequency);
+            maxFre /= 2;
+        }
     }
     [self eqDidChangedNotification:nil];
     
