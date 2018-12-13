@@ -19,6 +19,7 @@
 @property (readonly,nonatomic) BOOL hasSongPlay;
 
 -(void)setPlayingMediaItem:(MPMediaItem*)item inPlayList:(MPMediaPlaylist*)list;
+-(void)insertCutMediaItem:(MPMediaItem*)item;
 
 -(void)play;
 -(void)pause;

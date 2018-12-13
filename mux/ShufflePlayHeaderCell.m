@@ -8,11 +8,17 @@
 
 #import "ShufflePlayHeaderCell.h"
 
-@implementation ShufflePlayHeaderCell
+@implementation ShufflePlayHeaderCell {
+    
+    __weak IBOutlet UIImageView *shuffleImageView;
+}
 
 - (void)awakeFromNib {
     // Initialization code
     [super awakeFromNib];
+    
+    shuffleImageView.tintColor = [UIColor blackColor];
+    shuffleImageView.image = [shuffleImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

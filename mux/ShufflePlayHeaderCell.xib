@@ -25,16 +25,19 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="shuffle" translatesAutoresizingMaskIntoConstraints="NO" id="7wk-ed-cut">
-                        <rect key="frame" x="276" y="11" width="29" height="22"/>
+                        <rect key="frame" x="86.5" y="11" width="29" height="22"/>
                     </imageView>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="7wk-ed-cut" firstAttribute="leading" secondItem="jx4-vn-tjh" secondAttribute="trailing" constant="10" id="0tj-Oy-VJE"/>
                     <constraint firstItem="jx4-vn-tjh" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="JFB-Wp-uTt"/>
                     <constraint firstItem="7wk-ed-cut" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="So2-Uh-MrH"/>
                     <constraint firstItem="jx4-vn-tjh" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="ZYa-Oe-aFd"/>
-                    <constraint firstAttribute="trailing" secondItem="7wk-ed-cut" secondAttribute="trailing" constant="15" id="dwl-zz-2m3"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="shuffleImageView" destination="7wk-ed-cut" id="juy-um-eul"/>
+            </connections>
         </tableViewCell>
     </objects>
     <resources>

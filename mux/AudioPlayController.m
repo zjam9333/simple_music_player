@@ -24,6 +24,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 @property (nonatomic,strong) MPMediaPlaylist* playingList;
 @property (nonatomic,strong) NSArray* songs;
 @property (nonatomic,strong) NSMutableArray* playingOrder;
+@property (nonatomic,strong) NSMutableArray* cutLineOrder;
 
 @end
 
@@ -78,6 +79,15 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     [[NSNotificationCenter defaultCenter]postNotificationName:AudioPlayerStartMediaPlayNotification object:nil userInfo:nil];
     
     [self rebuildSongsListWithSongs:songs currentItem:item shuffle:[self isShuffle]];
+}
+
+- (void)insertCutMediaItem:(MPMediaItem *)item {
+    if (self.cutLineOrder == nil) {
+        self.cutLineOrder = [NSMutableArray array];
+    }
+    if (item) {
+        [self.cutLineOrder insertObject:item atIndex:0];
+    }
 }
 
 -(void)shuffle:(BOOL)shuffle
@@ -193,6 +203,13 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
 -(void)playNext
 {
+    if ([self.cutLineOrder containsObject:self.playingMediaItem]) {
+        [self.cutLineOrder removeObject:self.playingMediaItem];
+    }
+    if (self.cutLineOrder.count > 0) {
+        self.playingMediaItem = self.cutLineOrder.firstObject;
+        return;
+    }
     NSInteger next=currentPlayingIndex+1;
     if (next>=self.playingOrder.count) {
         [self.playingOrder addObjectsFromArray:[self sortedArray:self.songs shuffle:[self isShuffle]]];

@@ -118,7 +118,22 @@
         AudioPlayController* player=[AudioPlayController sharedAudioPlayer];
         [player setPlayingMediaItem:medi inPlayList:self.playList];
     }
-    
+}
+
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section != 2) {
+        return nil;
+    }
+    __weak typeof(self) weakself = self;
+    return @[[UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"next play" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        MPMediaItem* medi=[[weakself.playList items]objectAtIndex:indexPath.row];
+        AudioPlayController* player=[AudioPlayController sharedAudioPlayer];
+        [player insertCutMediaItem:medi];
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.selected = YES;
+        [cell setSelected:NO animated:YES];
+        tableView.editing = NO;
+    }]];
 }
 
 -(void)handlePlayingInfo:(PlayingInfoModel *)info
