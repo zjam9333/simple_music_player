@@ -2,7 +2,7 @@
 //  AudioPlayer.m
 //  mux
 //
-//  Created by bangju on 2017/9/8.
+//  Created by Jam on 2017/9/8.
 //  Copyright © 2017年 Jam. All rights reserved.
 //
 
@@ -10,6 +10,12 @@
 #import <AVFoundation/AVFoundation.h>
 #import "PlayingInfoModel.h"
 #import "MyAudioPlayer.h"
+
+@interface UIApplication()
+
+- (void)_performMemoryWarning;
+
+@end
 
 static AudioPlayController* shared;
 
@@ -35,6 +41,9 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     PlayingInfoModel* currenPlayingInfo;
     BOOL manualPaused;
     NSInteger currentPlayingIndex;
+    
+    NSTimeInterval lastPlayTime;
+    BOOL wasLowMemory;
 }
 
 +(instancetype)sharedAudioPlayer
@@ -52,6 +61,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
         [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(handleInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRouteChange:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMemoryWarning:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
         
         timer=[NSTimer scheduledTimerWithTimeInterval:scheduledTime target:self selector:@selector(timerRunning) userInfo:nil repeats:YES];
         [timer setFireDate:[NSDate date]];
@@ -65,6 +75,8 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 {
     return self.playingMediaItem!=nil;
 }
+
+#pragma mark - item and list
 
 -(void)setPlayingMediaItem:(MPMediaItem *)item inPlayList:(MPMediaPlaylist *)list
 {
@@ -167,18 +179,42 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
         currenPlayingInfo.playingList=self.playingList;
         
         [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
-        [player stop];
-        player=[[MyAudioPlayer alloc]initWithContentsOfURL:currenPlayingInfo.url error:nil];
-        player.delegate=self;
-        player.currentTime=0;
+        [self removePlayer];
+        [self resetLastTimeForLowMemory];
+        [self createPlayerIfNeed];
         [self play];
         [self saveLastPlay];
         
     }
 }
 
+#pragma mark - play actions
+
+- (void)createPlayerIfNeed {
+    if (player) {
+        return;
+    }
+    player=[[MyAudioPlayer alloc]initWithContentsOfURL:currenPlayingInfo.url error:nil];
+    player.delegate=self;
+    player.currentTime=0;
+}
+
+- (void)resetLastTimeForLowMemory {
+    if (wasLowMemory) {
+        player.currentTime = lastPlayTime;
+    }
+    wasLowMemory = NO;
+}
+
+- (void)removePlayer {
+    [player stop];
+    player = nil;
+}
+
 -(void)play
 {
+    [self createPlayerIfNeed];
+    [self resetLastTimeForLowMemory];
     manualPaused=NO;
     [self becomeActive];
     [player play];
@@ -222,6 +258,10 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
 -(void)playPrevious
 {
+//    // test low memory
+//    [[UIApplication sharedApplication] _performMemoryWarning];
+//    return;
+    
     if (self.currentTime>10) {
         self.currentTime=0;
         return;
@@ -232,6 +272,8 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
         currentPlayingIndex=pre;
     }
 }
+
+#pragma mark - handle action and exception
 
 -(void)handleInterruption:(NSNotification*)notification
 {
@@ -298,6 +340,27 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 //    }
 }
 
+- (void)handleMemoryWarning:(NSNotification *)notification {
+    NSLog(@"%@", notification);
+    lastPlayTime = player.currentTime;
+    wasLowMemory = YES;
+    [self removePlayer];
+}
+
+-(void)becomeActive
+{
+    [[UIApplication sharedApplication] becomeFirstResponder];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    //    [[AVAudioSession sharedInstance]setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    //    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
+}
+
+#pragma mark - center control
+
 -(void)setRemoteCommandCenter
 {
 //    return;
@@ -348,6 +411,8 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     }];
 }
 
+#pragma mark - current status
+
 -(void)setProgress:(CGFloat)progress
 {
     _progress=progress;
@@ -382,7 +447,6 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
 
         currenPlayingInfo.pcmData = player.pcmData;
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
         
         if (player.isPlaying) {
             NSMutableDictionary* dict=[NSMutableDictionary dictionary];
@@ -394,9 +458,17 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
             [dict setValue:currenPlayingInfo.mediaArtwork forKey:MPMediaItemPropertyArtwork];
             [[MPNowPlayingInfoCenter
               defaultCenter] setNowPlayingInfo:dict];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
+        } else if (arc4random() % 10 == 0) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
         }
+        
+        
     }
 }
+
+#pragma mark - AVAudioPlayerDelegate
 
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
@@ -404,17 +476,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
     [self playNext];
 }
 
--(void)becomeActive
-{
-    [[UIApplication sharedApplication] becomeFirstResponder];
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-//    [[AVAudioSession sharedInstance]setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
-}
+#pragma mark - last play
 
 -(void)saveLastPlay
 {
@@ -449,6 +511,7 @@ const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
             
             [self setPlayingMediaItem:self.playingMediaItem inPlayList:self.playingList];
             [self pause];
+            player.currentTime = 0;
 //            [self performSelector:@selector(pause) withObject:nil afterDelay:0.1];
             
             break;

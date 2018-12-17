@@ -2,7 +2,7 @@
 //  PlayingListHeaderCell.h
 //  mux
 //
-//  Created by bangju on 2017/9/11.
+//  Created by Jam on 2017/9/11.
 //  Copyright © 2017年 Jam. All rights reserved.
 //
 

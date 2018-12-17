@@ -2,7 +2,7 @@
 //  MediaQuery.m
 //  mux
 //
-//  Created by bangju on 2017/9/8.
+//  Created by Jam on 2017/9/8.
 //  Copyright © 2017年 Jam. All rights reserved.
 //
 
@@ -11,6 +11,10 @@
 static NSMutableDictionary* artworkImageDictionary;
 
 @implementation MediaQuery
+
++ (void)load {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeCachedArtwork) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+}
 
 +(NSArray*)allPlaylists
 {
@@ -47,6 +51,9 @@ static NSMutableDictionary* artworkImageDictionary;
     
     MPMediaEntityPersistentID lastAlbumPersistenId=0;
     
+    CGFloat smallW = 128;
+    CGFloat largeW = 256;
+    
     for (MPMediaItem* item in items) {
         MPMediaEntityPersistentID thisAlbumId=item.albumPersistentID;
         if (thisAlbumId!=lastAlbumPersistenId) {
@@ -63,8 +70,8 @@ static NSMutableDictionary* artworkImageDictionary;
     
     if (fourArtworks.count>=4) {
         
-        CGSize smallSize=CGSizeMake(256, 256);
-        CGSize largeSize=CGSizeMake(512, 512);
+        CGSize smallSize=CGSizeMake(smallW, smallW);
+        CGSize largeSize=CGSizeMake(largeW, largeW);
         UIGraphicsBeginImageContext(largeSize);
         for (int i=0; i<4; i++) {
             MPMediaItemArtwork* ar=[fourArtworks objectAtIndex:i];
@@ -81,7 +88,7 @@ static NSMutableDictionary* artworkImageDictionary;
     else
     {
         MPMediaItemArtwork* artwork=[fourArtworks firstObject];
-        UIImage* imageC=[artwork imageWithSize:CGSizeMake(512, 512)];
+        UIImage* imageC=[artwork imageWithSize:CGSizeMake(largeW, largeW)];
         
         [artworkImageDictionary setValue:imageC forKey:key];
         
@@ -89,6 +96,10 @@ static NSMutableDictionary* artworkImageDictionary;
     }
     
     return nil;
+}
+
++ (void)removeCachedArtwork {
+    [artworkImageDictionary removeAllObjects];
 }
 
 @end

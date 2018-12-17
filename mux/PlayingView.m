@@ -2,7 +2,7 @@
 //  PlayingView.m
 //  mux
 //
-//  Created by bangju on 2017/9/8.
+//  Created by Jam on 2017/9/8.
 //  Copyright © 2017年 Jam. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 #import "EqualizerView.h"
 
 @interface PlayingView()
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topViewTopConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewBottomConstraint;
 
 @property (weak, nonatomic) IBOutlet UIView *playingSmallBar;
@@ -58,6 +59,7 @@
         if (@available(iOS 11.0, *)) {
             UIEdgeInsets inset = UIApplication.sharedApplication.keyWindow.safeAreaInsets;
             pl.bottomViewBottomConstraint.constant =  inset.bottom;
+            pl.topViewTopConstraint.constant = inset.top + 20;
         } else {
             // Fallback on earlier versions
         }
@@ -79,9 +81,9 @@
     PlayingInfoModel* lastInfo = self.currentInfoModel;
     self.currentInfoModel = info;
     
-    if (([[UIApplication sharedApplication]applicationState] != UIApplicationStateActive) && lastInfo == info) {
-        return;
-    }
+//    if (([[UIApplication sharedApplication]applicationState] != UIApplicationStateActive) && lastInfo == info) {
+//        return;
+//    }
     
     // always same
     if (lastInfo != info) {
@@ -125,6 +127,9 @@
     }
     //    self.volumnSlider.value=
     CGFloat progressValue = info.currentTime.floatValue/info.playbackDuration.floatValue;
+    if (isnan(progressValue)) {
+        progressValue = 0;
+    }
     // set artwork image frame and progerss
     [self setWithProgress:progressValue];
 }

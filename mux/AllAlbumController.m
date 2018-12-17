@@ -2,7 +2,7 @@
 //  AllAlbumController.m
 //  mux
 //
-//  Created by bangju on 2017/10/12.
+//  Created by Jam on 2017/10/12.
 //  Copyright © 2017年 Jam. All rights reserved.
 //
 

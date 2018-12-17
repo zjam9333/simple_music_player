@@ -2,7 +2,7 @@
 //  MyAudioPlayer.m
 //  mux
 //
-//  Created by dabby on 2018/12/5.
+//  Created by Jam on 2018/12/5.
 //  Copyright © 2018 Jam. All rights reserved.
 //
 
@@ -85,7 +85,7 @@ const NSInteger bitDepth = 8;
         for (NSInteger i = bandsCount - 1; i >= 0; i --) {
             AVAudioUnitEQFilterParameters *ban = [bands objectAtIndex:i];
             ban.frequency = maxFre;
-            NSLog(@"%f", ban.frequency);
+//            NSLog(@"%f", ban.frequency);
             maxFre /= 2;
         }
     }
@@ -119,7 +119,7 @@ const NSInteger bitDepth = 8;
     
     // play file, or buffer
     __weak typeof(self) weself = self;
-    self.currentTime = 0.01;
+    self.currentTime = 0;
     
 //    // init a timer to catch current time;
     self.timer = [NSTimer db_scheduledTimerWithTimeInterval:0.01 repeats:YES block:^(NSTimer *timer) {

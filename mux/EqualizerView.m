@@ -2,7 +2,7 @@
 //  EqualizerView.m
 //  mux
 //
-//  Created by dabby on 2018/12/12.
+//  Created by Jam on 2018/12/12.
 //  Copyright © 2018 Jam. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  AllSongController.m
 //  mux
 //
-//  Created by bangju on 2017/10/10.
+//  Created by Jam on 2017/10/10.
 //  Copyright © 2017年 Jam. All rights reserved.
 //
 

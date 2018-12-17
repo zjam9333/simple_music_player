@@ -2,7 +2,7 @@
 //  MyHiddenSlider.m
 //  mux
 //
-//  Created by dabby on 2018/11/29.
+//  Created by Jam on 2018/11/29.
 //  Copyright © 2018 Jam. All rights reserved.
 //
 
@@ -107,8 +107,6 @@
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     
-    [[UIColor clearColor] setFill];
-    UIRectFill(rect);
     
     NSInteger totalSampleCount = self.numbers.length;
     if (totalSampleCount == 0) {
@@ -118,6 +116,9 @@
     if (columnCount == 0) {
         return;
     }
+    
+    [[UIColor clearColor] setFill];
+    UIRectFill(rect);
     
     CGFloat centerX = CGRectGetMidX(rect);
     
@@ -162,8 +163,16 @@
                 showSampleValue = thisSample;
             }
         }
+        
 //        SInt8 blockAvgValue = blockTotalSampleValue / blockLength;
         CGFloat numberValue = (showSampleValue / 128.0);
+//        CGFloat numberValue = 20 * log10(showSampleValue / 128.0);
+//        if (numberValue > maxGain) {
+//            maxGain = numberValue;
+//        }
+//        if (numberValue < minGain) {
+//            minGain = numberValue;
+//        }
         
         for (int k = 0; k < 2; k ++) {
             aPoints[0] = CGPointMake(lineCenterX, topMax);

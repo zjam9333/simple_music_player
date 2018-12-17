@@ -2,13 +2,17 @@
 //  PlayListCell.m
 //  mux
 //
-//  Created by bangju on 2017/9/8.
+//  Created by Jam on 2017/9/8.
 //  Copyright © 2017年 Jam. All rights reserved.
 //
 
 #import "PlayListCell.h"
 
 @implementation PlayListCell
+
+- (void)dealloc {
+    NSLog(@"dealloc: %@", self);
+}
 
 - (void)awakeFromNib {
     // Initialization code

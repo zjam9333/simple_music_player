@@ -399,7 +399,7 @@
                         <constraint firstItem="fef-0V-dUO" firstAttribute="top" secondItem="sLY-bc-FRb" secondAttribute="bottom" constant="8" id="JCN-sd-laE"/>
                         <constraint firstAttribute="bottom" secondItem="TgE-LB-Vhd" secondAttribute="bottom" id="Ppb-wP-ofF"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fef-0V-dUO" secondAttribute="trailing" constant="20" id="SNe-8Y-jLc"/>
-                        <constraint firstItem="sLY-bc-FRb" firstAttribute="top" secondItem="bjh-Mb-h2Y" secondAttribute="bottom" id="Wi5-JU-kkB"/>
+                        <constraint firstItem="sLY-bc-FRb" firstAttribute="top" secondItem="Yt2-75-cWW" secondAttribute="bottom" constant="18" id="Wi5-JU-kkB"/>
                         <constraint firstItem="TgE-LB-Vhd" firstAttribute="leading" secondItem="vbS-0e-ooF" secondAttribute="leading" id="bx8-vV-CPS"/>
                         <constraint firstItem="bjh-Mb-h2Y" firstAttribute="top" secondItem="vbS-0e-ooF" secondAttribute="top" id="eKa-Ze-eg6"/>
                         <constraint firstAttribute="trailing" secondItem="bjh-Mb-h2Y" secondAttribute="trailing" id="g3w-HP-ePt"/>
@@ -443,6 +443,7 @@
                 <outlet property="progressSmallView" destination="Ji8-s5-dA6" id="g5l-QA-5c0"/>
                 <outlet property="secondTitleLabel" destination="fef-0V-dUO" id="1u7-Es-WM5"/>
                 <outlet property="shuffleButton" destination="lQt-WZ-ACc" id="4WQ-Nm-kQY"/>
+                <outlet property="topViewTopConstraint" destination="gti-d6-tPv" id="Pnj-qX-ALq"/>
                 <outlet property="volumnView" destination="nGo-ix-aYW" id="O4g-qS-M1W"/>
             </connections>
             <point key="canvasLocation" x="459.19999999999999" y="593.70314842578716"/>
