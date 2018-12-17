@@ -9,8 +9,8 @@
 #import "MyWaveSlider.h"
 
 #define kWidthPerColumn (1/UIScreen.mainScreen.scale)
-#define kMarginForColumn (1/UIScreen.mainScreen.scale)
-#define kSampleRate (1)
+#define kMarginForColumn 0//(1/UIScreen.mainScreen.scale)
+#define kSampleRate (10)
 
 @implementation MyWaveSlider {
     CGFloat _startX;
