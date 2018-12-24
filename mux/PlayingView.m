@@ -26,7 +26,6 @@
 @property (weak, nonatomic) IBOutlet UIView *playingMainPage;
 @property (weak, nonatomic) IBOutlet UIButton *shuffleButton;
 @property (weak, nonatomic) IBOutlet UIImageView *artworkImageView;
-//@property (weak, nonatomic) IBOutlet UIImageView *bgArtworkImageView;
 @property (weak, nonatomic) IBOutlet UILabel *playedDurationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *leftDurationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *firstTitleLabel;
@@ -48,17 +47,17 @@
     CGPoint touchBeganPointOffset;
 }
 
-+(instancetype)defaultPlayingView
++ (instancetype)defaultPlayingView
 {
-    PlayingView* pl=[[[UINib nibWithNibName:@"PlayingView" bundle:nil]instantiateWithOwner:nil options:nil]firstObject];
-    pl.frame=[pl frameForShowing:NO];
-    [[NSNotificationCenter defaultCenter]addObserver:pl selector:@selector(refreshMediaInfoNotification:) name:AudioPlayerPlayingMediaInfoNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:pl selector:@selector(mediaStartedPlayingNotification:) name:AudioPlayerStartMediaPlayNotification object:nil];
+    PlayingView *pl = [[[UINib nibWithNibName:@"PlayingView" bundle:nil] instantiateWithOwner:nil options:nil] firstObject];
+    pl.frame = [pl frameForShowing:NO];
+    [[NSNotificationCenter defaultCenter] addObserver:pl selector:@selector(refreshMediaInfoNotification:) name:AudioPlayerPlayingMediaInfoNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:pl selector:@selector(mediaStartedPlayingNotification:) name:AudioPlayerStartMediaPlayNotification object:nil];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1  *NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (@available(iOS 11.0, *)) {
             UIEdgeInsets inset = UIApplication.sharedApplication.keyWindow.safeAreaInsets;
-            pl.bottomViewBottomConstraint.constant =  inset.bottom;
+            pl.bottomViewBottomConstraint.constant = inset.bottom;
             pl.topViewTopConstraint.constant = inset.top + 20;
         } else {
             // Fallback on earlier versions
@@ -68,89 +67,48 @@
     return pl;
 }
 
--(void)awakeFromNib
-{
-    [super awakeFromNib];
-//    [self.progressSlider setThumbImage:[UIImage imageNamed:@"progressThumb"] forState:UIControlStateNormal];
-//    [self.volumnView setVolumeThumbImage:[UIImage imageNamed:@"volumnThumb"] forState:UIControlStateNormal];
-}
+#pragma mark - notification
 
 -(void)refreshMediaInfoNotification:(NSNotification*)noti
 {
-    PlayingInfoModel* info=[noti.userInfo valueForKey:@"mediaInfo"];
-    PlayingInfoModel* lastInfo = self.currentInfoModel;
+    PlayingInfoModel *info = [noti.userInfo valueForKey:@"mediaInfo"];
+    PlayingInfoModel *lastInfo = self.currentInfoModel;
     self.currentInfoModel = info;
-    
-//    if (([[UIApplication sharedApplication]applicationState] != UIApplicationStateActive) && lastInfo == info) {
-//        return;
-//    }
     
     // always same
     if (lastInfo != info) {
-        self.artworkImageView.image=info.artwork;
-        //    self.bgArtworkImageView.image=self.artworkImageView.image;
+        self.artworkImageView.image = info.artwork;
 
-        self.nameSmallLabel.text=info.name;
-        self.artistAlbumSmallLabel.text=[NSString stringWithFormat:@"%@ - %@",info.artist,info.album];
+        self.nameSmallLabel.text = info.name;
+        self.artistAlbumSmallLabel.text = [NSString stringWithFormat:@"%@ - %@",info.artist,info.album];
 
-        //    NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
-        //    paragraphStyle.maximumLineHeight = 20;
-        //    paragraphStyle.minimumLineHeight = 20;
-        
         NSString *firstTitle = [NSString stringWithFormat:@"%@", info.name];
         NSString *secondTitle = [NSString stringWithFormat:@"%@ - %@",info.artist,info.album];
 
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    [UIColor blackColor], NSBackgroundColorAttributeName,
-                                    [UIColor whiteColor], NSForegroundColorAttributeName,
-                                    nil];
-        
-        self.firstTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:firstTitle attributes:attributes];
-        self.secondTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:secondTitle attributes:attributes];
-        
-//        self.myProgressSlider.numbers = [NSMutableData dataWithLength:info.playbackDuration.floatValue * sampleRate * channelCount];
+        self.firstTitleLabel.text = firstTitle;
+        self.secondTitleLabel.text = secondTitle;
     }
     
-    
     // not same;
-    BOOL playing=info.playing.boolValue;
-    self.playSmallButton.hidden=playing;
-    self.playLargeButton.hidden=playing;
-    self.pauseSmallButton.hidden=!playing;
-    self.pauseLargeButton.hidden=!playing;
+    BOOL playing = info.playing.boolValue;
+    self.playSmallButton.hidden = playing;
+    self.playLargeButton.hidden = playing;
+    self.pauseSmallButton.hidden = !playing;
+    self.pauseLargeButton.hidden = !playing;
     
-    self.shuffleButton.selected=info.shuffle.boolValue;
+    self.shuffleButton.selected = info.shuffle.boolValue;
     self.myProgressSlider.numbers = info.pcmData;
     
     if (self.myProgressSlider.isTouching) {
-        return;
+        return; // 在滑动进度条的时候，不要改progress了
     }
-    //    self.volumnSlider.value=
+    
+    // set artwork image frame and progerss
     CGFloat progressValue = info.currentTime.floatValue/info.playbackDuration.floatValue;
     if (isnan(progressValue)) {
         progressValue = 0;
     }
-    // set artwork image frame and progerss
     [self setWithProgress:progressValue];
-}
-
-- (void)setWithProgress:(CGFloat)progress {
-    self.playedDurationLabel.text=[self stringWithNumber:[NSNumber numberWithInteger:progress * self.currentInfoModel.playbackDuration.integerValue]];
-    self.leftDurationLabel.text=[self stringWithNumber:[NSNumber numberWithInteger:(1 - progress) * self.currentInfoModel.playbackDuration.integerValue]];
-    
-    self.progressSlider.value=progress;
-    self.progressSmallView.progress=progress;
-    self.myProgressSlider.value = progress;
-
-    if (self.currentInfoModel.artwork) {
-        CGSize windowSize = UIApplication.sharedApplication.keyWindow.bounds.size;
-        CGFloat imgH = windowSize.height;
-        CGFloat imgW = imgH / self.currentInfoModel.artwork.size.height * self.currentInfoModel.artwork.size.width;
-        CGFloat imgY = 0; //self.frame.size.height - imgH;
-        CGFloat totalMove = windowSize.width - imgW;
-        CGFloat imgX = (CGFloat)(progress * totalMove);
-        self.artworkImageView.frame = CGRectMake(imgX, imgY, imgW, imgH);
-    }
 }
 
 -(void)mediaStartedPlayingNotification:(NSNotification*)noti
@@ -158,142 +116,158 @@
     [self hidePlaying:nil];
 }
 
-- (IBAction)playOrPause:(id)sender {
-    if ([sender isKindOfClass:[UIButton class]]) {
-//        UIButton* btn=(UIButton*)sender;
-//        BOOL selected=!btn.selected;
-//        
-//        self.playSmallButton.selected=selected;
-//        self.playLargeButton.selected=selected;
-        [[AudioPlayController sharedAudioPlayer]playOrPause];
+#pragma mark - playing status and actions
+
+- (void)setWithProgress:(CGFloat)progress {
+    self.playedDurationLabel.text = [self stringWithNumber:[NSNumber numberWithInteger:progress  *self.currentInfoModel.playbackDuration.integerValue] ];
+    self.leftDurationLabel.text = [self stringWithNumber:[NSNumber numberWithInteger:(1 - progress)  *self.currentInfoModel.playbackDuration.integerValue] ];
+    
+    self.progressSlider.value = progress;
+    self.progressSmallView.progress = progress;
+    self.myProgressSlider.value  =  progress;
+
+    if (self.currentInfoModel.artwork) {
+        CGSize windowSize  =  UIApplication.sharedApplication.keyWindow.bounds.size;
+        CGFloat imgH  =  windowSize.height;
+        CGFloat imgW  =  imgH / self.currentInfoModel.artwork.size.height  *self.currentInfoModel.artwork.size.width;
+        CGFloat imgY  =  0; //self.frame.size.height - imgH;
+        CGFloat totalMove  =  windowSize.width - imgW;
+        CGFloat imgX  =  (CGFloat)(progress  *totalMove);
+        self.artworkImageView.frame  =  CGRectMake(imgX, imgY, imgW, imgH);
     }
 }
+
+-(NSString*)stringWithNumber:(NSNumber*)number
+{
+    int secs = number.intValue;
+    int min = secs/60;
+    int sec = secs%60;
+    return [NSString stringWithFormat:@"%d:%02d",min,sec];
+}
+
+- (IBAction)playOrPause:(id)sender {
+    [[AudioPlayController sharedAudioPlayer] playOrPause];
+}
 - (IBAction)playNext:(id)sender {
-    [[AudioPlayController sharedAudioPlayer]playNext];
+    [[AudioPlayController sharedAudioPlayer] playNext];
 }
 
 - (IBAction)playPrevious:(id)sender {
-    [[AudioPlayController sharedAudioPlayer]playPrevious];
+    [[AudioPlayController sharedAudioPlayer] playPrevious];
 }
 
 - (IBAction)shuffleOrNot:(id)sender {
-    self.shuffleButton.selected=!self.shuffleButton.selected;
-    [[AudioPlayController sharedAudioPlayer]shuffle:self.shuffleButton.selected];
+    self.shuffleButton.selected = !self.shuffleButton.selected;
+    [[AudioPlayController sharedAudioPlayer] shuffle:self.shuffleButton.selected];
 }
 
 - (IBAction)progressSliderValueChanged:(MyWaveSlider *)sender {
-    CGFloat progress=[sender value];
-//        CGFloat max=0.95;
-//        if (progress>max)
-//        {
-//            progress=max;
-//        }
-    [[AudioPlayController sharedAudioPlayer]setProgress:progress];
+    CGFloat progress = [sender value];
+    [[AudioPlayController sharedAudioPlayer] setProgress:progress];
     [self setWithProgress:progress];
 }
 - (IBAction)progressSliderDragInside:(MyWaveSlider *)sender {
-    CGFloat progress=[sender value];
+    CGFloat progress = [sender value];
     [self setWithProgress:progress];
 }
 
+#pragma mark - show and hide
+
 - (IBAction)showPlaying:(id)sender {
-    [[NSNotificationCenter defaultCenter]postNotificationName:PlayingViewShowingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PlayingViewShowingNotification object:nil];
     
     [UIView animateWithDuration:0.25 animations:^{
-        self.frame=[self frameForShowing:YES];
+        self.frame = [self frameForShowing:YES];
     } completion:^(BOOL finished) {
-        self.volumnView.hidden=NO;
-        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
+        self.volumnView.hidden = NO;
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     }];
 }
 
 - (IBAction)hidePlaying:(id)sender {
-    [[NSNotificationCenter defaultCenter]postNotificationName:PlayingViewHidingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PlayingViewHidingNotification object:nil];
     [UIView animateWithDuration:0.25 animations:^{
-        self.frame=[self frameForShowing:NO];
+        self.frame = [self frameForShowing:NO];
     } completion:^(BOOL finished) {
-        self.volumnView.hidden=YES;
-        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
+        self.volumnView.hidden = YES;
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     }];
 }
+
 - (IBAction)showMoreAction:(id)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Setting" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    [alert addAction:[UIAlertAction actionWithTitle:@"EQ" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertController *alert  =  [UIAlertController alertControllerWithTitle:@"Setting" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    [alert addAction:[UIAlertAction actionWithTitle:@"EQ" style:UIAlertActionStyleDefault handler:^(UIAlertAction  *_Nonnull action) {
         [EqualizerView show];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"close" style:UIAlertActionStyleCancel handler:nil]];
+    }] ];
+    [alert addAction:[UIAlertAction actionWithTitle:@"close" style:UIAlertActionStyleCancel handler:nil] ];
     [UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
+#pragma mark - rect and size
+
 -(CGRect)frameForShowing:(BOOL)showing
 {
-    CGFloat offset=44;
-    CGSize screen=[[UIScreen mainScreen]bounds].size;
-    CGSize size=[self sizeForPlayingView];
-    CGPoint origin=CGPointMake(0, 0);
+    CGFloat offset = 44;
+    CGSize screen = [[UIScreen mainScreen] bounds] .size;
+    CGSize size = [self sizeForPlayingView];
+    CGPoint origin = CGPointMake(0, 0);
     
     if (showing) {
-        origin.y=-offset;
+        origin.y = -offset;
     }
     else
     {
-        origin.y=screen.height-((UITabBarController *)(UIApplication.sharedApplication.keyWindow.rootViewController)).tabBar.frame.size.height-offset;
+        origin.y = screen.height-((UITabBarController *)(UIApplication.sharedApplication.keyWindow.rootViewController)).tabBar.frame.size.height-offset;
     }
     
-    CGRect frame=CGRectZero;
-    frame.origin=origin;
-    frame.size=size;
+    CGRect frame = CGRectZero;
+    frame.origin = origin;
+    frame.size = size;
     
     return frame;
 }
 
 -(CGSize)sizeForPlayingView
 {
-    CGFloat offset=44;
-    CGSize screen=[[UIScreen mainScreen]bounds].size;
-    CGSize size=CGSizeMake(screen.width, screen.height+offset);
+    CGFloat offset = 44;
+    CGSize screen = [[UIScreen mainScreen] bounds].size;
+    CGSize size = CGSizeMake(screen.width, screen.height+offset);
     return size;
 }
 
--(NSString*)stringWithNumber:(NSNumber*)number
-{
-    int secs=number.intValue;
-    int min=secs/60;
-    int sec=secs%60;
-    return [NSString stringWithFormat:@"%d:%02d",min,sec];
-}
+#pragma mark - touches
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    UITouch* to=[touches anyObject];
-    CGPoint loc=[to locationInView:self.superview];
+    UITouch *to = [touches anyObject];
+    CGPoint loc = [to locationInView:self.superview];
 //    NSLog(@"began %@",NSStringFromCGPoint(loc));
-    touchMoved=NO;
-    touchBeganPointOffset=loc;
-    touchBeganPointOffset.y=touchBeganPointOffset.y-self.frame.origin.y;
+    touchMoved = NO;
+    touchBeganPointOffset = loc;
+    touchBeganPointOffset.y = touchBeganPointOffset.y-self.frame.origin.y;
 }
 
 -(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    UITouch* to=[touches anyObject];
-    CGPoint loc=[to locationInView:self.superview];
+    UITouch *to = [touches anyObject];
+    CGPoint loc = [to locationInView:self.superview];
 //    NSLog(@"moved %@",NSStringFromCGPoint(loc));
-    touchMoved=YES;
+    touchMoved = YES;
     
-    CGRect fra=CGRectZero;
-    fra.size=[self sizeForPlayingView];
-    CGFloat toY=loc.y-touchBeganPointOffset.y;
+    CGRect fra = CGRectZero;
+    fra.size = [self sizeForPlayingView];
+    CGFloat toY = loc.y-touchBeganPointOffset.y;
     if (toY < - self.playingSmallBar.frame.size.height) {
-        toY = - self.playingSmallBar.frame.size.height;
+        toY  =  - self.playingSmallBar.frame.size.height;
     }
-    fra.origin=CGPointMake(0, toY);
-    self.frame=fra;
+    fra.origin = CGPointMake(0, toY);
+    self.frame = fra;
 }
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    UITouch* to=[touches anyObject];
-    CGPoint loc=[to locationInView:self.superview];
+    UITouch *to = [touches anyObject];
+    CGPoint loc = [to locationInView:self.superview];
 //    NSLog(@"ended %@",NSStringFromCGPoint(loc));
     if (!touchMoved) {
         if (loc.y<self.frame.size.height/2) {
@@ -306,7 +280,7 @@
     }
     else
     {
-        CGPoint pre=[to previousLocationInView:self.superview];
+        CGPoint pre = [to previousLocationInView:self.superview];
         if (loc.y<pre.y) {
             [self showPlaying:nil];
         }

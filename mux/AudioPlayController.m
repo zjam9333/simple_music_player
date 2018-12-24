@@ -17,501 +17,447 @@
 
 @end
 
-static AudioPlayController* shared;
+static AudioPlayController *_sharedPlayer;
 
-const CFTimeInterval scheduledTime=0.016;
+const CFTimeInterval scheduledTime = 0.016;
 
-const NSString* lastPlayingItemKey=@"fjs09djf0w9ef09ef09ewfoijfsd";
-const NSString* lastPlayingListKey=@"0f90eir9023urcjm982ne89u2389";
+const NSString *lastPlayingItemKey = @"fjs09djf0w9ef09ef09ewfoijfsd";
+const NSString *lastPlayingListKey = @"0f90eir9023urcjm982ne89u2389";
 
 @interface AudioPlayController()<AVAudioPlayerDelegate>
 
-@property (nonatomic,strong) MPMediaItem* playingMediaItem;
-@property (nonatomic,strong) MPMediaPlaylist* playingList;
-@property (nonatomic,strong) NSArray* songs;
-@property (nonatomic,strong) NSMutableArray* playingOrder;
-@property (nonatomic,strong) NSMutableArray* cutLineOrder;
-
 @end
 
-@implementation AudioPlayController
-{
-    NSTimer* timer;
-    MyAudioPlayer* player;
-    PlayingInfoModel* currenPlayingInfo;
-    BOOL manualPaused;
-    NSInteger currentPlayingIndex;
+@implementation AudioPlayController {
+    // 播放列表相关
+    MPMediaItem *_playingMediaItem;
+    MPMediaPlaylist *_playingList;
+    NSArray *_songs;
+    NSMutableArray *_playingOrder;
+    NSMutableArray *_cutLineOrder;
     
-    NSTimeInterval lastPlayTime;
-    BOOL wasLowMemory;
+    // 播放器相关
+    NSTimer *_timer;
+    MyAudioPlayer *_player;
+    PlayingInfoModel *_currenPlayingInfo;
+    BOOL _manualPaused;
+    NSInteger _currentPlayingIndex;
+    
+    // 内存警告相关
+    NSTimeInterval _lastPlayTime;
+    BOOL _wasLowMemory;
 }
 
-+(instancetype)sharedAudioPlayer
-{
-    if (shared==nil) {
-        shared=[[AudioPlayController alloc]init];
++ (void)load {
+    // 读取最后一次播放的歌单
+    [[AudioPlayController sharedAudioPlayer] performSelector:@selector(loadLastPlay) withObject:nil afterDelay:1];
+}
+
++ (instancetype)sharedAudioPlayer {
+    if (_sharedPlayer == nil) {
+        _sharedPlayer = [[AudioPlayController alloc] init];
     }
-    return shared;
+    return _sharedPlayer;
 }
 
--(instancetype)init
-{
-    self=[super init];
+- (instancetype)init {
+    self = [super init];
     if (self) {
-
+        // 处理中断、耳机拔出、内存警告
         [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(handleInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRouteChange:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMemoryWarning:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
         
-        timer=[NSTimer scheduledTimerWithTimeInterval:scheduledTime target:self selector:@selector(timerRunning) userInfo:nil repeats:YES];
-        [timer setFireDate:[NSDate date]];
+        // 定时发送播放状态
+        _timer = [NSTimer scheduledTimerWithTimeInterval:scheduledTime target:self selector:@selector(timerRunning) userInfo:nil repeats:YES];
+        [_timer setFireDate:[NSDate date]];
         
+        // 设置控制中心与线控
         [self setRemoteCommandCenter];
     }
     return self;
 }
 
--(BOOL)hasSongPlay
-{
-    return self.playingMediaItem!=nil;
-}
-
 #pragma mark - item and list
 
--(void)setPlayingMediaItem:(MPMediaItem *)item inPlayList:(MPMediaPlaylist *)list
-{
-    self.playingList=list;
+- (BOOL)hasSongPlay {
+    return _playingMediaItem != nil;
+}
+
+- (void)playMediaItem:(MPMediaItem *)item inPlayList:(MPMediaPlaylist *)list {
+    _playingList = list;
     [self setPlayMediaItem:item inSongs:list.items];
 }
 
--(void)setPlayMediaItem:(MPMediaItem*)item inSongs:(NSArray*)songs
-{
-    self.playingMediaItem=item;
-    self.songs=songs;
-    [[NSNotificationCenter defaultCenter]postNotificationName:AudioPlayerStartMediaPlayNotification object:nil userInfo:nil];
+- (void)setPlayMediaItem:(MPMediaItem *)item inSongs:(NSArray *)songs {
+    [self playMediaItem:item];
+    _songs = songs;
+    [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerStartMediaPlayNotification object:nil userInfo:nil];
     
     [self rebuildSongsListWithSongs:songs currentItem:item shuffle:[self isShuffle]];
 }
 
 - (void)insertCutMediaItem:(MPMediaItem *)item {
-    if (self.cutLineOrder == nil) {
-        self.cutLineOrder = [NSMutableArray array];
+    // 插播列表作用于“play next”方法
+    if (_cutLineOrder == nil) {
+        _cutLineOrder = [NSMutableArray array];
     }
     if (item) {
-        [self.cutLineOrder insertObject:item atIndex:0];
+        [_cutLineOrder insertObject:item atIndex:0];
     }
 }
 
--(void)shuffle:(BOOL)shuffle
-{
-    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithBool:shuffle] forKey:@"shuffle"];
-    currenPlayingInfo.shuffle=[NSNumber numberWithBool:shuffle];
+- (void)shuffle:(BOOL)shuffle {
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:shuffle] forKey:@"shuffle"];
+    _currenPlayingInfo.shuffle = [NSNumber numberWithBool:shuffle];
     
-    [self rebuildSongsListWithSongs:self.songs currentItem:self.playingMediaItem shuffle:[self isShuffle]];
+    [self rebuildSongsListWithSongs:_songs currentItem:_playingMediaItem shuffle:[self isShuffle]];
 }
 
--(BOOL)isShuffle
-{
-    BOOL shuffle=[[[NSUserDefaults standardUserDefaults]valueForKey:@"shuffle"]boolValue];
+- (BOOL)isShuffle {
+    BOOL shuffle = [[[NSUserDefaults standardUserDefaults] valueForKey:@"shuffle"] boolValue];
     return shuffle;
 }
 
--(void)rebuildSongsListWithSongs:(NSArray*)songs currentItem:(MPMediaItem*)item shuffle:(BOOL)shuffle
-{
-    self.playingOrder=[NSMutableArray array];
+- (void)rebuildSongsListWithSongs:(NSArray *)songs currentItem:(MPMediaItem *)item shuffle:(BOOL)shuffle {
+    _playingOrder = [NSMutableArray array];
     
-    NSArray* orderNow=[self sortedArray:songs shuffle:shuffle];
+    NSArray *orderNow = [self sortedArray:songs shuffle:shuffle];
     
-    NSInteger inde=[orderNow indexOfObject:item];
-    inde=inde+songs.count;
+    NSInteger inde = [orderNow indexOfObject:item];
+    inde = inde + songs.count;
     
-    NSArray* orderOld=[self sortedArray:songs shuffle:shuffle];
+    NSArray *orderOld = [self sortedArray:songs shuffle:shuffle];
     
-    [self.playingOrder addObjectsFromArray:orderOld];
-    [self.playingOrder addObjectsFromArray:orderNow];
+    [_playingOrder addObjectsFromArray:orderOld];
+    [_playingOrder addObjectsFromArray:orderNow];
     
-    currentPlayingIndex=inde;
+    _currentPlayingIndex = inde;
+    
+    // 这里为什么这么搞？
+    // 为了伪造播放历史，避免点击上一首没有东西
 }
 
--(NSArray*)sortedArray:(NSArray*)array shuffle:(BOOL)shuffle
-{
+- (NSArray *)sortedArray:(NSArray *)array shuffle:(BOOL)shuffle {
     if (shuffle) {
         return [self shuffleArray:array];
     }
     return array;
 }
 
--(NSArray*)shuffleArray:(NSArray*)array
-{
-    NSMutableArray* shus=[NSMutableArray arrayWithArray:array];
-    NSInteger count=shus.count;
-    for (NSInteger i=0; i<count; i++) { // how many rounds should be better ?
-        if(i>0)
-        {
-            NSInteger randomIndex=arc4random()%i;
+- (NSArray *)shuffleArray:(NSArray *)array {
+    NSMutableArray *shus = [NSMutableArray arrayWithArray:array];
+    NSInteger count = shus.count;
+    for (NSInteger i = 0; i < count; i++) { // how many rounds should be better ?
+        if (i > 0) {
+            NSInteger randomIndex = arc4random()%i;
             [shus exchangeObjectAtIndex:randomIndex withObjectAtIndex:i];
         }
     }
     return shus;
 }
 
--(void)setPlayingMediaItem:(MPMediaItem *)playingMediaItem
-{
-    MPMediaItem* media=playingMediaItem;
-    if (media==_playingMediaItem&&self.playing) {
+- (void)playMediaItem:(MPMediaItem *)playingMediaItem {
+    MPMediaItem *media = playingMediaItem;
+    if (media == _playingMediaItem && self.playing) {
         return;
     }
-    _playingMediaItem=media;
+    _playingMediaItem = media;
     if (media) {
-        currenPlayingInfo=[[PlayingInfoModel alloc]init];
-        currenPlayingInfo.url = [media valueForProperty:MPMediaItemPropertyAssetURL];
-        currenPlayingInfo.name=media.title;
-        currenPlayingInfo.artist=media.artist;
-        currenPlayingInfo.album=media.albumTitle;
-        currenPlayingInfo.artwork=[media.artwork imageWithSize:CGSizeMake(512, 512)];
-        currenPlayingInfo.mediaArtwork=media.artwork;
-        currenPlayingInfo.playbackDuration=@(media.playbackDuration);
-        currenPlayingInfo.currentTime=@(0);
-        currenPlayingInfo.playing=@(YES);
-        currenPlayingInfo.shuffle=[[NSUserDefaults standardUserDefaults]valueForKey:@"shuffle"];
+        _currenPlayingInfo = [[PlayingInfoModel alloc] init];
+        _currenPlayingInfo.url = [media valueForProperty:MPMediaItemPropertyAssetURL];
+        _currenPlayingInfo.name = media.title;
+        _currenPlayingInfo.artist = media.artist;
+        _currenPlayingInfo.album = media.albumTitle;
+        _currenPlayingInfo.artwork = [media.artwork imageWithSize:CGSizeMake(512,  512)];
+        _currenPlayingInfo.mediaArtwork = media.artwork;
+        _currenPlayingInfo.playbackDuration = @(media.playbackDuration);
+        _currenPlayingInfo.currentTime = @(0);
+        _currenPlayingInfo.playing = @(YES);
+        _currenPlayingInfo.shuffle = [[NSUserDefaults standardUserDefaults] valueForKey:@"shuffle"];
         
-        currenPlayingInfo.playingItem=self.playingMediaItem;
-        currenPlayingInfo.playingList=self.playingList;
+        _currenPlayingInfo.playingItem = _playingMediaItem;
+        _currenPlayingInfo.playingList = _playingList;
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:_currenPlayingInfo forKey:@"mediaInfo"]];
         [self removePlayer];
-        [self resetLastTimeForLowMemory];
+        [self resetLastTimeIfNeed];
         [self createPlayerIfNeed];
         [self play];
         [self saveLastPlay];
-        
     }
 }
 
 #pragma mark - play actions
 
 - (void)createPlayerIfNeed {
-    if (player) {
+    if (_player) {
         return;
     }
-    player=[[MyAudioPlayer alloc]initWithContentsOfURL:currenPlayingInfo.url error:nil];
-    player.delegate=self;
-    player.currentTime=0;
+    NSError *err = nil;
+    _player = [[MyAudioPlayer alloc] initWithContentsOfURL:_currenPlayingInfo.url error:&err];
+    _player.delegate = self;
+    _player.currentTime = 0;
 }
 
-- (void)resetLastTimeForLowMemory {
-    if (wasLowMemory) {
-        player.currentTime = lastPlayTime;
+- (void)resetLastTimeIfNeed {
+    if (_wasLowMemory) {
+        _player.currentTime = _lastPlayTime;
     }
-    wasLowMemory = NO;
+    _wasLowMemory = NO;
 }
 
 - (void)removePlayer {
-    [player stop];
-    player = nil;
+    [_player stop];
+    _player = nil;
 }
 
--(void)play
-{
+- (void)play {
     [self createPlayerIfNeed];
-    [self resetLastTimeForLowMemory];
-    manualPaused=NO;
+    [self resetLastTimeIfNeed];
+    _manualPaused = NO;
     [self becomeActive];
-    [player play];
+    [_player play];
 }
 
--(void)pause
-{
-    manualPaused=YES;
-    [player pause];
+- (void)pause {
+    _manualPaused = YES;
+    [_player pause];
 }
 
--(void)playOrPause
-{
-    if (player.isPlaying) {
+- (void)playOrPause {
+    if (_player.isPlaying) {
         [self pause];
-    }
-    else
-    {
+    } else {
         [self play];
     }
 }
 
--(void)playNext
-{
-    if ([self.cutLineOrder containsObject:self.playingMediaItem]) {
-        [self.cutLineOrder removeObject:self.playingMediaItem];
-    }
-    if (self.cutLineOrder.count > 0) {
-        self.playingMediaItem = self.cutLineOrder.firstObject;
+- (void)playNext {
+    // 如果有插播内容，就优先播放
+    if (_cutLineOrder.count > 0) {
+        [self playMediaItem:_cutLineOrder.firstObject];
+        [_cutLineOrder removeObject:_playingMediaItem];
         return;
     }
-    NSInteger next=currentPlayingIndex+1;
-    if (next>=self.playingOrder.count) {
-        [self.playingOrder addObjectsFromArray:[self sortedArray:self.songs shuffle:[self isShuffle]]];
+    NSInteger next = _currentPlayingIndex + 1;
+    if (next >= _playingOrder.count) {
+        [_playingOrder addObjectsFromArray:[self sortedArray:_songs shuffle:[self isShuffle]]];
     }
-    if (next<self.playingOrder.count) {
-        self.playingMediaItem=[self.playingOrder objectAtIndex:next];
-        currentPlayingIndex=next;
+    if (next < _playingOrder.count) {
+        [self playMediaItem:[_playingOrder objectAtIndex:next]];
+        _currentPlayingIndex = next;
     }
 }
 
--(void)playPrevious
-{
+- (void)playPrevious {
 //    // test low memory
 //    [[UIApplication sharedApplication] _performMemoryWarning];
 //    return;
     
-    if (self.currentTime>10) {
-        self.currentTime=0;
+    if (self.currentTime > 10) {
+        self.currentTime = 0;
         return;
     }
-    NSInteger pre=currentPlayingIndex-1;
-    if (pre>=0&&pre<self.playingOrder.count) {
-        self.playingMediaItem=[self.playingOrder objectAtIndex:pre];
-        currentPlayingIndex=pre;
+    NSInteger pre = _currentPlayingIndex-1;
+    if (pre >= 0 && pre < _playingOrder.count) {
+        [self playMediaItem:[_playingOrder objectAtIndex:pre]];
+        _currentPlayingIndex = pre;
     }
 }
 
-#pragma mark - handle action and exception
-
--(void)handleInterruption:(NSNotification*)notification
-{
-    NSLog(@"\n\ninterruption: \n%@",notification);
-    
-    NSDictionary* dict=notification.userInfo;
-    AVAudioSessionInterruptionType interruptionType=[[dict valueForKey:AVAudioSessionInterruptionTypeKey]integerValue];
-    if (interruptionType==AVAudioSessionInterruptionTypeBegan) {
-        [self pause];
-        manualPaused = NO;
-    }
-    else if(interruptionType==AVAudioSessionInterruptionTypeEnded)
-    {
-        if([[dict valueForKey:AVAudioSessionInterruptionOptionKey]integerValue]==AVAudioSessionInterruptionOptionShouldResume)
-        {
-            if (!manualPaused) {
-                [self play];
-            }
-        }
-        
-    }
-}
-
--(void)handleRouteChange:(NSNotification*)notification
-{
-//    NSLog(@"routechange: \n%@",notification);
-    
-    NSDictionary* userinfo=notification.userInfo;
-    
-    AVAudioSessionRouteChangeReason reason=[[userinfo valueForKey:AVAudioSessionRouteChangeReasonKey]unsignedIntegerValue];
-    
-    if (reason==AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
-        
-        AVAudioSessionRouteDescription* prevoiusRouteDescription=[userinfo valueForKey:AVAudioSessionRouteChangePreviousRouteKey];
-        AVAudioSessionPortDescription* portDescription=prevoiusRouteDescription.outputs.firstObject;
-        if ([portDescription.portType isEqualToString:AVAudioSessionPortHeadphones]) {
-            [self pause];
-        }
-    }
-}
-
--(void)handleRemoteControlEvent:(UIEvent *)event
-{
-//    if (event.type==UIEventTypeRemoteControl) {
-//        switch (event.subtype) {
-//            case UIEventSubtypeRemoteControlPause:
-//                [self pause];
-//                break;
-//            case UIEventSubtypeRemoteControlPlay:
-//                [self play];
-//                break;
-//            case UIEventSubtypeRemoteControlTogglePlayPause:
-//                [self playOrPause];
-//                break;
-//            case UIEventSubtypeRemoteControlPreviousTrack:
-//                [self playPrevious];
-//                break;
-//            case UIEventSubtypeRemoteControlNextTrack:
-//                [self playNext];
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-}
-
-- (void)handleMemoryWarning:(NSNotification *)notification {
-    NSLog(@"%@", notification);
-    lastPlayTime = player.currentTime;
-    wasLowMemory = YES;
-    [self removePlayer];
-}
-
--(void)becomeActive
-{
+- (void)becomeActive {
     [[UIApplication sharedApplication] becomeFirstResponder];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    //    [[AVAudioSession sharedInstance]setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-    //    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
+}
+
+#pragma mark - handle action and exception
+
+- (void)handleInterruption:(NSNotification *)notification {
+//    NSLog(@"\n\ninterruption: \n%@", notification);
+    // 其他app播放声音时，可能会触发中断
+    NSDictionary *dict = notification.userInfo;
+    AVAudioSessionInterruptionType interruptionType = [[dict valueForKey:AVAudioSessionInterruptionTypeKey] integerValue];
+    if (interruptionType == AVAudioSessionInterruptionTypeBegan) {
+        [self pause];
+        _manualPaused = NO;
+    } else if (interruptionType == AVAudioSessionInterruptionTypeEnded) {
+        if ([[dict valueForKey:AVAudioSessionInterruptionOptionKey] integerValue] == AVAudioSessionInterruptionOptionShouldResume) {
+            if (!_manualPaused) {
+                [self play];
+            }
+        }
+    }
+}
+
+- (void)handleRouteChange:(NSNotification *)notification {
+//    NSLog(@"routechange: \n%@", notification);
+    
+    NSDictionary *userinfo = notification.userInfo;
+    
+    AVAudioSessionRouteChangeReason reason = [[userinfo valueForKey:AVAudioSessionRouteChangeReasonKey] unsignedIntegerValue];
+    if (reason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
+        AVAudioSessionRouteDescription *prevoiusRouteDescription = [userinfo valueForKey:AVAudioSessionRouteChangePreviousRouteKey];
+        AVAudioSessionPortDescription *portDescription = prevoiusRouteDescription.outputs.firstObject;
+        if ([portDescription.portType isEqualToString:AVAudioSessionPortHeadphones]) {
+            [self pause]; // 处理耳机拔出
+        }
+    }
+}
+
+- (void)handleMemoryWarning:(NSNotification *)notification {
+//    NSLog(@"%@", notification);
+    
+    // 处理低内存警告，似乎问题不在这里，而是在封面图片缓存那里
+    _lastPlayTime = _player.currentTime;
+    _wasLowMemory = YES;
+    [self removePlayer];
 }
 
 #pragma mark - center control
 
--(void)setRemoteCommandCenter
-{
+- (void)setRemoteCommandCenter {
 //    return;
-    MPRemoteCommandCenter* center=[MPRemoteCommandCenter sharedCommandCenter];
+    MPRemoteCommandCenter *center = [MPRemoteCommandCenter sharedCommandCenter];
 
-    __weak typeof(self) weself=self;
+    __weak typeof(self) weself = self;
 
-    [center.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        NSLog(@"%@",event);
+    [center.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *_Nonnull event) {
+//        NSLog(@"%@", event);
         [weself play];
         return weself.playing?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
     }];
 
-    [center.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        NSLog(@"%@",event);
+    [center.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *_Nonnull event) {
+//        NSLog(@"%@", event);
         [weself playOrPause];
         return MPRemoteCommandHandlerStatusSuccess;//!weself.playing?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
     }];
 
-    [center.togglePlayPauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+    [center.togglePlayPauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *_Nonnull event) {
         // 耳机用
-        NSLog(@"%@",event);
-        BOOL oldIsPlaying=[weself playing];
+//        NSLog(@"%@", event);
+        BOOL oldIsPlaying = [weself playing];
         [weself playOrPause];
-        return oldIsPlaying!=weself.playing?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
+        return oldIsPlaying != weself.playing?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
     }];
 
-    [center.nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        NSLog(@"%@",event);
+    [center.nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *_Nonnull event) {
+//        NSLog(@"%@", event);
         [weself playNext];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
-    [center.previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        NSLog(@"%@",event);
+    [center.previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *_Nonnull event) {
+//        NSLog(@"%@", event);
         [weself playPrevious];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
 
-    [center.changePlaybackPositionCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        NSLog(@"%@",event);
-        if ([event isKindOfClass:[MPChangePlaybackPositionCommandEvent class]]) {
-            MPChangePlaybackPositionCommandEvent* ev=(MPChangePlaybackPositionCommandEvent*)event;
-            NSTimeInterval newPositionTime=ev.positionTime;
-            [weself setCurrentTime:newPositionTime];
-            return weself.currentTime==newPositionTime?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
-        }
-        return MPRemoteCommandHandlerStatusCommandFailed;
-    }];
+    if (@available(iOS 9.1, *)) {
+        [center.changePlaybackPositionCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *_Nonnull event) {
+            NSLog(@"%@", event);
+            if ([event isKindOfClass:[MPChangePlaybackPositionCommandEvent class]]) {
+                MPChangePlaybackPositionCommandEvent *ev = (MPChangePlaybackPositionCommandEvent *)event;
+                NSTimeInterval newPositionTime = ev.positionTime;
+                [weself setCurrentTime:newPositionTime];
+                return weself.currentTime == newPositionTime?MPRemoteCommandHandlerStatusSuccess:MPRemoteCommandHandlerStatusCommandFailed;
+            }
+            return MPRemoteCommandHandlerStatusCommandFailed;
+        }];
+    }
 }
 
 #pragma mark - current status
 
--(void)setProgress:(CGFloat)progress
-{
-    _progress=progress;
-    [player setCurrentTime:(progress*player.duration)];
+- (void)setProgress:(CGFloat)progress {
+    _progress = progress;
+    [_player setCurrentTime:(progress * _player.duration)];
     [self timerRunning];
 }
 
--(void)setCurrentTime:(NSTimeInterval)currentTime
-{
-    [player setCurrentTime:currentTime];
+- (void)setCurrentTime:(NSTimeInterval)currentTime {
+    [_player setCurrentTime:currentTime];
 }
 
--(NSTimeInterval)currentTime
-{
-    return [player currentTime];
+- (NSTimeInterval)currentTime {
+    return [_player currentTime];
 }
 
--(BOOL)playing
-{
-    return player.isPlaying;
+- (BOOL)playing {
+    return _player.isPlaying;
 }
 
--(void)timerRunning
-{
-    if (currenPlayingInfo) {
-        currenPlayingInfo.currentTime=@(player.currentTime);
-        currenPlayingInfo.playbackDuration=@(player.duration);
-        currenPlayingInfo.playing=@(player.isPlaying);
-        
-        currenPlayingInfo.playingItem=self.playingMediaItem;
-        currenPlayingInfo.playingList=self.playingList;
-
-        currenPlayingInfo.pcmData = player.pcmData;
-        
-        
-        if (player.isPlaying) {
-            NSMutableDictionary* dict=[NSMutableDictionary dictionary];
-            [dict setValue:@(player.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
-            [dict setValue:@(player.duration) forKey:MPMediaItemPropertyPlaybackDuration];
-            [dict setValue:currenPlayingInfo.name forKey:MPMediaItemPropertyTitle];
-            [dict setValue:currenPlayingInfo.artist forKey:MPMediaItemPropertyArtist];
-            [dict setValue:currenPlayingInfo.album forKey:MPMediaItemPropertyAlbumTitle];
-            [dict setValue:currenPlayingInfo.mediaArtwork forKey:MPMediaItemPropertyArtwork];
+- (void)timerRunning {
+    // 定时发送当前状态的通知
+    if (_currenPlayingInfo) {
+        _currenPlayingInfo.currentTime = @(_player.currentTime);
+        _currenPlayingInfo.playbackDuration = @(_player.duration);
+        _currenPlayingInfo.playing = @(_player.isPlaying);
+        _currenPlayingInfo.playingItem = _playingMediaItem;
+        _currenPlayingInfo.playingList = _playingList;
+        _currenPlayingInfo.pcmData = _player.pcmData;
+        if (_player.isPlaying) {
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            [dict setValue:@(_player.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+            [dict setValue:@(_player.duration) forKey:MPMediaItemPropertyPlaybackDuration];
+            [dict setValue:_currenPlayingInfo.name forKey:MPMediaItemPropertyTitle];
+            [dict setValue:_currenPlayingInfo.artist forKey:MPMediaItemPropertyArtist];
+            [dict setValue:_currenPlayingInfo.album forKey:MPMediaItemPropertyAlbumTitle];
+            [dict setValue:_currenPlayingInfo.mediaArtwork forKey:MPMediaItemPropertyArtwork];
             [[MPNowPlayingInfoCenter
               defaultCenter] setNowPlayingInfo:dict];
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
-        } else if (arc4random() % 10 == 0) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:currenPlayingInfo forKey:@"mediaInfo"]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:_currenPlayingInfo forKey:@"mediaInfo"]];
+        } else if (arc4random() % 100 < 10) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:AudioPlayerPlayingMediaInfoNotification object:nil userInfo:[NSDictionary dictionaryWithObject:_currenPlayingInfo forKey:@"mediaInfo"]];
         }
-        
-        
     }
 }
 
 #pragma mark - AVAudioPlayerDelegate
 
--(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
-{
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     NSLog(@"did finish?");
     [self playNext];
 }
 
 #pragma mark - last play
 
--(void)saveLastPlay
-{
-    [[NSUserDefaults standardUserDefaults]setValue:[NSNumber numberWithLongLong:self.playingMediaItem.persistentID] forKey:lastPlayingItemKey.description];
-    if (self.playingList) {
-        [[NSUserDefaults standardUserDefaults]setValue:self.playingList.name forKey:lastPlayingListKey.description];
+- (void)saveLastPlay {
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithLongLong:_playingMediaItem.persistentID] forKey:lastPlayingItemKey.description];
+    if (_playingList) {
+        [[NSUserDefaults standardUserDefaults] setValue:_playingList.name forKey:lastPlayingListKey.description];
     }
 }
 
--(void)loadLastPlay
-{
+- (void)loadLastPlay {
 //    return;
-    MPMediaEntityPersistentID itemID=[[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingItemKey.description]longLongValue];
-    NSString *listName=[[NSUserDefaults standardUserDefaults]valueForKey:lastPlayingListKey.description];
+    MPMediaEntityPersistentID itemID = [[[NSUserDefaults standardUserDefaults] valueForKey:lastPlayingItemKey.description] longLongValue];
+    NSString *listName = [[NSUserDefaults standardUserDefaults] valueForKey:lastPlayingListKey.description];
     
-    NSArray* allsongs=[MediaQuery allSongs];
-    NSArray* alllists=[MediaQuery allPlaylists];
+    NSArray *allsongs = [MediaQuery allSongs];
+    NSArray *alllists = [MediaQuery allPlaylists];
     
-    for (MPMediaItem* item in allsongs) {
-        if (item.persistentID==itemID) {
-            self.playingMediaItem=item;
-            NSLog(@"%@",item);
-            for (MPMediaPlaylist* list in alllists) {
+    for (MPMediaItem *item in allsongs) {
+        if (item.persistentID == itemID) {
+            _playingMediaItem = item;
+            NSLog(@"%@", item);
+            for (MPMediaPlaylist *list in alllists) {
                 if ([list.name isEqualToString:listName]) {
                     if ([list.items containsObject:item]) {
-                        self.playingList=list;
-                        NSLog(@"%@",list);
+                        _playingList = list;
+                        NSLog(@"%@", list);
                         break;
                     }
                 }
             }
             
-            [self setPlayingMediaItem:self.playingMediaItem inPlayList:self.playingList];
+            [self playMediaItem:_playingMediaItem inPlayList:_playingList];
             [self pause];
-            player.currentTime = 0;
+            _player.currentTime = 0;
 //            [self performSelector:@selector(pause) withObject:nil afterDelay:0.1];
             
             break;

@@ -14,29 +14,28 @@
 
 @interface AudioPlayController : NSObject
 
-+(instancetype)sharedAudioPlayer;
++ (instancetype)sharedAudioPlayer;
 
-@property (readonly,nonatomic) BOOL hasSongPlay;
+@property (readonly, nonatomic) BOOL hasSongPlay;
 
--(void)setPlayingMediaItem:(MPMediaItem*)item inPlayList:(MPMediaPlaylist*)list;
--(void)insertCutMediaItem:(MPMediaItem*)item;
+@property (nonatomic, assign) CGFloat progress;
+@property (nonatomic, assign) NSTimeInterval currentTime;
+@property (nonatomic, assign, readonly) BOOL playing;
 
--(void)play;
--(void)pause;
--(void)playOrPause;
--(void)playPrevious;
--(void)playNext;
--(void)shuffle:(BOOL)shuffle;
+// 从播放列表进入
+- (void)playMediaItem:(MPMediaItem *)item inPlayList:(MPMediaPlaylist *)list;
 
--(void)becomeActive;
+// 插播
+- (void)insertCutMediaItem:(MPMediaItem *)item;
 
--(void)handleRemoteControlEvent:(UIEvent *)event;
+- (void)play;
+- (void)pause;
+- (void)playOrPause;
+- (void)playPrevious;
+- (void)playNext;
+- (void)shuffle:(BOOL)shuffle;
 
--(void)loadLastPlay;
--(void)saveLastPlay;
-
-@property (nonatomic,assign) CGFloat progress;
-@property (nonatomic,assign) NSTimeInterval currentTime;
-@property (nonatomic,assign,readonly) BOOL playing;
+- (void)loadLastPlay;
+- (void)saveLastPlay;
 
 @end

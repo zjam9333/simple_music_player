@@ -49,6 +49,11 @@ const NSInteger bitDepth = 8;
 }
 
 - (instancetype)initWithContentsOfURL:(NSURL *)url error:(NSError * _Nullable __autoreleasing *)outError {
+    if (url == nil) {
+        NSError *err = [NSError errorWithDomain:NSURLErrorDomain code:404 userInfo:nil];
+        *outError = err;
+        return nil;
+    }
     self = [super init];
     if (self) {
 //        self.duration = 10000000;

@@ -111,12 +111,12 @@
         MPMediaItem* medi=[[self.playList items]objectAtIndex:(arc4random()%self.playList.count)];
         AudioPlayController* player=[AudioPlayController sharedAudioPlayer];
         [player shuffle:YES];
-        [player setPlayingMediaItem:medi inPlayList:self.playList];
+        [player playMediaItem:medi inPlayList:self.playList];
     }
     else if (indexPath.section==2) {
         MPMediaItem* medi=[[self.playList items]objectAtIndex:indexPath.row];
         AudioPlayController* player=[AudioPlayController sharedAudioPlayer];
-        [player setPlayingMediaItem:medi inPlayList:self.playList];
+        [player playMediaItem:medi inPlayList:self.playList];
     }
 }
 
