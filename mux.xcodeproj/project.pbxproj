@@ -57,6 +57,11 @@
 		06B55EF521BE4D220014EADE /* NSTimer+HICategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+HICategory.h"; sourceTree = "<group>"; };
 		06BE8A0521AE71470011258A /* MarginLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginLabel.m; sourceTree = "<group>"; };
 		06BE8A0621AE71470011258A /* MarginLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginLabel.h; sourceTree = "<group>"; };
+		06DD1A8F21F16CFC0010F32F /* MPMediaItemArtwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMediaItemArtwork.h; sourceTree = "<group>"; };
+		06DD1A9021F16D190010F32F /* MPConcreteMediaItemArtwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPConcreteMediaItemArtwork.h; sourceTree = "<group>"; };
+		06DD1A9121F16DD80010F32F /* MPArtworkCatalog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPArtworkCatalog.h; sourceTree = "<group>"; };
+		06DD1A9221F16ED30010F32F /* MPArtworkDataSource-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MPArtworkDataSource-Protocol.h"; sourceTree = "<group>"; };
+		06DD1A9321F16EF40010F32F /* MPArtworkRepresentation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPArtworkRepresentation.h; sourceTree = "<group>"; };
 		3F4AE85F1D5D7E2400951EA3 /* OnePlayListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnePlayListController.h; sourceTree = "<group>"; };
 		3F4AE8601D5D7E2400951EA3 /* OnePlayListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnePlayListController.m; sourceTree = "<group>"; };
 		3FE4DB431D5D5BD400A07CB5 /* mux.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mux.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +129,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		06DD1A8E21F16CB70010F32F /* PrivteHeader */ = {
+			isa = PBXGroup;
+			children = (
+				06DD1A9221F16ED30010F32F /* MPArtworkDataSource-Protocol.h */,
+				06DD1A9321F16EF40010F32F /* MPArtworkRepresentation.h */,
+				06DD1A9121F16DD80010F32F /* MPArtworkCatalog.h */,
+				06DD1A9021F16D190010F32F /* MPConcreteMediaItemArtwork.h */,
+				06DD1A8F21F16CFC0010F32F /* MPMediaItemArtwork.h */,
+			);
+			name = PrivteHeader;
+			sourceTree = "<group>";
+		};
 		3FE4DB3A1D5D5BD400A07CB5 = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +161,7 @@
 		3FE4DB451D5D5BD400A07CB5 /* mux */ = {
 			isa = PBXGroup;
 			children = (
+				06DD1A8E21F16CB70010F32F /* PrivteHeader */,
 				8E8E15141F6242DE0093459D /* Controllers */,
 				8E8E15131F6242CC0093459D /* Tools */,
 				8E8E15121F6242B90093459D /* Views */,

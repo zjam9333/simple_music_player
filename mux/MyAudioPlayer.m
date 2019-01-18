@@ -152,15 +152,17 @@ const NSInteger bitDepth = 8;
 }
 
 - (void)play {
+    NSError *error = nil;
     if (!self.engine.running) {
-        [self.engine startAndReturnError:nil];
+        [self.engine prepare];
+        [self.engine startAndReturnError:&error];
     }
     [self.playerNode play];
 }
 
 - (void)pause {
-    [self.engine stop];
     [self.playerNode pause];
+    [self.engine stop];
 }
 
 - (void)stop {

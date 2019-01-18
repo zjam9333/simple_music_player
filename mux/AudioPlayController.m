@@ -309,12 +309,12 @@ const NSString *lastPlayingListKey = @"0f90eir9023urcjm982ne89u2389";
 }
 
 - (void)handleMemoryWarning:(NSNotification *)notification {
-//    NSLog(@"%@", notification);
-    
-    // 处理低内存警告，似乎问题不在这里，而是在封面图片缓存那里
-    _lastPlayTime = _player.currentTime;
-    _wasLowMemory = YES;
-    [self removePlayer];
+////    NSLog(@"%@", notification);
+//
+//    // 处理低内存警告，似乎问题不在这里，而是在封面图片缓存那里
+//    _lastPlayTime = _player.currentTime;
+//    _wasLowMemory = YES;
+//    [self removePlayer];
 }
 
 #pragma mark - center control
